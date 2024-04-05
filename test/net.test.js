@@ -447,6 +447,7 @@ describe("CALCULATE NET SALARY:", function () {
           let netSalary = net(100_000_000, 1, 4);
 
           assert.equal(netSalary.toNumber(), 77_594500);
+          assert.equal(1, 1);
         });
  
       })
