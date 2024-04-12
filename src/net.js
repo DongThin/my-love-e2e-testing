@@ -1,23 +1,24 @@
 
 const Big = require('big.js');
 
-module.exports = function net(gross, nguoiPhuThuoc, region = 1) {
+module.exports = function net(gross, nguoiPhuThuoc = 0, region = 1) {
     const grossBig = new Big(gross);
-    console.log("Gross: ", grossBig.toNumber());
-    console.log("Dependents: ", nguoiPhuThuoc);
 
-   
+    const allInfor = {};
+
+    allInfor.gross = grossBig.toNumber();
+    allInfor.dependents = nguoiPhuThuoc;
+
     var giamThueNguoiPhuThuoc = new Big(0);
 
     if (nguoiPhuThuoc > 0) {
 
-        giamThueNguoiPhuThuoc = new Big(nguoiPhuThuoc *4400000);
+        giamThueNguoiPhuThuoc = new Big(nguoiPhuThuoc * 4400000);
     }
 
-    console.log("So tien khau tru nguoi phu thuoc: ", giamThueNguoiPhuThuoc.toNumber());
 
+    allInfor.giamThueNguoiPhuThuoc = giamThueNguoiPhuThuoc.toNumber();
 
-    //Gross > 93_600_000? regionMinWage*20: gross*0.01
     let regionMinWage;
 
     if (region === 1) {
@@ -31,29 +32,31 @@ module.exports = function net(gross, nguoiPhuThuoc, region = 1) {
     } else {
         console.log("Invalid region entered. Please enter again! (1, 2, 3, 4) ")
     };
+    allInfor.region= region;
 
     // Tính toán các khoản bảo hiểm xã hội
     const maxGrossForInsurance = new Big(36000000);
     const maxGrossAccidental = new Big(regionMinWage * 20);
 
     const BHXH = Math.min(maxGrossForInsurance.times(0.08), grossBig.times(0.08));
-    console.log("BHXH: ", BHXH);
+    allInfor.BHXH = BHXH;
 
     const BHYT = Math.min(maxGrossForInsurance.times(0.015), grossBig.times(0.015));
-    console.log("BHYT: ", BHYT);
+    allInfor.BHYT = BHYT;
 
     const BHTN = Math.min(maxGrossAccidental.times(0.01), grossBig.times(0.01));
-    console.log("BHTN: ", BHTN);
-
+    allInfor.BHTN = BHTN;
 
     // Tính toán thu nhập chịu thuế
     const grossIncome = grossBig.minus(BHXH).minus(BHYT).minus(BHTN);
-    console.log("Thu nhap truoc thue: ", grossIncome.toNumber());
+    allInfor.grossIncome = grossIncome.toNumber();
 
     const taxableIncome = grossIncome.minus(11000000).minus(giamThueNguoiPhuThuoc);
     const taxableIncomeTemp = taxableIncome.gt(0) ? taxableIncome : new Big(0);
 
-    console.log("Thu nhap chiu thue: ", taxableIncomeTemp.toNumber())
+    allInfor.taxableIncomeTemp = taxableIncomeTemp.toNumber();
+
+    // console.log("Thu nhap chiu thue: ", taxableIncomeTemp.toNumber())
 
 
     // Tính toán thuế TNCN theo từng bậc thuế
@@ -74,24 +77,32 @@ module.exports = function net(gross, nguoiPhuThuoc, region = 1) {
     const thueBac6 = bac6 * 0.3;
     const thueBac7 = bac7 * 0.35;
 
+    allInfor.thueBac1 = thueBac1;
+    allInfor.thueBac2 = thueBac2;
+    allInfor.thueBac3 = thueBac3;
+    allInfor.thueBac4 = thueBac4;
+    allInfor.thueBac5 = thueBac5;
+    allInfor.thueBac6 = thueBac6;
+    allInfor.thueBac7 = thueBac7;
 
     // Tổng thuế thu nhập cá nhân
     const tongThueTNCN = thueBac1 + thueBac2 + thueBac3 + thueBac4 + thueBac5 + thueBac6 + thueBac7;
-    console.log("Tong thue TNCN: ", tongThueTNCN);
+    // console.log("Tong thue TNCN: ", tongThueTNCN);
+    allInfor.totalIncomeTax = tongThueTNCN;
 
     // Tính toán thu nhập ròng (net)
 
-
+    let netSalary;
     if (taxableIncome.gt(0)) {
         netSalary = grossIncome.minus(tongThueTNCN);
     } else {
         netSalary = grossIncome;
     }
+    allInfor.netSalary = netSalary.toNumber();
 
-    console.log("netSalary: ", netSalary.toNumber());
-    console.log("____________________________")
+    console.log("All Information:", allInfor);
 
-    return netSalary;
+    return allInfor;
 
 };
 
