@@ -90,7 +90,7 @@ The primary objectives of the "my-love-e2e-testing" project are:
 
 ## Acknowledgements
 
-- A heartfelt appreciation to @alang.dev for his invaluable contributions as a trainer, guiding and inspiring learners
+- A heartfelt appreciation to [alang.dev](https://github.com/alang-dev) for his invaluable contributions as a trainer, guiding and inspiring learners
   throughout their journey in mastering automation testing.
 - Special thanks to the creators and maintainers of the tools and libraries used in this project, including Playwright,
   Mocha, NYC, Chai, Git, and GitHub.
