@@ -1,99 +1,107 @@
 
 const Big = require('big.js');
+const july23 = new Date("2023-07-01")
 
-module.exports = function net(gross, nguoiPhuThuoc, region = 1) {
+module.exports = function net(gross, dependents = 0, region = 1, date = july23) {
     const grossBig = new Big(gross);
-    console.log("Gross: ", grossBig.toNumber());
-    console.log("Dependents: ", nguoiPhuThuoc);
 
-   
-    var giamThueNguoiPhuThuoc = new Big(0);
-
-    if (nguoiPhuThuoc > 0) {
-
-        giamThueNguoiPhuThuoc = new Big(nguoiPhuThuoc *4400000);
-    }
-
-    console.log("So tien khau tru nguoi phu thuoc: ", giamThueNguoiPhuThuoc.toNumber());
-
-
-    //Gross > 93_600_000? regionMinWage*20: gross*0.01
     let regionMinWage;
+    let baseSalary;
+    // console.log('Date:', date.toISOString());
 
-    if (region === 1) {
-        regionMinWage = 4680000;
-    } else if (region === 2) {
-        regionMinWage = 4160000;
-    } else if (region === 3) {
-        regionMinWage = 3640000;
-    } else if (region === 4) {
-        regionMinWage = 3250000;
+    if (date.getTime() < july23.getTime()) {
+
+        baseSalary = new Big(1_490_000);
+        switch (region) {
+            case 1:
+                regionMinWage = new Big(4_420_000);
+                break;
+            case 2:
+                regionMinWage = new Big(3_920_000);
+                break;
+            case 3:
+                regionMinWage = new Big(3_430_000);
+                break;
+            case 4:
+                regionMinWage = new Big(3_070_000);
+                break;
+            default:
+                throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)");
+        }
+
     } else {
-        console.log("Invalid region entered. Please enter again! (1, 2, 3, 4) ")
-    };
 
-    // Tính toán các khoản bảo hiểm xã hội
-    const maxGrossForInsurance = new Big(36000000);
-    const maxGrossAccidental = new Big(regionMinWage * 20);
+        baseSalary = new Big(1_800_000);
+        switch (region) {
+            case 1:
+                regionMinWage = new Big(4_680_000);
+                break;
+            case 2:
+                regionMinWage = new Big(4_160_000);
+                break;
+            case 3:
+                regionMinWage = new Big(3_640_000);
+                break;
+            case 4:
+                regionMinWage = new Big(3_250_000);
+                break;
+            default:
+                throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)");
+        }
 
-    const BHXH = Math.min(maxGrossForInsurance.times(0.08), grossBig.times(0.08));
-    console.log("BHXH: ", BHXH);
-
-    const BHYT = Math.min(maxGrossForInsurance.times(0.015), grossBig.times(0.015));
-    console.log("BHYT: ", BHYT);
-
-    const BHTN = Math.min(maxGrossAccidental.times(0.01), grossBig.times(0.01));
-    console.log("BHTN: ", BHTN);
-
-
-    // Tính toán thu nhập chịu thuế
-    const grossIncome = grossBig.minus(BHXH).minus(BHYT).minus(BHTN);
-    console.log("Thu nhap truoc thue: ", grossIncome.toNumber());
-
-    const taxableIncome = grossIncome.minus(11000000).minus(giamThueNguoiPhuThuoc);
-    const taxableIncomeTemp = taxableIncome.gt(0) ? taxableIncome : new Big(0);
-
-    console.log("Thu nhap chiu thue: ", taxableIncomeTemp.toNumber())
-
-
-    // Tính toán thuế TNCN theo từng bậc thuế
-    const bac1 = Math.min(taxableIncomeTemp.toNumber(), 5000000);
-    const bac2 = Math.max(0, Math.min(taxableIncomeTemp.toNumber() - 5000000, 5000000));
-    const bac3 = Math.max(0, Math.min(taxableIncomeTemp.toNumber() - 10000000, 8000000));
-    const bac4 = Math.max(0, Math.min(taxableIncomeTemp.toNumber() - 18000000, 14000000));
-    const bac5 = Math.max(0, Math.min(taxableIncomeTemp.toNumber() - 32000000, 20000000));
-    const bac6 = Math.max(0, Math.min(taxableIncomeTemp.toNumber() - 52000000, 28000000));
-    const bac7 = Math.max(0, taxableIncomeTemp.toNumber() - 80000000);
-
-    // Tính toán thuế cho từng bậc
-    const thueBac1 = bac1 * 0.05;
-    const thueBac2 = bac2 * 0.1;
-    const thueBac3 = bac3 * 0.15;
-    const thueBac4 = bac4 * 0.2;
-    const thueBac5 = bac5 * 0.25;
-    const thueBac6 = bac6 * 0.3;
-    const thueBac7 = bac7 * 0.35;
-
-
-    // Tổng thuế thu nhập cá nhân
-    const tongThueTNCN = thueBac1 + thueBac2 + thueBac3 + thueBac4 + thueBac5 + thueBac6 + thueBac7;
-    console.log("Tong thue TNCN: ", tongThueTNCN);
-
-    // Tính toán thu nhập ròng (net)
-
-
-    if (taxableIncome.gt(0)) {
-        netSalary = grossIncome.minus(tongThueTNCN);
-    } else {
-        netSalary = grossIncome;
     }
-
-    console.log("netSalary: ", netSalary.toNumber());
-    console.log("____________________________")
-
-    return netSalary;
-
-};
+    const dependentTaxRelief = new Big(dependents * 4_400_000);
 
 
+// Calculating social insurance contributions
+const maxGrossForInsurance = new Big(baseSalary.times(new Big(20)));
+const maxGrossAccidental = new Big(regionMinWage.times(new Big(20)));
+
+const socialInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.08)) : Big(maxGrossForInsurance.times(0.08));
+
+const healthInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.015)) : Big(maxGrossForInsurance.times(0.015));
+
+const unemploymentInsurance = maxGrossAccidental.gt(grossBig) ? Big(grossBig.times(0.01)) : Big(maxGrossAccidental.times(0.01));
+
+
+// Calculating taxable income
+const afterInsurance = grossBig.minus(socialInsurance).minus(healthInsurance).minus(unemploymentInsurance);
+
+let taxableIncome = afterInsurance.minus(11000000).minus(dependentTaxRelief);
+
+taxableIncome = taxableIncome.gt(0) ? taxableIncome : new Big(0);
+
+const taxableIncomeRate1 = Big(taxableIncome).gt(Big(5000000)) ? Big(5000000) : taxableIncome;
+
+let taxableIncomeRate2 = Big(taxableIncome.minus(5000000)).lt(Big(5000000)) ? taxableIncome.minus(5000000) : Big(5000000);
+taxableIncomeRate2 = Big(0).gt(taxableIncomeRate2) ? Big(0) : taxableIncomeRate2;
+
+let taxableIncomeRate3 = Big(taxableIncome.minus(10000000)).lt(Big(8000000)) ? taxableIncome.minus(10000000) : Big(8000000);
+taxableIncomeRate3 = Big(0).gt(taxableIncomeRate3) ? Big(0) : taxableIncomeRate3;
+
+let taxableIncomeRate4 = Big(taxableIncome.minus(18000000)).lt(Big(14000000)) ? taxableIncome.minus(18000000) : Big(14000000);
+taxableIncomeRate4 = Big(0).gt(taxableIncomeRate4) ? Big(0) : taxableIncomeRate4;
+
+let taxableIncomeRate5 = Big(taxableIncome.minus(32000000)).lt(Big(20000000)) ? taxableIncome.minus(32000000) : Big(20000000);
+taxableIncomeRate5 = Big(0).gt(taxableIncomeRate5) ? Big(0) : taxableIncomeRate5;
+
+let taxableIncomeRate6 = Big(taxableIncome.minus(52000000)).lt(Big(28000000)) ? taxableIncome.minus(52000000) : Big(28000000);
+taxableIncomeRate6 = Big(0).gt(taxableIncomeRate6) ? Big(0) : taxableIncomeRate6;
+
+const taxableIncomeRate7 = Big(0).gt(Big(taxableIncome.minus(80000000))) ? Big(0) : Big(taxableIncome.minus(80000000));
+
+// Calculating tax by tax bracket
+const taxRate1 = new Big(taxableIncomeRate1).times(new Big(0.05));
+const taxRate2 = new Big(taxableIncomeRate2).times(new Big(0.1));
+const taxRate3 = new Big(taxableIncomeRate3).times(new Big(0.15));
+const taxRate4 = new Big(taxableIncomeRate4).times(new Big(0.2));
+const taxRate5 = new Big(taxableIncomeRate5).times(new Big(0.25));
+const taxRate6 = new Big(taxableIncomeRate6).times(new Big(0.3));
+const taxRate7 = new Big(taxableIncomeRate7).times(new Big(0.35));
+
+const totalTax = Big(taxRate1).add(Big(taxRate2)).add(Big(taxRate3)).add(Big(taxRate4)).add(Big(taxRate5)).add(Big(taxRate6)).add(Big(taxRate7));
+
+return afterInsurance.minus(totalTax).toNumber();
+
+}
 
