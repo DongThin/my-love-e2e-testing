@@ -2,12 +2,26 @@
 const Big = require('big.js');
 const july23 = new Date("2023-07-01")
 
+
 module.exports = function net(gross, dependents = 0, region = 1, date = july23) {
     const grossBig = new Big(gross);
+
+    const allInfor = {};
+
+    allInfor.gross = grossBig.toNumber();
+    allInfor.dependents = dependents;
+
+    let dependentTaxRelief = new Big(0);
+
+    dependentTaxRelief = new Big(dependents * 4_400_000);
+
+    allInfor.dependentTaxRelief = dependentTaxRelief.toNumber();
+
 
     let regionMinWage;
     let baseSalary;
     // console.log('Date:', date.toISOString());
+    allInfor.region = region;
 
     if (date.getTime() < july23.getTime()) {
 
@@ -31,26 +45,25 @@ module.exports = function net(gross, dependents = 0, region = 1, date = july23) 
 
     } else {
 
-        baseSalary = new Big(1_800_000);
-        switch (region) {
-            case 1:
-                regionMinWage = new Big(4_680_000);
-                break;
-            case 2:
-                regionMinWage = new Big(4_160_000);
-                break;
-            case 3:
-                regionMinWage = new Big(3_640_000);
-                break;
-            case 4:
-                regionMinWage = new Big(3_250_000);
-                break;
-            default:
-                throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)");
-        }
 
+    baseSalary = new Big(1_800_000);
+    switch (region) {
+        case 1:
+            regionMinWage = new Big(4_680_000);
+            break;
+        case 2:
+            regionMinWage = new Big(4_160_000);
+            break;
+        case 3:
+            regionMinWage = new Big(3_640_000);
+            break;
+        case 4:
+            regionMinWage = new Big(3_250_000);
+            break;
+        default:
+            throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)");
     }
-    const dependentTaxRelief = new Big(dependents * 4_400_000);
+}
 
 
 // Calculating social insurance contributions
@@ -58,14 +71,17 @@ const maxGrossForInsurance = new Big(baseSalary.times(new Big(20)));
 const maxGrossAccidental = new Big(regionMinWage.times(new Big(20)));
 
 const socialInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.08)) : Big(maxGrossForInsurance.times(0.08));
+allInfor.socialInsurance = socialInsurance.toNumber()
 
 const healthInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.015)) : Big(maxGrossForInsurance.times(0.015));
+allInfor.healthInsurance = healthInsurance.toNumber();
 
 const unemploymentInsurance = maxGrossAccidental.gt(grossBig) ? Big(grossBig.times(0.01)) : Big(maxGrossAccidental.times(0.01));
-
+allInfor.unemploymentInsurance = unemploymentInsurance.toNumber();
 
 // Calculating taxable income
 const afterInsurance = grossBig.minus(socialInsurance).minus(healthInsurance).minus(unemploymentInsurance);
+allInfor.afterInsurance = afterInsurance.toNumber();
 
 let taxableIncome = afterInsurance.minus(11000000).minus(dependentTaxRelief);
 
@@ -99,9 +115,22 @@ const taxRate5 = new Big(taxableIncomeRate5).times(new Big(0.25));
 const taxRate6 = new Big(taxableIncomeRate6).times(new Big(0.3));
 const taxRate7 = new Big(taxableIncomeRate7).times(new Big(0.35));
 
+allInfor.taxRate1 = taxRate1.toNumber();
+allInfor.taxRate2 = taxRate2.toNumber();
+allInfor.taxRate3 = taxRate3.toNumber();
+allInfor.taxRate4 = taxRate4.toNumber();
+allInfor.taxRate5 = taxRate5.toNumber();
+allInfor.taxRate6 = taxRate6.toNumber();
+allInfor.taxRate7 = taxRate7.toNumber();
+
+// allInfor.taxes = [ { rate: 0.05, taxed: 250_000 }, { rate: 0.015, taxed: 500_000 }]
+
 const totalTax = Big(taxRate1).add(Big(taxRate2)).add(Big(taxRate3)).add(Big(taxRate4)).add(Big(taxRate5)).add(Big(taxRate6)).add(Big(taxRate7));
 
-return afterInsurance.minus(totalTax).toNumber();
+allInfor.totalTax = totalTax.toNumber();
+const netSalary = afterInsurance.minus(totalTax).toNumber();
+allInfor.netSalary = netSalary;
 
-}
+return allInfor;
 
+};
