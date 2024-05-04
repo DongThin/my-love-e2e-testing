@@ -22,19 +22,24 @@ describe("Calculate net salary", function () {
                 healthInsurance: 184357.5,
                 unemploymentInsurance: 122905,
                 afterInsurance: 10999997.5,
-                taxRate1: 0,
-                taxRate2: 0,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 0 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],
+
                 totalTax: 0,
                 netSalary: 10999997.5
             };
             assert.deepStrictEqual(allInfor, expectedValues);
 
         })
+
         test('Dependent with no taxable income', function () {
             //afterInsurance below 11 million is tax-exempt.
 
@@ -49,13 +54,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 184357.5,
                 unemploymentInsurance: 122905,
                 afterInsurance: 10999997.5,
-                taxRate1: 0,
-                taxRate2: 0,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 0 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],
+
                 totalTax: 0,
                 netSalary: 10999997.5
             };
@@ -77,13 +86,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 240_000,
                 unemploymentInsurance: 160_000,
                 afterInsurance: 14320000,
-                taxRate1: 0,
-                taxRate2: 0,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 0 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],
+
                 totalTax: 0,
                 netSalary: 14_320_000
             };
@@ -105,13 +118,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 351955.305,
                 unemploymentInsurance: 234636.87,
                 afterInsurance: 20999999.865,
-                taxRate1: 250000,
-                taxRate2: 59999.9865,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 59999.9865 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],
+
                 totalTax: 309999.9865,
                 netSalary: 20689999.8785
             };
@@ -148,13 +165,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 0.15,
                     unemploymentInsurance: 0.1,
                     afterInsurance: 8.95,
-                    taxRate1: 0,
-                    taxRate2: 0,
-                    taxRate3: 0,
-                    taxRate4: 0,
-                    taxRate5: 0,
-                    taxRate6: 0,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 0 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 0,
                     netSalary: 8.95
 
@@ -179,17 +200,21 @@ describe("Calculate net salary", function () {
                     healthInsurance: 447_000,
                     unemploymentInsurance: 299_000,
                     afterInsurance: 26770000,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 865500,
-                    taxRate4: 0,
-                    taxRate5: 0,
-                    taxRate6: 0,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 865500 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 1_615_500,
                     netSalary: 25154500
-
                 };
+
                 assert.deepStrictEqual(allInfor, expectedValues);
 
             })
@@ -210,13 +235,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 447000,
                     unemploymentInsurance: 884000,
                     afterInsurance: 85173888,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 6652166.4,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 6652166.4 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 16402166.4,
                     netSalary: 68_771_721.6
 
@@ -241,13 +270,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 447000,
                     unemploymentInsurance: 784000,
                     afterInsurance: 85273888,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 6682166.4,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 6682166.4 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 16432166.4,
                     netSalary: 68_841_721.6
 
@@ -272,13 +305,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 447000,
                     unemploymentInsurance: 686000,
                     afterInsurance: 85371888,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 6711566.4,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 6711566.4 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 16461566.4,
                     netSalary: 68910321.6
                 };
@@ -303,13 +340,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 447000,
                     unemploymentInsurance: 614000,
                     afterInsurance: 85443888,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 6733166.4,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 6733166.4 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 16483166.4,
                     netSalary: 68_960_721.6
                 };
@@ -343,13 +384,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 468516.84,
                     unemploymentInsurance: 312344.56,
                     afterInsurance: 27954838.12,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1043225.718,
-                    taxRate4: 0,
-                    taxRate5: 0,
-                    taxRate6: 0,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1043225.718 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+
                     totalTax: 1793225.718,
                     netSalary: 26_161_612.402
                 };
@@ -373,13 +418,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 540000,
                     unemploymentInsurance: 367891.23,
                     afterInsurance: 33001231.77,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 800246.354,
-                    taxRate5: 0,
-                    taxRate6: 0,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 800246.354 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+                    
                     totalTax: 2750246.354,
                     netSalary: 30_250_985.416
 
@@ -403,13 +452,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 540000,
                     unemploymentInsurance: 936000,
                     afterInsurance: 89244000,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 7873200,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 7873200 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+                    
                     totalTax: 17623200,
                     netSalary: 71620800
 
@@ -435,13 +488,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 540_000,
                     unemploymentInsurance: 832_000,
                     afterInsurance: 89426123,
-                    taxRate1: 250_000,
-                    taxRate2: 500_000,
-                    taxRate3: 1_200_000,
-                    taxRate4: 2_800_000,
-                    taxRate5: 5_000_000,
-                    taxRate6: 7927836.9,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 7927836.9 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+                    
                     totalTax: 17677836.9,
                     netSalary: 71_748_286.1
 
@@ -466,13 +523,18 @@ describe("Calculate net salary", function () {
                     healthInsurance: 540_000,
                     unemploymentInsurance: 728_000,
                     afterInsurance: 90_852_000,
-                    taxRate1: 250_000,
-                    taxRate2: 500_000,
-                    taxRate3: 1_200_000,
-                    taxRate4: 2_800_000,
-                    taxRate5: 5_000_000,
-                    taxRate6: 8_355_600,
-                    taxRate7: 0,
+
+                    
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 8_355_600 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+                    
                     totalTax: 18_105_600,
                     netSalary: 72_746_400
 
@@ -497,13 +559,17 @@ describe("Calculate net salary", function () {
                     healthInsurance: 540000,
                     unemploymentInsurance: 650000,
                     afterInsurance: 90930000,
-                    taxRate1: 250000,
-                    taxRate2: 500000,
-                    taxRate3: 1200000,
-                    taxRate4: 2800000,
-                    taxRate5: 5000000,
-                    taxRate6: 8379000,
-                    taxRate7: 0,
+
+                    taxes: [
+                        { name: 'Tax level 1', rate: 0.05, amount: 250000 },
+                        { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                        { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                        { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                        { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                        { name: 'Tax level 6', rate: 0.3, amount: 8379000 },
+                        { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                    ],
+                   
                     totalTax: 18129000,
                     netSalary: 72801000
                 };
@@ -539,13 +605,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 180_000,
                 unemploymentInsurance: 120_000,
                 afterInsurance: 10_740_000,
-                taxRate1: 0,
-                taxRate2: 0,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 0 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],       
+        
                 totalTax: 0,
                 netSalary: 10_740_000
             };
@@ -554,7 +624,7 @@ describe("Calculate net salary", function () {
         })
 
         test('It applies tax rate 1 only', function () {
-            //11m < Gross - 10.5% Gross < 11m + 5m (taxRate1)
+            //11m < Gross - 10.5% Gross < 11m + 5m (amount)
             //12.29m < Gross <17.87
 
             const allInfor = net(16_789_000);
@@ -567,13 +637,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 251_835,
                 unemploymentInsurance: 167_890,
                 afterInsurance: 15026155,
-                taxRate1: 201307.75,
-                taxRate2: 0,
-                taxRate3: 0,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 201307.75 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 0 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 0 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],       
+        
                 totalTax: 201307.75,
                 netSalary: 14_824_847.25
             };
@@ -581,7 +655,7 @@ describe("Calculate net salary", function () {
             assert.deepStrictEqual(allInfor, expectedValues);
         })
         test('It applies 2 first tax rates', function () {
-            //16m < Gross - 10.5% Gross < 11m + 5m (taxRate1) +  5m (taxRate2)
+            //16m < Gross - 10.5% Gross < 11m + 5m (amount) +  5m (amount)
             //17.87m <Gross < 23.46m
             const allInfor = net(29_050_280);
             const expectedValues = {
@@ -593,13 +667,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 435754.2,
                 unemploymentInsurance: 290502.8,
                 afterInsurance: 26000000.6,
-                taxRate1: 250_000,
-                taxRate2: 500000,
-                taxRate3: 750000.09,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 750000.09 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],   
+               
                 totalTax: 1500000.09,
                 netSalary: 24500000.51
             };
@@ -608,7 +686,7 @@ describe("Calculate net salary", function () {
         })
 
         test('It applies 3 first tax rates', function () {
-            //21m < Gross - 10.5% Gross < 11m + 5m (taxRate1) +  5m (taxRate2) + 8m (taxRate3)
+            //21m < Gross - 10.5% Gross < 11m + 5m (amount) +  5m (amount) + 8m (amount)
             //23.46m < Gross < 32.4m
             const allInfor = net(29_050_280);
             const expectedValues = {
@@ -620,13 +698,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 435754.2,
                 unemploymentInsurance: 290502.8,
                 afterInsurance: 26000000.6,
-                taxRate1: 250_000,
-                taxRate2: 500000,
-                taxRate3: 750000.09,
-                taxRate4: 0,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 750000.09 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],   
+               
                 totalTax: 1500000.09,
                 netSalary: 24_500_000.51
             };
@@ -636,7 +718,7 @@ describe("Calculate net salary", function () {
         })
 
         test('It applies 4 first tax rates', function () {
-            //29m < Gross - 10.5% Gross &&  Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (taxRate1) +  5m (taxRate2) + 8m (taxRate3) + 14m (taxRate4)
+            //29m < Gross - 10.5% Gross &&  Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (amount) +  5m (amount) + 8m (amount) + 14m (amount)
             //32.402235m < Gross < 46_888_888,89
             //Double check the net value
             const allInfor = net(32_402_235);
@@ -650,13 +732,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 486033.525,
                 unemploymentInsurance: 324022.35,
                 afterInsurance: 29000000.325,
-                taxRate1: 250000,
-                taxRate2: 500000,
-                taxRate3: 1200000,
-                taxRate4: 0.065,
-                taxRate5: 0,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 0.065 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 0 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ],    
+            
                 totalTax: 1950000.065,
                 netSalary: 27050000.26
 
@@ -666,7 +752,7 @@ describe("Calculate net salary", function () {
         })
 
         test('It applies 5 first tax rates', function () {
-            //43m < Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (taxRate1) +  5m (taxRate2) + 8m (taxRate3) + 14m (taxRate4) + 20m(taxRate5)
+            //43m < Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (amount) +  5m (amount) + 8m (amount) + 14m (amount) + 20m(amount)
             //46_888_888,89m < Gross < 67_090_909,09m
             const allInfor = net(47_884_187);
 
@@ -679,13 +765,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 540000,
                 unemploymentInsurance: 478841.87,
                 afterInsurance: 43985345.13,
-                taxRate1: 250000,
-                taxRate2: 500000,
-                taxRate3: 1200000,
-                taxRate4: 2800000,
-                taxRate5: 246336.2825,
-                taxRate6: 0,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 246336.2825 },
+                    { name: 'Tax level 6', rate: 0.3, amount: 0 },
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ], 
+                
                 totalTax: 4_996_336.2825,
                 netSalary: 38_989_008.8475
 
@@ -694,9 +784,8 @@ describe("Calculate net salary", function () {
 
         })
 
-
         test('It applies 6 first tax rates', function () {
-            //63m < Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (taxRate1) +  5m (taxRate2) + 8m (taxRate3) + 14m (taxRate4) + 20m(taxRate5) + 28m (taxRate6)
+            //63m < Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (amount) +  5m (amount) + 8m (amount) + 14m (amount) + 20m(amount) + 28m (amount)
             //67_090_909,09m < Gross < 95_373_737,37m
 
             const allInfor = net(70_000_000);
@@ -710,13 +799,17 @@ describe("Calculate net salary", function () {
                 healthInsurance: 540000,
                 unemploymentInsurance: 700000,
                 afterInsurance: 65880000,
-                taxRate1: 250000,
-                taxRate2: 500000,
-                taxRate3: 1200000,
-                taxRate4: 2800000,
-                taxRate5: 5000000,
-                taxRate6: 864000,
-                taxRate7: 0,
+
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                    { name: 'Tax level 6', rate: 0.3, amount:  864000},
+                    { name: 'Tax level 7', rate: 0.35, amount: 0 }
+                ], 
+             
                 totalTax: 10614000,
                 netSalary: 55266000
 
@@ -740,13 +833,18 @@ describe("Calculate net salary", function () {
                 healthInsurance: 540000,
                 unemploymentInsurance: 936_000,
                 afterInsurance: 95644000,
-                taxRate1: 250_000,
-                taxRate2: 500_000,
-                taxRate3: 1_200_000,
-                taxRate4: 2_800_000,
-                taxRate5: 5_000_000,
-                taxRate6: 8_400_000,
-                taxRate7: 1_625_400,
+
+                
+                taxes: [
+                    { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
+                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
+                    { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
+                    { name: 'Tax level 4', rate: 0.2, amount: 2800000 },
+                    { name: 'Tax level 5', rate: 0.25, amount: 5000000 },
+                    { name: 'Tax level 6', rate: 0.3, amount:  8_400_000},
+                    { name: 'Tax level 7', rate: 0.35, amount: 1_625_400 }
+                ], 
+               
                 totalTax: 19775400,
                 netSalary: 75_868_600
             };
@@ -756,10 +854,6 @@ describe("Calculate net salary", function () {
 
         })
     })
-
-
-
-
 
 });
 
