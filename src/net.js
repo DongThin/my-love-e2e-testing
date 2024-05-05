@@ -1,27 +1,20 @@
-
 const Big = require('big.js');
 const july23 = new Date("2023-07-01")
-
 
 module.exports = function net(gross, dependents = 0, region = 1, date = july23) {
     const grossBig = new Big(gross);
 
-    const allInfor = {};
+    const payslip = {};
 
-    allInfor.gross = grossBig.toNumber();
-    allInfor.dependents = dependents;
+    payslip.gross = grossBig.toNumber();
+    payslip.dependents = dependents;
 
-    let dependentTaxRelief = new Big(0);
-
-    dependentTaxRelief = new Big(dependents * 4_400_000);
-
-    allInfor.dependentTaxRelief = dependentTaxRelief.toNumber();
-
+    payslip.dependentDeductionAmount = new Big(dependents * 4_400_000).toNumber();
 
     let regionMinWage;
     let baseSalary;
-    // console.log('Date:', date.toISOString());
-    allInfor.region = region;
+    
+    payslip.region = region;
 
     if (date.getTime() < july23.getTime()) {
 
@@ -45,7 +38,6 @@ module.exports = function net(gross, dependents = 0, region = 1, date = july23) 
 
     } else {
 
-
         baseSalary = new Big(1_800_000);
         switch (region) {
             case 1:
@@ -65,25 +57,24 @@ module.exports = function net(gross, dependents = 0, region = 1, date = july23) 
         }
     }
 
-
     // Calculating social insurance contributions
-    const maxGrossForInsurance = new Big(baseSalary.times(new Big(20)));
-    const maxGrossAccidental = new Big(regionMinWage.times(new Big(20)));
+    const maxGrossForSIorHI = new Big(baseSalary.times(new Big(20)));
+    const maxGrossForUI = new Big(regionMinWage.times(new Big(20)));
 
-    const socialInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.08)) : Big(maxGrossForInsurance.times(0.08));
-    allInfor.socialInsurance = socialInsurance.toNumber()
+    const socialInsurance = maxGrossForSIorHI.gt(grossBig) ? Big(grossBig.times(0.08)) : Big(maxGrossForSIorHI.times(0.08));
+    payslip.socialInsurance = socialInsurance.toNumber()
 
-    const healthInsurance = maxGrossForInsurance.gt(grossBig) ? Big(grossBig.times(0.015)) : Big(maxGrossForInsurance.times(0.015));
-    allInfor.healthInsurance = healthInsurance.toNumber();
+    const healthInsurance = maxGrossForSIorHI.gt(grossBig) ? Big(grossBig.times(0.015)) : Big(maxGrossForSIorHI.times(0.015));
+    payslip.healthInsurance = healthInsurance.toNumber();
 
-    const unemploymentInsurance = maxGrossAccidental.gt(grossBig) ? Big(grossBig.times(0.01)) : Big(maxGrossAccidental.times(0.01));
-    allInfor.unemploymentInsurance = unemploymentInsurance.toNumber();
+    const unemploymentInsurance = maxGrossForUI.gt(grossBig) ? Big(grossBig.times(0.01)) : Big(maxGrossForUI.times(0.01));
+    payslip.unemploymentInsurance = unemploymentInsurance.toNumber();
 
     // Calculating taxable income
     const afterInsurance = grossBig.minus(socialInsurance).minus(healthInsurance).minus(unemploymentInsurance);
-    allInfor.afterInsurance = afterInsurance.toNumber();
+    payslip.afterInsurance = afterInsurance.toNumber();
 
-    let taxableIncome = afterInsurance.minus(11000000).minus(dependentTaxRelief);
+    let taxableIncome = afterInsurance.minus(11000000).minus(payslip.dependentDeductionAmount);
 
     taxableIncome = taxableIncome.gt(0) ? taxableIncome : new Big(0);
 
@@ -115,21 +106,25 @@ module.exports = function net(gross, dependents = 0, region = 1, date = july23) 
     const taxRate6 = new Big(taxableIncomeRate6).times(new Big(0.3));
     const taxRate7 = new Big(taxableIncomeRate7).times(new Big(0.35));
 
-    allInfor.taxes = [
-        { name: 'Tax level 1', rate: 0.05, amount: taxRate1.toNumber() },
-        { name: 'Tax level 2', rate: 0.1, amount: taxRate2.toNumber() },
-        { name: 'Tax level 3', rate: 0.15, amount: taxRate3.toNumber() },
-        { name: 'Tax level 4', rate: 0.2, amount: taxRate4.toNumber() },
-        { name: 'Tax level 5', rate: 0.25, amount: taxRate5.toNumber() },
-        { name: 'Tax level 6', rate: 0.3, amount: taxRate6.toNumber() },
-        { name: 'Tax level 7', rate: 0.35, amount: taxRate7.toNumber() }]
+    payslip.taxes =
+        [
+            { name: 'Tax level 1', rate: 0.05, amount: taxRate1.toNumber() },
+            { name: 'Tax level 2', rate: 0.1, amount: taxRate2.toNumber() },
+            { name: 'Tax level 3', rate: 0.15, amount: taxRate3.toNumber() },
+            { name: 'Tax level 4', rate: 0.2, amount: taxRate4.toNumber() },
+            { name: 'Tax level 5', rate: 0.25, amount: taxRate5.toNumber() },
+            { name: 'Tax level 6', rate: 0.3, amount: taxRate6.toNumber() },
+            { name: 'Tax level 7', rate: 0.35, amount: taxRate7.toNumber() }
+        ]
+            .filter(tax => tax.amount !== 0);
 
-    const totalTax = Big(taxRate1).add(Big(taxRate2)).add(Big(taxRate3)).add(Big(taxRate4)).add(Big(taxRate5)).add(Big(taxRate6)).add(Big(taxRate7));
+    let totalTax = Big(0);
+    for (const tax of payslip.taxes) {
+        totalTax = totalTax.plus(Big(tax.amount));
+    }
 
-    allInfor.totalTax = totalTax.toNumber();
-    const netSalary = afterInsurance.minus(totalTax).toNumber();
-    allInfor.netSalary = netSalary;
+    payslip.totalTax = totalTax.toNumber();
+    payslip.netSalary = afterInsurance.minus(totalTax).toNumber();
 
-    return allInfor;
-
+    return payslip;
 };
