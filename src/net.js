@@ -12,7 +12,6 @@ module.exports = function net(gross, dependents = 0, region = 1, date = july23) 
 
     payslip.dependentDeductionAmount = new Big(dependents * 4_400_000).toNumber();
 
-
     let regionMinWage;
     let baseSalary;
 

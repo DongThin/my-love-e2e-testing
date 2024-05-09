@@ -1,4 +1,3 @@
-const Big = require('big.js');
 const net = require('../src/net.js')
 
 const assert = require('assert');
