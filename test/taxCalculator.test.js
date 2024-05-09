@@ -117,4 +117,12 @@ describe('Calculate taxes', function () {
         };
         assert.deepStrictEqual(actualTaxes, expectedTaxes);
     })
+
+    test('Total tax is equal total of tax per rate ', function () {
+        //tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
+
+        const actualTaxes = calculateTaxes(29_000_000);
+        assert.deepStrictEqual(actualTaxes.totalTax, 4_150_000);
+    })
+
 })

@@ -7,8 +7,9 @@ const TAX_RATES = [
     { name: 'Tax level 4', rate: 0.2, deduction: 14000000 },
     { name: 'Tax level 5', rate: 0.25, deduction: 20000000 },
     { name: 'Tax level 6', rate: 0.3, deduction: 28000000 },
-    { name: 'Tax level 7', rate: 0.35, deduction: 9007_199_254_740_991 },
+    { name: 'Tax level 7', rate: 0.35, deduction: Number.MAX_SAFE_INTEGER },
 ]
+
 /**
  * 
  * @param {number} taxableIncome 
@@ -16,40 +17,33 @@ const TAX_RATES = [
  */
 module.exports = function calculateTaxes(taxableIncome) {
     //Do not change type param default. If want to change, convert that variable to the other variable
-    let taxableIncomeBig = new Big(taxableIncome);
+    let taxableIncomeRemain = new Big(taxableIncome);
 
     const tax = { totalTax: new Big(0), rates: [] };
 
-    if (taxableIncomeBig.lte(0)) {
+    if (taxableIncomeRemain.lte(0)) {
         tax.totalTax = tax.totalTax.toNumber();
         return tax;
     }
 
-    for (let taxRate of TAX_RATES) {
+    for (const taxRate of TAX_RATES) {
+        const taxPaidForEachRate = Big(Math.min(taxableIncomeRemain, taxRate.deduction)).times(taxRate.rate);
 
-        let taxableIncomeRate = taxableIncomeBig.minus(taxRate.deduction).gt(Big(0)) ? Big(taxRate.deduction) : taxableIncomeBig;
+        tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
 
-        if (taxRate.name === 'Tax level 7') {
-            taxableIncomeRate = taxableIncomeBig;
-        }
+        tax.rates.push({
+            name: taxRate.name,
+            rate: taxRate.rate,
+            amount: taxPaidForEachRate.toNumber()
+        });
 
-        const taxAmount = taxableIncomeRate.times(taxRate.rate);
-        tax.totalTax = tax.totalTax.plus(taxAmount);
+        taxableIncomeRemain = taxableIncomeRemain.minus(Big(taxRate.deduction));
 
-        if (taxAmount.gt(0)) {
-            tax.rates.push({
-                name: taxRate.name,
-                rate: taxRate.rate,
-                amount: taxAmount.toNumber()
-            });
-        }
-
-        taxableIncomeBig = taxableIncomeBig.minus(taxableIncomeRate);
-
-        if (taxableIncomeBig.lte(0)) {
+        if (taxableIncomeRemain.lte(0)) {
             break;
         }
     }
+
     tax.totalTax = tax.totalTax.toNumber();
     return tax;
 }
