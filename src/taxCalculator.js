@@ -13,7 +13,7 @@ const TAX_RATES = [
 /**
  * 
  * @param {number} taxableIncome 
- * @returns 
+ * @returns {{totalTax: number, rates: [{name: string, rate: number, amount: number}]}}
  */
 module.exports = function calculateTaxes(taxableIncome) {
     //Do not change type param default. If want to change, convert that variable to the other variable
