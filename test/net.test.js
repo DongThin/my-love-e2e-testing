@@ -17,9 +17,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 983_240,
-                healthInsurance: 184357.5,
-                unemploymentInsurance: 122905,
+                insurances: [
+                    {
+                        amount: 983_240,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 184357.5,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 122905,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 1290502.5,
                 afterInsurance: 10999997.5,
                 taxes: [],
                 totalTax: 0,
@@ -38,9 +50,21 @@ describe("Calculate net salary", function () {
                 dependents: 1,
                 dependentDeductionAmount: 4400000,
                 region: 1,
-                socialInsurance: 983_240,
-                healthInsurance: 184357.5,
-                unemploymentInsurance: 122905,
+                insurances: [
+                    {
+                        amount: 983_240,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 184357.5,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 122905,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 1290502.5,
                 afterInsurance: 10999997.5,
                 taxes: [],
                 totalTax: 0,
@@ -59,9 +83,21 @@ describe("Calculate net salary", function () {
                 dependents: 1,
                 dependentDeductionAmount: 4_400_000,
                 region: 1,
-                socialInsurance: 1_280_000,
-                healthInsurance: 240_000,
-                unemploymentInsurance: 160_000,
+                insurances: [
+                    {
+                        amount: 1_280_000,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 240_000,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 160_000,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 1680000,
                 afterInsurance: 14320000,
                 taxes: [],
                 totalTax: 0,
@@ -80,9 +116,21 @@ describe("Calculate net salary", function () {
                 dependents: 1,
                 dependentDeductionAmount: 4400000,
                 region: 1,
-                socialInsurance: 1877094.96,
-                healthInsurance: 351955.305,
-                unemploymentInsurance: 234636.87,
+                insurances: [
+                    {
+                        amount: 1877094.96,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 351955.305,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 234636.87,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 2463687.135,
                 afterInsurance: 20999999.865,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -93,7 +141,6 @@ describe("Calculate net salary", function () {
             };
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
         })
-
     });
 
     describe('Check Net salary with Insurance', function () {
@@ -120,9 +167,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 0.8,
-                    healthInsurance: 0.15,
-                    unemploymentInsurance: 0.1,
+                    insurances: [
+                        {
+                            amount: 0.8,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 0.15,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 0.1,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 1.05,
                     afterInsurance: 8.95,
                     taxes: [],
                     totalTax: 0,
@@ -143,9 +202,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 2_384_000,
-                    healthInsurance: 447_000,
-                    unemploymentInsurance: 299_000,
+                    insurances: [
+                        {
+                            amount: 2_384_000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 447_000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 299_000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3130000,
                     afterInsurance: 26770000,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -170,9 +241,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 2384000,
-                    healthInsurance: 447000,
-                    unemploymentInsurance: 884000,
+                    insurances: [
+                        {
+                            amount: 2_384_000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 447_000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 884000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3715000,
                     afterInsurance: 85173888,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -200,9 +283,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 2,
-                    socialInsurance: 2384000,
-                    healthInsurance: 447000,
-                    unemploymentInsurance: 784000,
+                    insurances: [
+                        {
+                            amount: 2_384_000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 447_000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 784000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3615000,
                     afterInsurance: 85273888,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -230,9 +325,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 3,
-                    socialInsurance: 2384000,
-                    healthInsurance: 447000,
-                    unemploymentInsurance: 686000,
+                    insurances: [
+                        {
+                            amount: 2_384_000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 447_000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 686000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3517000,
                     afterInsurance: 85371888,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -261,9 +368,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 4,
-                    socialInsurance: 2384000,
-                    healthInsurance: 447000,
-                    unemploymentInsurance: 614000,
+                    insurances: [
+                        {
+                            amount: 2_384_000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 447_000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 614000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3445000,
                     afterInsurance: 85443888,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -299,9 +418,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 2498756.48,
-                    healthInsurance: 468516.84,
-                    unemploymentInsurance: 312344.56,
+                    insurances: [
+                        {
+                            amount: 2498756.48,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 468516.84,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 312344.56,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3279617.88,
                     afterInsurance: 27954838.12,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -326,9 +457,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 2880000,
-                    healthInsurance: 540000,
-                    unemploymentInsurance: 367891.23,
+                    insurances: [
+                        {
+                            amount: 2880000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 540000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 367891.23,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 3787891.23,
                     afterInsurance: 33001231.77,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -353,9 +496,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 1,
-                    socialInsurance: 2880000,
-                    healthInsurance: 540000,
-                    unemploymentInsurance: 936000,
+                    insurances: [
+                        {
+                            amount: 2880000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 540000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 936000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 4356000,
                     afterInsurance: 89244000,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -383,9 +538,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 2,
-                    socialInsurance: 2_880_000,
-                    healthInsurance: 540_000,
-                    unemploymentInsurance: 832_000,
+                    insurances: [
+                        {
+                            amount: 2880000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 540000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 832_000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 4252000,
                     afterInsurance: 89426123,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -413,9 +580,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 3,
-                    socialInsurance: 2_880_000,
-                    healthInsurance: 540_000,
-                    unemploymentInsurance: 728_000,
+                    insurances: [
+                        {
+                            amount: 2880000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 540000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 728_000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 4148000,
                     afterInsurance: 90_852_000,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -444,9 +623,21 @@ describe("Calculate net salary", function () {
                     dependents: 0,
                     dependentDeductionAmount: 0,
                     region: 4,
-                    socialInsurance: 2880000,
-                    healthInsurance: 540000,
-                    unemploymentInsurance: 650000,
+                    insurances: [
+                        {
+                            amount: 2880000,
+                            name: 'Social Insurance 8%'
+                        },
+                        {
+                            amount: 540000,
+                            name: 'Health Insurance 1.5%'
+                        },
+                        {
+                            amount: 650000,
+                            name: 'Unemployment Insurance 1%'
+                        },
+                    ],
+                    totalInsurance: 4070000,
                     afterInsurance: 90930000,
                     taxes: [
                         { name: 'Tax level 1', rate: 0.05, amount: 250000 },
@@ -485,9 +676,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 960_000,
-                healthInsurance: 180_000,
-                unemploymentInsurance: 120_000,
+                insurances: [
+                    {
+                        amount: 960_000,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 180_000,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 120_000,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 1260000,
                 afterInsurance: 10_740_000,
                 taxes: [],
                 totalTax: 0,
@@ -506,9 +709,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 1_343_120,
-                healthInsurance: 251_835,
-                unemploymentInsurance: 167_890,
+                insurances: [
+                    {
+                        amount: 1_343_120,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 251_835,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 167_890,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 1762845,
                 afterInsurance: 15026155,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 201307.75 }
@@ -522,25 +737,35 @@ describe("Calculate net salary", function () {
         test('It applies 2 first tax rates', function () {
             //16m < Gross - 10.5% Gross < 11m + 5m (tax level 1) +  5m (tax level 2)
             //17.87m <Gross < 23.46m
-            const actualPayslip = net(29_050_280);
+            const actualPayslip = net(20_050_280);
             const expectedPayslip = {
-                gross: 29050280,
+                gross: 20_050_280,
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2324022.4,
-                healthInsurance: 435754.2,
-                unemploymentInsurance: 290502.8,
-                afterInsurance: 26000000.6,
+                insurances: [
+                    {
+                        amount: 1604022.4,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 300754.2,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 200502.8,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 2105279.4,
+                afterInsurance: 17945000.6,
 
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
-                    { name: 'Tax level 2', rate: 0.1, amount: 500000 },
-                    { name: 'Tax level 3', rate: 0.15, amount: 750000.09 }
+                    { name: 'Tax level 2', rate: 0.1, amount: 194500.06 }
                 ],
-
-                totalTax: 1500000.09,
-                netSalary: 24500000.51
+                totalTax: 444500.06,
+                netSalary: 17500500.54
             };
 
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
@@ -555,9 +780,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2324022.4,
-                healthInsurance: 435754.2,
-                unemploymentInsurance: 290502.8,
+                insurances: [
+                    {
+                        amount: 2324022.4,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 435754.2,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 290502.8,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 3050279.4,
                 afterInsurance: 26000000.6,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
@@ -573,26 +810,37 @@ describe("Calculate net salary", function () {
         test('It applies 4 first tax rates', function () {
             //29m < Gross - 10.5% Gross &&  Gross - 8%*36_000_000 - 1.5%*36_000_000 - 1%* Gross (Gross < 20 * regionMinWage) < 11m + 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4)
             //32.402235m < Gross < 46_888_888,89
-            //Double check the net value
-            const actualPayslip = net(32_402_235);
+            const actualPayslip = net(32_402_236);
 
             const expectedPayslip = {
-                gross: 32402235,
+                gross: 32402236,
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2592178.8,
-                healthInsurance: 486033.525,
-                unemploymentInsurance: 324022.35,
-                afterInsurance: 29000000.325,
+                insurances: [
+                    {
+                        amount: 2592178.88,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 486033.54,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 324022.36,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 3402234.78,
+                afterInsurance: 29000001.22,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
                     { name: 'Tax level 2', rate: 0.1, amount: 500000 },
                     { name: 'Tax level 3', rate: 0.15, amount: 1200000 },
-                    { name: 'Tax level 4', rate: 0.2, amount: 0.065 }
+                    { name: 'Tax level 4', rate: 0.2, amount: 0.244 }
                 ],
-                totalTax: 1950000.065,
-                netSalary: 27050000.26
+                totalTax: 1950000.244,
+                netSalary: 27050000.976
             };
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
         })
@@ -607,9 +855,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2880000,
-                healthInsurance: 540000,
-                unemploymentInsurance: 478841.87,
+                insurances: [
+                    {
+                        amount: 2880000,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 540000,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 478841.87,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 3898841.87,
                 afterInsurance: 43985345.13,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
@@ -635,9 +895,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2880000,
-                healthInsurance: 540000,
-                unemploymentInsurance: 700000,
+                insurances: [
+                    {
+                        amount: 2880000,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 540000,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 700000,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 4120000,
                 afterInsurance: 65880000,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },
@@ -663,9 +935,21 @@ describe("Calculate net salary", function () {
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
-                socialInsurance: 2880000,
-                healthInsurance: 540000,
-                unemploymentInsurance: 936_000,
+                insurances: [
+                    {
+                        amount: 2880000,
+                        name: 'Social Insurance 8%'
+                    },
+                    {
+                        amount: 540000,
+                        name: 'Health Insurance 1.5%'
+                    },
+                    {
+                        amount: 936_000,
+                        name: 'Unemployment Insurance 1%'
+                    },
+                ],
+                totalInsurance: 4356000,
                 afterInsurance: 95644000,
                 taxes: [
                     { name: 'Tax level 1', rate: 0.05, amount: 250_000 },

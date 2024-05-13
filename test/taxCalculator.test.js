@@ -1,4 +1,3 @@
-const Big = require('big.js');
 const calculateTaxes = require('../src/taxCalculator.js')
 
 const assert = require('assert');
