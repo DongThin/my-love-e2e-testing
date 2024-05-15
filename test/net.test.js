@@ -2,7 +2,7 @@ const net = require('../src/net.js')
 const assert = require('assert');
 const test = require('mocha').it;
 const sinon = require('sinon');
-var proxyquire = require("proxyquire");
+const proxyquire = require("proxyquire");
 
 describe("Calculate net salary", function () {
 
@@ -145,144 +145,85 @@ describe("Calculate net salary", function () {
     });
 
     describe('Check Insurance & Taxes deduction', function () {
+        let insurancesCalcStub;
+        let taxCalcStub;
+        let mockedInsurance;
+        let mockedTaxes;
+
+        let net;
 
         beforeEach(function () {
             insurancesCalcStub = sinon.stub();
-            mockedInsurance = { total: 0, insurances: [] };
-
             taxCalcStub = sinon.stub()
-            mockedTaxes = { totalTax: 1, rates: [] };
+
+            net = proxyquire("../src/net.js", {
+                "./insurancesCalculator.js": insurancesCalcStub,
+                "./taxCalculator.js": taxCalcStub,
+            });
         });
 
         afterEach(function () {
             sinon.restore();
         })
 
-        describe('Before 1/7/2023', function () {
+        test('It should correctly deduct total Insurance and total tax', function () {
+            // Arrange
+            mockedInsurance = { total: 1, insurances: [] };
+            mockedTaxes = { totalTax: 2, rates: [] };
 
-            test('It should correctly deduct total Insurance and total tax when there are no taxes', function () {
-                // Social Insurance (SI): 8% Gross
-                // Health Insurance (HI): 1.5% Gross
-                // Unemployment Insurance (UI): 1% Gross
+            const region = 3;
+            const argDate = new Date("2023-06-01");
 
-                insurancesCalcStub.withArgs(10, 1, new Date("2023-06-01")).returns(mockedInsurance)
-                taxCalcStub.withArgs(0).returns(mockedTaxes)
+            insurancesCalcStub.withArgs(93_600_000, region, argDate).returns(mockedInsurance);
+            taxCalcStub.withArgs(82_599_999).returns(mockedTaxes)
 
-                const mockedModules = {
-                    "./insurancesCalculator.js": insurancesCalcStub,
-                    "./taxCalculator.js": taxCalcStub,
-                }
-                const net = proxyquire("../src/net.js", mockedModules);
-                const actualPayslip = net(10, 0, 1, new Date("2023-06-01"));
+            // Act
+            const actualPayslip = net(93_600_000, 0, region, argDate);
 
-                const expectedPayslip = {
-                    gross: 10,
-                    dependents: 0,
-                    dependentDeductionAmount: 0,
-                    region: 1,
-                    insurances: mockedInsurance.insurances,
-                    totalInsurance: mockedInsurance.total,
-                    afterInsurance: actualPayslip.gross - mockedInsurance.total,
-                    taxes: mockedTaxes.rates,
-                    totalTax: mockedTaxes.totalTax,
-                    netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
-                };
-                assert.deepStrictEqual(actualPayslip, expectedPayslip);
-            })
-
-            test('It should correctly deduct total Insurance and total tax when there are taxes', function () {
-                // Social Insurance (SI): 8% Gross
-                // Health Insurance (HI): 1.5% Gross
-                // Unemployment Insurance (UI): 1% Gross
-
-                insurancesCalcStub.withArgs(93_600_000, 1, new Date("2023-06-01")).returns(mockedInsurance)
-                taxCalcStub.returns(mockedTaxes)
-
-                const mockedModules = {
-                    "./insurancesCalculator.js": insurancesCalcStub,
-                    "./taxCalculator.js": taxCalcStub,
-                }
-                const net = proxyquire("../src/net.js", mockedModules);
-                const actualPayslip = net(93_600_000, 0, 1, new Date("2023-06-01"));
-
-                const expectedPayslip = {
-                    gross: 93_600_000,
-                    dependents: 0,
-                    dependentDeductionAmount: 0,
-                    region: 1,
-                    insurances: mockedInsurance.insurances,
-                    totalInsurance: mockedInsurance.total,
-                    afterInsurance: actualPayslip.gross - mockedInsurance.total,
-                    taxes: mockedTaxes.rates,
-                    totalTax: mockedTaxes.totalTax,
-                    netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
-                };
-                assert.deepStrictEqual(actualPayslip, expectedPayslip);
-            })
+            // Verify
+            const expectedPayslip = {
+                gross: 93_600_000,
+                dependents: 0,
+                dependentDeductionAmount: 0,
+                region: region,
+                insurances: mockedInsurance.insurances,
+                totalInsurance: mockedInsurance.total,
+                afterInsurance: actualPayslip.gross - mockedInsurance.total,
+                taxes: mockedTaxes.rates,
+                totalTax: mockedTaxes.totalTax,
+                netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
+            };
+            assert.deepStrictEqual(actualPayslip, expectedPayslip);
         })
 
-        describe('After 1/7/2023', function () {
+        test('It should ensure correct default argument passing for accurate insurance calculations', function () {
+            mockedInsurance = { total: 0, insurances: [] };
+            mockedTaxes = { totalTax: 1, rates: [] };
 
-            test('It should correctly deduct total Insurance when there are no taxes', function () {
-                // Social Insurance (SI): 8% Gross
-                // Health Insurance (HI): 1.5% Gross
-                // Unemployment Insurance (UI): 1% Gross
+            insurancesCalcStub.withArgs(93_600_000, 1).returns(mockedInsurance)
+            taxCalcStub.withArgs(82_600_000).returns(mockedTaxes)
 
-                insurancesCalcStub.withArgs(10, 1).returns(mockedInsurance)
-                taxCalcStub.withArgs(0).returns(mockedTaxes)
+            const actualPayslip = net(93_600_000);
 
-                const mockedModules = {
-                    "./insurancesCalculator.js": insurancesCalcStub,
-                    "./taxCalculator.js": taxCalcStub,
-                }
-                const net = proxyquire("../src/net.js", mockedModules);
-                const actualPayslip = net(10);
+            const expectedPayslip = {
+                gross: 93_600_000,
+                dependents: 0,
+                dependentDeductionAmount: 0,
+                region: 1,
+                insurances: mockedInsurance.insurances,
+                totalInsurance: mockedInsurance.total,
+                afterInsurance: actualPayslip.gross - mockedInsurance.total,
+                taxes: mockedTaxes.rates,
+                totalTax: mockedTaxes.totalTax,
+                netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
+            };
 
-                const expectedPayslip = {
-                    gross: 10,
-                    dependents: 0,
-                    dependentDeductionAmount: 0,
-                    region: 1,
-                    insurances: mockedInsurance.insurances,
-                    totalInsurance: mockedInsurance.total,
-                    afterInsurance: actualPayslip.gross - mockedInsurance.total,
-                    taxes: mockedTaxes.rates,
-                    totalTax: mockedTaxes.totalTax,
-                    netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
-                };
-                assert.deepStrictEqual(actualPayslip, expectedPayslip);
-            })
-
-            test('It should correctly deduct total Insurance and total Tax when there are taxes', function () {
-                // Social Insurance (SI): 8% Gross
-                // Health Insurance (HI): 1.5% Gross
-                // Unemployment Insurance (UI): 1% Gross
-
-                insurancesCalcStub.withArgs(93_600_000).returns(mockedInsurance)
-                taxCalcStub.returns(mockedTaxes)
-
-                const mockedModules = {
-                    "./insurancesCalculator.js": insurancesCalcStub,
-                    "./taxCalculator.js": taxCalcStub,
-                }
-                const net = proxyquire("../src/net.js", mockedModules);
-                const actualPayslip = net(93_600_000);
-
-                const expectedPayslip = {
-                    gross: 93_600_000,
-                    dependents: 0,
-                    dependentDeductionAmount: 0,
-                    region: 1,
-                    insurances: mockedInsurance.insurances,
-                    totalInsurance: mockedInsurance.total,
-                    afterInsurance: actualPayslip.gross - mockedInsurance.total,
-                    taxes: mockedTaxes.rates,
-                    totalTax: mockedTaxes.totalTax,
-                    netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
-                };
-                assert.deepStrictEqual(actualPayslip, expectedPayslip);
-            })
-        });
+            assert.deepStrictEqual(actualPayslip, expectedPayslip);
+            const argDate = insurancesCalcStub.getCall(0).args[2].toISOString().substring(0,10);
+            const expectedDate = new Date().toISOString().substring(0, 10);
+        
+            assert.equal(argDate, expectedDate)
+        })
     })
-})
+});
 
