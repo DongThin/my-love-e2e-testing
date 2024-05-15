@@ -1,18 +1,17 @@
 const Big = require('big.js');
-const july23 = new Date("2023-07-01")
+const todayDate = new Date();
 const calculateTaxes = require('./taxCalculator.js');
 const calculateInsurances = require('./insurancesCalculator.js');
 
-module.exports = function net(gross, dependents = 0, region = 1, date = july23) {
+module.exports = function net(gross, dependents = 0, region = 1, date = todayDate) {
     const grossBig = new Big(gross);
-
     const payslip = {};
-
     payslip.gross = grossBig.toNumber();
 
     payslip.region = region;
 
     const insurancesInfo = calculateInsurances(gross, region, date);
+   
     payslip.totalInsurance = insurancesInfo.total;
     payslip.insurances = insurancesInfo.insurances;
 
