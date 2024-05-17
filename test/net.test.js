@@ -9,9 +9,12 @@ describe("Calculate net salary", function () {
     describe('Check Net salary with dependent', function () {
         //Personal Income Tax (PIT)
 
-        test('No dependent deducted', function () {
+        test('No dependent deducted', function (done) {
             //Gross income below 11 million is tax-exempt.
+<<<<<<< Updated upstream
            const actualPayslip = net(12_290_500, 0);
+=======
+>>>>>>> Stashed changes
 
             const expectedPayslip = {
                 gross: 12_290_500,
@@ -37,15 +40,27 @@ describe("Calculate net salary", function () {
                 totalTax: 0,
                 netSalary: 10999997.5
             };
+<<<<<<< Updated upstream
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
+=======
+            net(12_290_500, 0).then(function (result) {
+                assert.deepStrictEqual(actualPayslip, expectedPayslip);
+                done();
+            }).catch(function () {
+                done()
+            })
+>>>>>>> Stashed changes
 
         })
 
-        test('Dependent with no taxable income', function () {
+        test('Dependent with no taxable income', function (done) {
             //afterInsurance below 11 million is tax-exempt.
 
+<<<<<<< Updated upstream
            const actualPayslip = net(12_290_500, 1);
 
+=======
+>>>>>>> Stashed changes
             const expectedPayslip = {
                 gross: 12_290_500,
                 dependents: 1,
@@ -61,14 +76,29 @@ describe("Calculate net salary", function () {
                 totalTax: 0,
                 netSalary: 10999997.5
             };
+<<<<<<< Updated upstream
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
+=======
+
+            net(12_290_500, 1).then(function (result) {
+
+                assert.deepStrictEqual(actualPayslip, expectedPayslip);
+                done();
+
+            }).catch(function () {
+                done()
+            })
+>>>>>>> Stashed changes
 
         })
 
-        test('Taxes fully deducted with dependents', function () {
+        test('Taxes fully deducted with dependents', function (done) {
             //11m < Gross - 10.5% Gross  <= 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //12.29m < Gross <=17.2067m
+<<<<<<< Updated upstream
            const actualPayslip = net(16_000_000, 1);
+=======
+>>>>>>> Stashed changes
 
             const expectedPayslip = {
                 gross: 16_000_000,
@@ -85,14 +115,27 @@ describe("Calculate net salary", function () {
                 totalTax: 0,
                 netSalary: 14_320_000
             };
+<<<<<<< Updated upstream
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
 
+=======
+
+            net(16_000_000, 1).then(function (result) {
+                assert.deepStrictEqual(actualPayslip, expectedPayslip);
+                done();
+            }).catch(function () {
+                done();
+            })
+>>>>>>> Stashed changes
         })
 
-        test('Taxes partially deducted with dependents', function () {
+        test('Taxes partially deducted with dependents', function (done) {
             //Gross - 10.5% Gross  > 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //Gross > 17.2067m
+<<<<<<< Updated upstream
            const actualPayslip = net(23_463_687, 1);
+=======
+>>>>>>> Stashed changes
 
             const expectedPayslip = {
                 gross: 23_463_687,
@@ -112,7 +155,15 @@ describe("Calculate net salary", function () {
                 totalTax: 309999.9865,
                 netSalary: 20689999.8785
             };
-            assert.deepStrictEqual(actualPayslip, expectedPayslip);
+
+            net(23_463_687, 1).then(function (result) {
+
+                assert.deepStrictEqual(actualPayslip, expectedPayslip);
+                done();
+
+            }).catch(function () {
+                done();
+            })
         })
 
     })
@@ -532,7 +583,15 @@ describe("Calculate net salary", function () {
         })
     });
 
+<<<<<<< Updated upstream
     describe('Check Net salary with 7 rates of taxes: ', function () {
+=======
+    describe('Check Insurance & Taxes deduction', function (done) {
+        let insurancesCalcStub;
+        let taxCalcStub;
+        let mockedInsurance;
+        let mockedTaxes;
+>>>>>>> Stashed changes
 
         /**
          * gross = NET + tax + inssurance
@@ -547,9 +606,67 @@ describe("Calculate net salary", function () {
             //Gross - 10.5% Gross < 11m (Personal deductions)
             // Gross < 12.29m
 
+<<<<<<< Updated upstream
            const actualPayslip = net(12_000_000);
             const expectedPayslip = {
                 gross: 12_000_000,
+=======
+        beforeEach(function () {
+            insurancesCalcStub = sinon.stub();
+            taxCalcStub = sinon.stub()
+
+            net = proxyquire("../src/net.js", {
+                "./insurancesCalculator.js": insurancesCalcStub,
+                "./taxCalculator.js": taxCalcStub,
+            });
+        });
+
+        afterEach(function () {
+            sinon.restore();
+        })
+
+        test('It should correctly deduct total Insurance and total tax', async function () {
+            // Arrange
+            mockedInsurance = { total: 1, insurances: [] };
+            mockedTaxes = { totalTax: 2, rates: [] };
+
+            const region = 3;
+            const argDate = new Date("2023-06-01");
+
+            insurancesCalcStub.withArgs(93_600_000, region, argDate).resolves(mockedInsurance);
+            taxCalcStub.withArgs(82_599_999).resolves(mockedTaxes)
+
+            // Act
+            const actualPayslip = await net(93_600_000, 0, region, argDate);
+
+            // Verify
+            const expectedPayslip = {
+                gross: 93_600_000,
+                dependents: 0,
+                dependentDeductionAmount: 0,
+                region: region,
+                insurances: mockedInsurance.insurances,
+                totalInsurance: mockedInsurance.total,
+                afterInsurance: actualPayslip.gross - mockedInsurance.total,
+                taxes: mockedTaxes.rates,
+                totalTax: mockedTaxes.totalTax,
+                netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
+            };
+            assert.deepStrictEqual(actualPayslip, expectedPayslip);
+        })
+
+        test('Ensure correct default argument passing for accurate insurance calculations', async function () {
+            mockedInsurance = { total: 0, insurances: [] };
+            mockedTaxes = { totalTax: 1, rates: [] };
+
+            insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
+            taxCalcStub.withArgs(82_600_000).resolves(mockedTaxes)
+
+            const actualPayslip = await net(93_600_000);
+
+            const expectedPayslip = {
+                gross: 93_600_000,
+>>>>>>> Stashed changes
                 dependents: 0,
                 dependentDeductionAmount: 0,
                 region: 1,
@@ -772,6 +889,13 @@ describe("Calculate net salary", function () {
             };
 
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
+<<<<<<< Updated upstream
+=======
+            const argDate = insurancesCalcStub.getCall(0).args[2].toISOString().substring(0, 10);
+            const expectedDate = new Date().toISOString().substring(0, 10);
+
+            assert.equal(argDate, expectedDate)
+>>>>>>> Stashed changes
         })
     })
 
