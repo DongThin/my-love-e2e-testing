@@ -9,10 +9,18 @@ const TAX_RATES = [
     { name: 'Tax level 6', rate: 0.3, deduction: 28000000 },
     { name: 'Tax level 7', rate: 0.35, deduction: Number.MAX_SAFE_INTEGER },
 ]
+
 /**
  * 
  * @param {number} taxableIncome 
- * @returns {Promise<{totalTax: number, rates: {name: string, rate: number, amount: number}}[]>}
+ * @returns {Promise<{
+ *  totalTax: number,
+ *  rates: [{
+ *      name: string,
+ *      rate: number,
+ *      amount: number
+ * }]
+ * }>}
  */
 module.exports = function calculateTaxes(taxableIncome) {
     //Do not change type param default. If want to change, convert that variable to the other variable
@@ -43,11 +51,10 @@ module.exports = function calculateTaxes(taxableIncome) {
 
             if (taxableIncomeRemain.lte(0)) {
                 break;
-            }  
+            }
         }
-        
+
         tax.totalTax = tax.totalTax.toNumber();
         resolve(tax);
     })
 }
-

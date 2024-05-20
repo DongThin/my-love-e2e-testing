@@ -35,7 +35,7 @@ const POLICY_UPDATES = [
  * @param {Number} gross 
  * @param {1|2|3|4} region 
  * @param {Date} date 
- * @returns {Promise<{total: number, details: { name: string, amount: number }[]}>}
+ * @returns {Promise<{total: number, insurances: { name: string, amount: number }[]}>}
  */
 
 module.exports = function insurancesCalculator(gross, region = 1, date = new Date()) {

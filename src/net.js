@@ -30,10 +30,10 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
             calculateTaxes(taxableIncome).then(function (taxResult) {
                 payslip.taxes = taxResult.rates;
                 payslip.totalTax = taxResult.totalTax;
-
                 payslip.netSalary = afterInsurance.minus(payslip.totalTax).toNumber();
 
                 resolve(payslip);
+                
             }).catch(function (error) {
                 reject('Error calculating taxes');
             })

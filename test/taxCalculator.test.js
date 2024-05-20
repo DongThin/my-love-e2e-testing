@@ -1,11 +1,27 @@
 const calculateTaxes = require('../src/taxCalculator.js')
+const Big = require('big.js');
 
 const assert = require('assert');
 const test = require('mocha').it;
 
 describe('Calculate taxes', function () {
 
-    test('It applies tax rate 1 only', function (done) {
+    test('It should return no tax when taxableIncome is lte 0', async function () {
+        // taxableIncome <= 5m (tax level 1)
+        const taxableIncome = -1;
+
+        const expectedTaxes = {
+            rates: [],
+            totalTax: 0
+        };
+
+        await calculateTaxes(taxableIncome)
+            .then(function (actual) {
+                assert.deepStrictEqual(actual, expectedTaxes)
+            })
+    })
+
+    test('It applies tax rate 1 only', async function () {
         // taxableIncome <= 5m (tax level 1)
 
         const expectedTaxes = {
@@ -15,16 +31,14 @@ describe('Calculate taxes', function () {
             totalTax: 61722.2
         };
 
-        calculateTaxes(1_234_444)
-            .then(function(actual){
+        await calculateTaxes(1_234_444)
+            .then(function (actual) {
                 assert.deepStrictEqual(actual, expectedTaxes)
-                done()
-            }).catch(function(){
-                done();
+
             })
     })
 
-    test('It applies 2 first tax rates', function (done) {
+    test('It applies 2 first tax rates', async function () {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) 
         //5m < taxableIncome <= 10m
 
@@ -36,17 +50,12 @@ describe('Calculate taxes', function () {
             totalTax: 650_000
         };
 
-        calculateTaxes(9_000_000).then(function (taxes) {
-
+        await calculateTaxes(9_000_000).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
         })
     })
 
-    test('It applies 3 first tax rates', function (done) {
+    test('It applies 3 first tax rates', async function () {
         // 10m < taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3)
         //10m < taxableIncome <= 18m
         const expectedTaxes = {
@@ -57,17 +66,12 @@ describe('Calculate taxes', function () {
             totalTax: 1050000
         };
 
-        calculateTaxes(12_000_000).then(function (taxes) {
-
+        await calculateTaxes(12_000_000).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
         })
     })
 
-    test('It applies 4 first tax rates', function (done) {
+    test('It applies 4 first tax rates', async function () {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m(tax level 4)
         //18m < taxableIncome <= 32m
 
@@ -80,18 +84,12 @@ describe('Calculate taxes', function () {
             totalTax: 4_150_000
         };
 
-        calculateTaxes(29_000_000).then(function (taxes) {
-
+        await calculateTaxes(29_000_000).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
         })
-
     })
 
-    test('It applies 5 first tax rates', function (done) {
+    test('It applies 5 first tax rates', async function () {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) 
         //32m < taxableIncome <= 52m
 
@@ -105,18 +103,13 @@ describe('Calculate taxes', function () {
             totalTax: 4_996_336.25
         };
 
-        calculateTaxes(32_985_345).then(function (taxes) {
-
+        await calculateTaxes(32_985_345).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
         })
 
     })
 
-    test('It applies 6 first tax rates', function (done) {
+    test('It applies 6 first tax rates', async function () {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) + 28m (tax level 6)
         //52m < taxableIncome <= 80m
 
@@ -131,18 +124,12 @@ describe('Calculate taxes', function () {
             totalTax: 10_614_000
         };
 
-        calculateTaxes(54_880_000).then(function (taxes) {
-
+        await calculateTaxes(54_880_000).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
         })
-
     })
 
-    test('It applies with all 7 tax rates', function (done) {
+    test('It applies with all 7 tax rates', async function () {
         // taxableIncome > 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) + 28m (tax level 6) 
         // taxableIncome > 80m
 
@@ -157,24 +144,8 @@ describe('Calculate taxes', function () {
                 { name: 'Tax level 7', rate: 0.35, amount: 1_625_400 }],
             totalTax: 19775400
         };
-        calculateTaxes(84_644_000).then(function (taxes) {
+        await calculateTaxes(84_644_000).then(function (taxes) {
             assert.deepStrictEqual(taxes, expectedTaxes)
-            done()
-
-        }).catch(function () {
-            done()
-        })
-    })
-
-    test('Total tax is equal total of tax per rate ', function (done) {
-        //tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
-
-        calculateTaxes(29_000_000).then(function (taxes) {
-            assert.deepStrictEqual(taxes, 4_150_000)
-            done()
-
-        }).catch(function () {
-            done()
         })
     })
 })

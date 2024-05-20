@@ -8,7 +8,7 @@ describe('Calculate Insurances', async function () {
     describe('It applies update of 1/7/2022', function () {
         const jun23 = new Date("2023-06-01");
 
-        test('It applies 10.5% of Gross for all Insurance(Social Insurance 8%, Health Insurance 1.5% , Unemployment Insurance 1%) when Gross Income is less than or equal 20 times Base Salary (29.8m)', async function () {
+        test('It applies 10.5% of Gross for all Insurance(Social Insurance 8%, Health Insurance 1.5% , Unemployment Insurance 1%) when Gross Income is lte 20 times Base Salary (29.8m)', async function () {
             //Gross Income <= 29.8 million:
             // Social Insurance (Social Insurance): 8% Gross
             // Health Insurance (Health Insurance): 1.5% Gross
