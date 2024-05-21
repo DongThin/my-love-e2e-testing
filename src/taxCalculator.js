@@ -13,37 +13,48 @@ const TAX_RATES = [
 /**
  * 
  * @param {number} taxableIncome 
- * @returns {{totalTax: number, rates: [{name: string, rate: number, amount: number}]}}
+ * @returns {Promise<{
+ *  totalTax: number,
+ *  rates: [{
+ *      name: string,
+ *      rate: number,
+ *      amount: number
+ * }]
+ * }>}
  */
 module.exports = function calculateTaxes(taxableIncome) {
     //Do not change type param default. If want to change, convert that variable to the other variable
-    let taxableIncomeRemain = new Big(taxableIncome);
+    return new Promise(function (resolve, reject) {
+        let taxableIncomeRemain = new Big(taxableIncome);
 
-    const tax = { totalTax: new Big(0), rates: [] };
-
-    if (taxableIncomeRemain.lte(0)) {
-        tax.totalTax = tax.totalTax.toNumber();
-        return tax;
-    }
-
-    for (const taxRate of TAX_RATES) {
-        const taxPaidForEachRate = Big(Math.min(taxableIncomeRemain, taxRate.deduction)).times(taxRate.rate);
-
-        tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
-
-        tax.rates.push({
-            name: taxRate.name,
-            rate: taxRate.rate,
-            amount: taxPaidForEachRate.toNumber()
-        });
-
-        taxableIncomeRemain = taxableIncomeRemain.minus(Big(taxRate.deduction));
+        const tax = { totalTax: new Big(0), rates: [] };
 
         if (taxableIncomeRemain.lte(0)) {
-            break;
-        }
-    }
+            tax.totalTax = tax.totalTax.toNumber()
 
-    tax.totalTax = tax.totalTax.toNumber();
-    return tax;
+            resolve(tax)
+            return;
+        }
+
+        for (const taxRate of TAX_RATES) {
+            const taxPaidForEachRate = Big(Math.min(taxableIncomeRemain, taxRate.deduction)).times(taxRate.rate);
+
+            tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
+
+            tax.rates.push({
+                name: taxRate.name,
+                rate: taxRate.rate,
+                amount: taxPaidForEachRate.toNumber()
+            });
+
+            taxableIncomeRemain = taxableIncomeRemain.minus(Big(taxRate.deduction));
+
+            if (taxableIncomeRemain.lte(0)) {
+                break;
+            }
+        }
+
+        tax.totalTax = tax.totalTax.toNumber();
+        resolve(tax);
+    })
 }
