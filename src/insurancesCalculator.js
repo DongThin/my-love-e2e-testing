@@ -51,7 +51,7 @@ module.exports = function insurancesCalculator(gross, region = 1, date = new Dat
         const policyUpdate = POLICY_UPDATES.find(function (update) {
             return update.startDate.getTime() <= date.getTime()
         })
-        
+
         if (!policyUpdate) {
             reject(new Error("There is no salary policy available for the date provided"));
             return; // Ensure no more code from this Promise block will run.
@@ -83,7 +83,8 @@ module.exports = function insurancesCalculator(gross, region = 1, date = new Dat
         };
 
         const total = insurances.reduce(addIns, new Big(0));
-        resolve({ total: total.toNumber(), insurances });    
+        // console.log(total.toNumber());
+        resolve({ total: total.toNumber(), insurances });
     })
 }
 
