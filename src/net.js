@@ -4,6 +4,7 @@ const calculateTaxes = require('./taxCalculator.js');
 const calculateInsurances = require('./insurancesCalculator.js');
 
 // I made this change
+// Kien has made a change
 
 module.exports = function net(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
