@@ -1,8 +1,15 @@
 const assert = require('assert');
 const test = require('mocha').it;
-const calculateTaxableIncome = require('../src/taxableIncomeCalcGross.js');
+const calculateTaxableIncome = require('../../src/net-to-gross/calcTaxableIncome.js');
+
 
 describe('Calculate taxes', function () {
+
+    test('Taxable Income should be return zero when Taxable Income is lte 0', async function () {
+        const netIncome = -1000;
+        const actual = await calculateTaxableIncome(netIncome);
+       assert.equal(actual, 0);
+    })
 
     describe('Test Taxable Income when no dependent deducted', function () {
 
@@ -20,7 +27,6 @@ describe('Calculate taxes', function () {
             // ti - 5% ti           <= net - 11 
             // 95%*ti               <= net - 11
             // ti <= 5             ==> net <= 15.75
-
             const netIncome = 15_750_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -32,7 +38,6 @@ describe('Calculate taxes', function () {
             // ti        <= net + 5% * 5 + 10% * (ti - 5) - 11
             // 0.9*ti    <= net - 11.25
             // ti <= 10  ==> net <= 20_250_000
-
             const netIncome = 20_250_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -43,7 +48,6 @@ describe('Calculate taxes', function () {
             // ti        <= net + 5% * 5 + 10% * 5 + 15%*min(ti - 10, 8) - 11; Only if ti <= 18
             // 0.85*ti   <= net - 11.75
             // ti <= 18 ==> net <= 27_050_000
-
             const netIncome = 27_050_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -54,7 +58,6 @@ describe('Calculate taxes', function () {
             // ti        <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*min(ti-18, 14)- 11; Only if ti <= 32
             // 0.8*ti    <= net - 12.65
             // ti <= 32 ==> net <= 38_250_000
-
             const netIncome = 38_250_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -65,7 +68,6 @@ describe('Calculate taxes', function () {
             // ti        <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*min(ti-32, 20) - 11; Only if ti <=52
             // 0.75*ti   <= net -14.25
             // ti <= 52 ==> net <= 53_250_000
-
             const netIncome = 53_250_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -77,7 +79,6 @@ describe('Calculate taxes', function () {
             // 0.7*ti   <= net + 9.75 - 30%*52 -11
             // 0.7*ti   <= net - 16.85
             // ti <=80  ==> net <= 72_850_000
-
             const netIncome = 72_850_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -89,7 +90,6 @@ describe('Calculate taxes', function () {
             // 0.65*ti   > net +18.15 -35%*80 -11
             // 0.65*ti   > net - 20.85
             // ti > 80 ==> net > 72_850_000
-
             const netIncome = 72_950_000
             const actual = await calculateTaxableIncome(netIncome)
 
@@ -100,7 +100,6 @@ describe('Calculate taxes', function () {
     describe('Test Taxable Income when having dependent deducted', function () {
 
         test('Dependent with no taxable income', async function () {
-
             const netIncome = 11_000_000
             const actual = await calculateTaxableIncome(netIncome, 0)
             const expected = 0;
@@ -118,7 +117,6 @@ describe('Calculate taxes', function () {
         })
 
         test('Taxes partially deducted with dependents', async function () {
-
             const netIncome = 15_750_000
             const actual = await calculateTaxableIncome(netIncome, 1)
             const expected = 368_421.05263157893;
@@ -128,3 +126,4 @@ describe('Calculate taxes', function () {
 
     })
 })
+

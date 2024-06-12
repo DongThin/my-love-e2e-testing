@@ -389,7 +389,6 @@ describe('Calculate Insurances', async function () {
         test('Throw Exception when entering start date out of update range', async function () {
 
             await insurancesCalculator(93_678_123, 1, new Date("2020-06-01")).catch(function (err) {
-
                 assert.equal(err.message, "There is no salary policy available for the date provided")
             })
 
