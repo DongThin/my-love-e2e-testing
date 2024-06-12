@@ -64,12 +64,9 @@ module.exports = function calculateTaxableIncome(netIncome, dependentCount = 0, 
             .minus(totalDeductionPrev.times(taxRateMatch.rate)))
             .minus(dependents)
             .div(per)
+        ti = Math.max(ti, 0)
 
-        if (ti < 0) {
-            return ti = 0;
-        }
-
-        resolve(ti.toNumber());
+        resolve(ti);
     })
 }
 

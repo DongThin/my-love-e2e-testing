@@ -1,40 +1,12 @@
 const Big = require('big.js');
-
-const REGIONS = [1, 2, 3, 4];
+const findPolicyAndRegion = require('./findPolicyAndRegion');
 const BIG_20 = new Big(20);
-/**
- * If there are new policy changes, please add that on top!
- */
-const POLICY_UPDATES = [
-    {
-        startDate: new Date("2023-07-01"),
-        regionMinWages:
-            [
-                { region: 1, minWage: 4_680_000 },
-                { region: 2, minWage: 4_160_000 },
-                { region: 3, minWage: 3_640_000 },
-                { region: 4, minWage: 3_250_000 }
-            ],
-        baseSalary: new Big(1_800_000)
-    },
-    {
-        startDate: new Date("2022-07-01"),
-        regionMinWages:
-            [
-                { region: 1, minWage: 4_420_000 },
-                { region: 2, minWage: 3_920_000 },
-                { region: 3, minWage: 3_430_000 },
-                { region: 4, minWage: 3_070_000 }
-            ],
-        baseSalary: new Big(1_490_000)
-    },
-];
 
 /**
- * 
- * @param {Number} gross 
- * @param {1|2|3|4} region 
- * @param {Date} date 
+ *
+ * @param {Number} gross
+ * @param {1|2|3|4} region
+ * @param {Date} date
  * @returns {Promise<{total: number, insurances: { name: string, amount: number }[]}>}
  */
 
@@ -42,31 +14,16 @@ module.exports = function insurancesCalculator(gross, region = 1, date = new Dat
     return new Promise(function (resolve, reject) {
 
         const grossBig = new Big(gross);
+        const infoRegion = findPolicyAndRegion(region, date);
+        const minWage = infoRegion.minWage;
+        const baseSalary = infoRegion.baseSalary;
 
-        if (!REGIONS.includes(region)) {
-            reject(new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)"))
-            return;
-        }
-
-        const policyUpdate = POLICY_UPDATES.find(function (update) {
-            return update.startDate.getTime() <= date.getTime()
-        })
-
-        if (!policyUpdate) {
-            reject(new Error("There is no salary policy available for the date provided"));
-            return; // Ensure no more code from this Promise block will run.
-        }
-
-        const regionMinWage = policyUpdate.regionMinWages.find(function (eachRegionMinWage) {
-            return eachRegionMinWage.region === region;
-        })
-
-        const maxGrossForSIorHI = new Big(policyUpdate.baseSalary.times(BIG_20));
+        const maxGrossForSIorHI = new Big(baseSalary.times(BIG_20));
 
         const insuranceScheme = [
-            { name: 'Social Insurance 8%', percentage: 0.08, maxGross: maxGrossForSIorHI },
-            { name: 'Health Insurance 1.5%', percentage: 0.015, maxGross: maxGrossForSIorHI },
-            { name: 'Unemployment Insurance 1%', percentage: 0.01, maxGross: new Big(regionMinWage.minWage).times(BIG_20) }
+            {name: 'Social Insurance 8%', percentage: 0.08, maxGross: maxGrossForSIorHI},
+            {name: 'Health Insurance 1.5%', percentage: 0.015, maxGross: maxGrossForSIorHI},
+            {name: 'Unemployment Insurance 1%', percentage: 0.01, maxGross: new Big(minWage).times(BIG_20)}
         ]
 
         const insurances = insuranceScheme.map(function to(eachScheme) {
@@ -84,7 +41,7 @@ module.exports = function insurancesCalculator(gross, region = 1, date = new Dat
 
         const total = insurances.reduce(addIns, new Big(0));
         // console.log(total.toNumber());
-        resolve({ total: total.toNumber(), insurances });
+        resolve({total: total.toNumber(), insurances});
     })
 }
 

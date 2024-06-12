@@ -1,11 +1,11 @@
 const Big = require('big.js');
 const todayDate = new Date();
-const calculateTaxes = require('./taxCalculator.js');
-const insurancesCalcGross = require('./insurancesCalcGross.js');
-const calculateTaxableIncome = require('./taxableIncomeCalcGross.js');
-const insurancesCalculator = require('./insurancesCalculator.js');
+const calculateTaxes = require('../taxCalculator.js');
+const insurancesCalcGross = require('./calcInsurance.js');
+const calculateTaxableIncome = require('./calcTaxableIncome.js');
+const insurancesCalculator = require('../insurancesCalculator.js');
 
-module.exports = async function gross(net, dependentCount = 0, region = 1, date = todayDate) {
+module.exports = async function netToGross(net, dependentCount = 0, region = 1, date = todayDate) {
 
     const netBig = new Big(net)
     if (netBig.lte(0)) {
@@ -24,16 +24,17 @@ module.exports = async function gross(net, dependentCount = 0, region = 1, date 
     payslip.totalTax = taxes.totalTax;
     payslip.taxes = taxes.rates;
 
-    //Gross = net + totalTax + Insurance
-    const insurance = await insurancesCalcGross(net, taxes.totalTax, region, date)
+    const insurance = await insurancesCalcGross(net, payslip.totalTax, region, date)
     payslip.totalInsurance = insurance.totalInsurance
     payslip.gross = insurance.grossFromIns;
+    payslip.afterInsurance = new Big(payslip.gross).minus(payslip.totalInsurance).toNumber();
     payslip.netSalary = net;
 
+//Gross = net + totalTax + Insurance
     const findInsuranceItem = insurancesCalculator(payslip.gross)
     payslip.insurances = (await findInsuranceItem).insurances;
-    payslip.afterInsurance = Big(payslip.gross).minus(payslip.totalInsurance).toNumber();
     payslip.region = region;
+
     return payslip
 }
 
