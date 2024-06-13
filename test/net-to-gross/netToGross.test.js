@@ -43,7 +43,7 @@ describe('Calculate Gross salary', function () {
 
         const inputNet = -19;
         await netToGross(inputNet).then(function (actual) {
-            assert.equal(actual, 0)
+            assert.equal(actual.gross, 0)
         })
     });
 

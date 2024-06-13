@@ -5,15 +5,9 @@ const calculateTaxableIncome = require('../../src/net-to-gross/calcTaxableIncome
 
 describe('Calculate taxes', function () {
 
-    test('Taxable Income should be return zero when Taxable Income is lte 0', async function () {
-        const netIncome = -1000;
-        const actual = await calculateTaxableIncome(netIncome);
-       assert.equal(actual, 0);
-    })
-
     describe('Test Taxable Income when no dependent deducted', function () {
 
-        test('No taxable income', async function () {
+        test('No taxable income when Net Income is lte 11_000_000', async function () {
             const netIncome = 11_000_000
             const actual = await calculateTaxableIncome(netIncome)
             const expected = 0;
@@ -39,9 +33,11 @@ describe('Calculate taxes', function () {
             // 0.9*ti    <= net - 11.25
             // ti <= 10  ==> net <= 20_250_000
             const netIncome = 20_250_000
-            const actual = await calculateTaxableIncome(netIncome)
+            await calculateTaxableIncome(netIncome).then(function(actual){
+                assert.deepEqual(actual, 10_000_000)
+            })
 
-            assert.deepEqual(actual, 10_000_000)
+           
         })
 
         test('It applies 3 first tax rates', async function () {

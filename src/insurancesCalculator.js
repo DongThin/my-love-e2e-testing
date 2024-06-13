@@ -40,7 +40,6 @@ module.exports = function insurancesCalculator(gross, region = 1, date = new Dat
         };
 
         const total = insurances.reduce(addIns, new Big(0));
-        // console.log(total.toNumber());
         resolve({total: total.toNumber(), insurances});
     })
 }
