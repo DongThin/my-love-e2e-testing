@@ -35,32 +35,6 @@ describe('Calculate Insurances', async function () {
             assert.deepStrictEqual(actualInsurances, expectedInsurances)
         })
 
-        // test('11 net ', async function () {
-        //     // Social Insurance: 8% of 29.8 million
-        //     // Health Insurance: 1.5% of 29.8 million
-        //     // Unemployment Insurance: 1% of Gross Income
-
-        //     const actualInsurances = await insurancesCalculator(12_290_503, 1, jun23);
-        //     const expectedInsurances = {
-        //         insurances: [
-        //             {
-        //                 amount: 2384000,
-        //                 name: 'Social Insurance 8%'
-        //             },
-        //             {
-        //                 amount: 447000,
-        //                 name: 'Health Insurance 1.5%'
-        //             },
-        //             {
-        //                 amount: 299_000,
-        //                 name: 'Unemployment Insurance 1%'
-        //             },
-        //         ],
-        //         total: 3130000
-        //     }
-        //     assert.deepStrictEqual(actualInsurances, expectedInsurances)
-        // })
-
         test('It applies max threshold (29.8m) for Social Insurance (8%) and Health Insurance (1.5%) when Gross between 29.8m and 88.4m', async function () {
             // Social Insurance: 8% of 29.8 million
             // Health Insurance: 1.5% of 29.8 million

@@ -25,7 +25,7 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
             // Calculating taxable income
             let taxableIncome = afterInsurance.minus(new Big(11_000_000)).minus(payslip.dependentDeductionAmount);
             taxableIncome = Math.max(0, taxableIncome.toNumber());
-           
+
             //Calculate totalTax && all level tax 
             calculateTaxes(taxableIncome).then(function (taxResult) {
                 payslip.taxes = taxResult.rates;
@@ -33,7 +33,7 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
                 payslip.netSalary = afterInsurance.minus(payslip.totalTax).toNumber();
 
                 resolve(payslip);
-                
+
             }).catch(function (error) {
                 reject('Error calculating taxes');
             })

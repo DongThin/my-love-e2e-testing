@@ -1,10 +1,8 @@
 const Big = require("big.js");
 const REGIONS = [1, 2, 3, 4];
-// const BIG_20 = new Big(20);
 /**
  * If there are new policy changes, please add that on top!
  */
-
 const POLICY_UPDATES = [
     {
         startDate: new Date("2023-07-01"),
