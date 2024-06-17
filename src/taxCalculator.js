@@ -1,8 +1,7 @@
 const Big = require('big.js');
-const TAX_RATES = require('./taxRate');
+const {TAX_RATES} = require('./salaryConstants');
 
 /**
- *
  * @param {number} taxableIncome
  * @returns {Promise<{
  *  totalTax: number,
@@ -27,7 +26,7 @@ module.exports = function calculateTaxes(taxableIncome) {
         }
 
         for (const taxRate of TAX_RATES) {
-            const taxPaidForEachRate = Big(Math.min(taxableIncomeRemain, taxRate.deduction)).times(taxRate.rate);
+            const taxPaidForEachRate = Big(Math.min(taxableIncomeRemain.toNumber(), taxRate.deduction)).times(taxRate.rate);
             tax.totalTax = tax.totalTax.plus(taxPaidForEachRate);
 
             tax.rates.push({
