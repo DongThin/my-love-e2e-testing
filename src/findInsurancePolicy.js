@@ -16,18 +16,25 @@ const POLICY_UPDATES = [
     },
     {
         startDate: new Date("2022-07-01"),
-        regionMinWages:
-            [
-                {region: 1, minWage: 4_420_000},
-                {region: 2, minWage: 3_920_000},
-                {region: 3, minWage: 3_430_000},
-                {region: 4, minWage: 3_070_000}
-            ],
+        regionMinWages: [
+            {region: 1, minWage: 4_420_000},
+            {region: 2, minWage: 3_920_000},
+            {region: 3, minWage: 3_430_000},
+            {region: 4, minWage: 3_070_000}
+        ],
         baseSalary: new Big(1_490_000)
     }
 ]
 
-module.exports = function findPolicyAndRegion(region, date) {
+/**
+ * @param region {1|2|3|4}
+ * @param date {Date}
+ * @returns {{
+ *     baseSalary: Big,
+ *     minWage: number
+ * }}
+ */
+module.exports = function findInsurancePolicy(region, date) {
     if (!REGIONS.includes(region)) {
         throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)")
     }
@@ -46,7 +53,6 @@ module.exports = function findPolicyAndRegion(region, date) {
 
     return {
         baseSalary: policyUpdate.baseSalary,
-        region: regionInfo.region,
         minWage: regionInfo.minWage,
     }
 }

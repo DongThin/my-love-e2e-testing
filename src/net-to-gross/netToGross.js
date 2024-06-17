@@ -1,11 +1,12 @@
 const Big = require('big.js');
-const todayDate = new Date();
 const calculateTaxes = require('../taxCalculator.js');
-const insurancesCalcGross = require('./calcInsurance.js');
+const calcTotalInsurance = require('./calcTotalInsurance.js');
 const calcTaxableIncome = require('./calcTaxableIncome.js');
-const calcInsurance = require('../insurancesCalculator.js');
+const calcInsDetails = require('../insurancesCalculator.js');
+const {DEDUCTION_PER_PERSON} = require("../salaryConstants");
 
-module.exports = async function netToGross(net, dependentCount = 0, region = 1, date = todayDate) {
+// Single source of truth
+module.exports = async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {
 
     const netBig = new Big(net)
     const payslip = {};
@@ -15,8 +16,10 @@ module.exports = async function netToGross(net, dependentCount = 0, region = 1, 
         return payslip
     }
 
+    payslip.netSalary = net;
+    payslip.region = region;
     payslip.dependents = dependentCount;
-    payslip.dependentDeductionAmount = dependentCount * 4400000;
+    payslip.dependentDeductionAmount = dependentCount * DEDUCTION_PER_PERSON;
 
     const taxableIncome = await calcTaxableIncome(net, dependentCount)
     const taxes = await calculateTaxes(taxableIncome);
@@ -24,15 +27,13 @@ module.exports = async function netToGross(net, dependentCount = 0, region = 1, 
     payslip.totalTax = taxes.totalTax;
     payslip.taxes = taxes.rates;
 
-    const insurance = await insurancesCalcGross(net, payslip.totalTax, region, date)
-    payslip.totalInsurance = insurance.totalInsurance
-    payslip.gross = insurance.grossFromIns;
+    const totalIns = await calcTotalInsurance(net, payslip.totalTax, region, date)
+    payslip.totalInsurance = totalIns.total
+    payslip.gross = totalIns.gross;
     payslip.afterInsurance = new Big(payslip.gross).minus(payslip.totalInsurance).toNumber();
-    payslip.netSalary = net;
 
-    const ins =await calcInsurance(payslip.gross)
-    payslip.insurances = ins.insurances
-    payslip.region = region;
+    const insuranceDetails = await calcInsDetails(payslip.gross)
+    payslip.insurances = insuranceDetails.insurances
 
     return payslip
 }

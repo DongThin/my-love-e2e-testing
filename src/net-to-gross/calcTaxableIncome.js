@@ -1,79 +1,114 @@
 const Big = require('big.js');
-const TAX_RATES = require('../taxRate');
+const {TAX_RATES, DEDUCTION_PER_PERSON, SELF_DEDUCTION} = require('../salaryConstants');
+/**
+ * Gross = Net + totalTax + totalInsurance
+ * Unit: a million (Ex: 11 means 11 million)
+ *
+ * Taxable Income (ti) = net + totalTax - 11; Total tax is the sum of the tax amounts at each level (tax rate * deduction).
+ * ti = net + sum tax amounts (tax rate * deduction) - 11
+ *
+ * Each tax level has different rate and its max deduction. Therefore, we have below un-equations
+ *
+ * lv1 ti ∈ (0, 5]:
+ * ==> 0 < net + 5% * min(ti, 5) - 11 <= 5
+ * ==> 11 - 5% * min(0, 5) < net <= 5 + 11 - 5% * min(5, 5)
+ * ==> 11 < net <= 15.75
+ *
+ * lv2: ti <= net + 5% * 5 + 10% *min(ti - 5, 5) - 11
+ * lv3: ti = net + 5% * 5 + 10% * 5 + 15% *min(ti - 10, 8) - 11
+ * lv4: ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20% *min(ti-18, 14)- 11
+ * lv5: ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*min(ti-32, 20) - 11
+ * lv6: ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*min(ti-52, 28) - 11
+ * lv7: ti >= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*28 + 35%*min(ti-80) - 11
+ *
+ *
+ * @type {[{taxableIncomeFactor: number, inclusiveNetMax: number, totalDeductionTimeRatePrev: number}]}
+ */
 
-const oneMinusInsRate = [0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65]
+const TAX_FACTOR_RANGES = [
+    // lv1 ti ∈ (0, 5], rate 5%:
+    // ==> 0 < net + 5% * min(ti, 5) - 11 <= 5
+    // ==> 11 - 5% * min(0, 5) < net <= 5 + 11 - 5% * min(5, 5)
+    // ==> 11 < net <= 15.75
 
-module.exports = function calculateTaxableIncome(netIncome, dependentCount = 0,) {
+    //==>  ti = (net - 11)/0.95 when net ∈ (11, 15.75]
+    {totalDeductionTimeRatePrev: 11_000_000, inclusiveNetMax: 15_750_000, taxableIncomeFactor: 0.95},
+
+    // lv2 ti ∈ (5, 10], rate 10%:
+    // ==> 5 < net + 5% * 5 + 10% *min(ti - 5, 5) - 11 <= 10
+    // ==> 5 + 11 - 5% * 5 - 10% *min(5 - 5, 5) < net <= 10 + 11 - 5 *5% - 10% *min(10 - 5, 5)
+    // ==> 15.75 < net <= 20.25
+
+    // ti = net + 5% * 5 + 10% *min(ti - 5, 5) - 11
+    // 0.9ti = net + 5% * 5 - 10% * 5 - 11
+    // ti = (net - 11.25)/0.9 when net ∈ (15.75, 20.25]
+    {totalDeductionTimeRatePrev: 11_250_000, inclusiveNetMax: 20_250_000, taxableIncomeFactor: 0.9},
+
+    /**
+     * Following above inequation, we can conclude for the rest of tax rates.
+     */
+
+    // lv3 ti ∈ (10, 18], rate 15%:
+    // ti = (net - 11.25)/0.9 when net ∈ (20.25, 27.05]
+    // ti <= net + 5% * 5 + 10% * 5 + 15%*min(ti - 10, 8) - 11
+    // ti <= (net - 11.75)/0.85
+    // ti <= 18 ==> net <= 27.05
+    {totalDeductionTimeRatePrev: 11_750_000, inclusiveNetMax: 27_050_000, taxableIncomeFactor: 0.85},
+
+    // ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*min(ti-18, 14)- 11
+    // ti <= (net -12.65)/0.8
+    // ti <= 32 ==> net <= 38.25
+    {totalDeductionTimeRatePrev: 12_650_000, inclusiveNetMax: 38_250_000, taxableIncomeFactor: 0.8},
+
+    // ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*min(ti-32, 20) - 11
+    // ti <= (net -14.25)/0.75 Only if ti <= 52
+    // ti <= 52 ==> net <= 53.25
+    {totalDeductionTimeRatePrev: 14_250_000, inclusiveNetMax: 53_250_000, taxableIncomeFactor: 0.75},
+
+    // ti <= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*min(ti-52, 28) - 11
+    // ti <= (net -16.85)/0.7
+    // ti <= 80 ==> net <= 72.85
+    {totalDeductionTimeRatePrev: 16_850_000, inclusiveNetMax: 72_850_000, taxableIncomeFactor: 0.7},
+
+    // ti >= net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*28 + 35%*min(ti-80) - 11
+    // ti >= (net -20.85)/0.65
+    // ti >= 80 ==> net >= 72.85
+    {totalDeductionTimeRatePrev: 20_850_000, inclusiveNetMax: Number.MAX_SAFE_INTEGER, taxableIncomeFactor: 0.65}
+]
+
+/**
+ * @param {number} netIncome
+ * @param {number} dependentCount
+ * @returns {Promise: number}
+ */
+
+module.exports = function calcTaxableIncome(netIncome, dependentCount = 0) {
     return new Promise(function (resolve, reject) {
-        const dependents = dependentCount * 4_400_000;
+        // lv1 ti ∈ (0, 5], rate 5%:
+        // ==> 0 < net + 5% * min(ti, 5) - 11 <= 5
+        // ==> 11 - 5% * min(0, 5) < net <= 5 + 11 - 5% * min(5, 5)
+        // ==> 11 < net <= 15.75
+
+        // ti = (net - 11)/0.95 when net ∈ (11, 15.75]
 
         let netBig = new Big(netIncome);
         let ti = new Big(0)
-        let totalDeductionTimesRatePrev = new Big(0);
-        let totalDeductionPrev = new Big(0);
-        let percentAfterInsRateDeducted = 0;
 
-        if (netBig.lte(11_000_000)) {
-            resolve(new Big(0).toNumber());
-            return;
-        } else if (netBig.lte(15_750_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[0];
-        } else if (netBig.lte(20_250_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[1]
-        } else if (netBig.lte(27_050_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[2]
-        } else if (netBig.lte(38_250_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[3]
-        } else if (netBig.lte(53_250_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[4]
-        } else if (netBig.lte(72_850_000)) {
-            percentAfterInsRateDeducted = oneMinusInsRate[5]
-        } else {
-            percentAfterInsRateDeducted = oneMinusInsRate[6]
+        if (netBig.lte(SELF_DEDUCTION)) {
+            resolve(ti.toNumber());
+            return
         }
 
-        let taxRateMatch;
+        const taxFactorRange = TAX_FACTOR_RANGES.find(function (result) {
+            return netBig.lte(result.inclusiveNetMax);
+        });
+        const taxableIncomeFactor = taxFactorRange.taxableIncomeFactor
 
-        for (let i = 0; i < TAX_RATES.length; i++) {
-            const taxRate = TAX_RATES[i];
-            if ((1 - taxRate.rate) >= percentAfterInsRateDeducted) {
-                totalDeductionTimesRatePrev = totalDeductionTimesRatePrev.add(Big(taxRate.deduction).times(taxRate.rate));
-                totalDeductionPrev = totalDeductionPrev.add(taxRate.deduction)
-            }
+        const dependents = dependentCount * DEDUCTION_PER_PERSON;
+        ti = (netBig.minus(taxFactorRange.totalDeductionTimeRatePrev)
+            .minus(dependents))
+            .div(taxableIncomeFactor)
 
-            if (1 - taxRate.rate < percentAfterInsRateDeducted && i > 0) {
-                taxRateMatch = TAX_RATES[i - 1];
-                break;
-            }
-        }
-        if (!taxRateMatch) {
-            taxRateMatch = TAX_RATES[TAX_RATES.length - 1];
-        }
-
-        ti = (netBig
-            .minus(11_000_000)
-            .add(totalDeductionTimesRatePrev)
-            .minus(totalDeductionPrev.times(taxRateMatch.rate)))
-            .minus(dependents)
-            .div(percentAfterInsRateDeducted)
-        ti = Math.max(ti, 0)
-
-        resolve(ti);
+        resolve(Math.max(ti.toNumber(), 0));
     })
 }
-
-// ti = net + 5% *min(ti, 5) - 11
-// ti = net + 5% * 5 + 10% *min(ti - 5, 5) - 11
-// ti = net + 5% * 5 + 10% * 5 + 15%*min(ti - 10, 8) - 11
-// ti = net + 5% * 5 + 10% * 5 + 15%*8 + 20%*min(ti-18, 14)- 11
-// ti = net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*min(ti-32, 20) - 11
-// ti = net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*min(ti-52, 28) - 11
-// ti = net + 5% * 5 + 10% * 5 + 15%*8 + 20%*14 + 25%*20 +30%*28 + 35%*min(ti-80) - 11
-
-// ti = (net - 11)/ 0.95 Only if ti <= 5.  15.75
-// ti = (net - 11.25)/0.9 Only if ti <= 10.  20.25
-// ti = (net - 11.75)/0.85 Only if ti <= 18. 27.05
-// ti = (net -12.65)/0.8 Only if ti <= 32.  38.25
-// ti = (net -14.25)/0.75 Only if ti <= 52  53.25
-// ti = (net -16.85)/0.7 if ti <= 80  72.85
-// ti = (net -20.85)/0.65 if ti > 80 > 72.85
