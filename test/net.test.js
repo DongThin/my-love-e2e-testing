@@ -1,5 +1,5 @@
 const assert = require('assert');
-const test = require('mocha').it;
+const verify = require('mocha').it;
 const sinon = require('sinon');
 const proxyquire = require("proxyquire");
 
@@ -41,7 +41,7 @@ describe("Calculate net salary", function () {
             sinon.restore();
         })
 
-        test('No dependent deducted', async function () {
+        verify('No dependent deducted', async function () {
             //Gross income below 11 million is tax-exempt.
             const gross = 12_290_500;
 
@@ -64,7 +64,7 @@ describe("Calculate net salary", function () {
             assert(taxCalcStub.calledWith(1_290_500));
         })
 
-        test('Dependent with no taxable income', async function () {
+        verify('Dependent with no taxable income', async function () {
             //afterInsurance below 11 million is tax-exempt.
             const gross = 12_290_500;
 
@@ -87,7 +87,7 @@ describe("Calculate net salary", function () {
             assert(taxCalcStub.calledWith(0));
         })
 
-        test('Taxes fully deducted with dependents', async function () {
+        verify('Taxes fully deducted with dependents', async function () {
             //11m < Gross - 10.5% Gross  <= 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //12.29m < Gross <=17.2067m
             const gross = 16_000_000;
@@ -112,7 +112,7 @@ describe("Calculate net salary", function () {
 
         })
 
-        test('Taxes partially deducted with dependents', async function () {
+        verify('Taxes partially deducted with dependents', async function () {
             //Gross - 10.5% Gross  > 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //Gross > 17.2067m
             const gross = 23_463_687;
@@ -139,7 +139,7 @@ describe("Calculate net salary", function () {
 
     describe('Check Insurance & Taxes deduction', function () {
 
-        test('It should correctly deduct total Insurance and total tax', async function () {
+        verify('It should correctly deduct total Insurance and total tax', async function () {
             // Arrange
             mockedInsurance = { total: 1, insurances: [] };
             mockedTaxes = { totalTax: 2, rates: [] };
@@ -169,7 +169,7 @@ describe("Calculate net salary", function () {
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
         })
 
-        test('Ensure correct default argument passing for accurate insurance calculations', async function () {
+        verify('Ensure correct default argument passing for accurate insurance calculations', async function () {
             mockedInsurance = { total: 0, insurances: [] };
             mockedTaxes = { totalTax: 1, rates: [] };
 
@@ -198,7 +198,7 @@ describe("Calculate net salary", function () {
             assert.equal(argDate, expectedDate)
         })
 
-        test('Throw error message when having error calculating taxes', async function () {
+        verify('Throw error message when having error calculating taxes', async function () {
             mockedInsurance = { total: 0, insurances: [] };
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
@@ -209,7 +209,7 @@ describe("Calculate net salary", function () {
             })
         })
 
-        test('Throw error message when having error calculating insurances', async function () {
+        verify('Throw error message when having error calculating insurances', async function () {
 
             insurancesCalcStub.withArgs(93_600_000, 1).rejects('Error calculating insurances')
 
