@@ -1,5 +1,4 @@
 const insurancesCalculator = require('../src/insurancesCalculator.js')
-
 const assert = require('assert');
 const test = require('mocha').it;
 
@@ -361,15 +360,13 @@ describe('Calculate Insurances', async function () {
 
     describe('Out of update range', async function () {
 
-        test('Throw Exception when entering start date out of update range', async function () {
+        test('Exception is thrown when entering start date out of update range', async function () {
 
             await insurancesCalculator(93_678_123, 1, new Date("2020-06-01")).catch(function (err) {
-
                 assert.equal(err.message, "There is no salary policy available for the date provided")
             })
 
         })
     })
 })
-
 
