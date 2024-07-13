@@ -141,8 +141,8 @@ describe("Calculate net salary", function () {
 
         test('It should correctly deduct total Insurance and total tax', async function () {
             // Arrange
-            mockedInsurance = { total: 1, insurances: [] };
-            mockedTaxes = { totalTax: 2, rates: [] };
+            const mockedInsurance = { total: 1, insurances: [] };
+            const mockedTaxes = { totalTax: 2, rates: [] };
 
             const region = 3;
             const argDate = new Date("2023-06-01");
@@ -170,8 +170,8 @@ describe("Calculate net salary", function () {
         })
 
         test('Ensure correct default argument passing for accurate insurance calculations', async function () {
-            mockedInsurance = { total: 0, insurances: [] };
-            mockedTaxes = { totalTax: 1, rates: [] };
+            const mockedInsurance = { total: 0, insurances: [] };
+            const mockedTaxes = { totalTax: 1, rates: [] };
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).resolves(mockedTaxes)
@@ -199,7 +199,7 @@ describe("Calculate net salary", function () {
         })
 
         test('Throw error message when having error calculating taxes', async function () {
-            mockedInsurance = { total: 0, insurances: [] };
+            const mockedInsurance = { total: 0, insurances: [] };
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).rejects('Error calculating taxes')
