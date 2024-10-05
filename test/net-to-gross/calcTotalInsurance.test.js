@@ -6,10 +6,10 @@ const test = require('mocha').it;
  * Gross max for UI = 20x region min wage
  * Gross max for SI,HI = 20x base Salary
  */
-describe('Calculate total Insurances from Net and Taxes', async function () {
+describe('Calculate total Insurances from Net and Taxes', async () => {
 
     test('Maximum SI, HI, and UI application' +
-        'when net + taxes >= Gross max for UI', async function () {
+        'when net + taxes >= Gross max for UI', async () => {
         // net + totalTax + 3_420_000 (SI + HI) + 1% 20*regionMinwage >= 93_600_000 (100% 20*regionMinwage)
         // net + totalTax >= 99% * 20 * regionMinwage - 3_420_000
         // net + totalTax >= 89_244_000
@@ -23,7 +23,7 @@ describe('Calculate total Insurances from Net and Taxes', async function () {
     })
 
     test('Maximum SI, HI application' +
-        'when net + taxes >= Gross max for SI, HI && < Gross max for UI', async function () {
+        'when net + taxes >= Gross max for SI, HI && < Gross max for UI', async () => {
 
         // 20*regionMinwage > gross >= 36_000_000==> net +totalTax + 3_420_000 + 1% gross >= 36_000_000
         // 20*regionMinwage > net + totalTax >= 99% * 36_000_000 - 3_420_000
@@ -38,7 +38,7 @@ describe('Calculate total Insurances from Net and Taxes', async function () {
     })
 
     test('10.5% gross-based standard insurance calculation' +
-        'when net + taxes < Gross max for SI, HI', async function () {
+        'when net + taxes < Gross max for SI, HI', async () => {
         // gross < 36_000_000 ==> net +totalTax + 3_420_000 + 1% gross < 36_000_000
         // net + totalTax <36_000_000 * 0.895
         // net + totalTax < 32_220_000
@@ -52,7 +52,7 @@ describe('Calculate total Insurances from Net and Taxes', async function () {
     })
 
     test('Gross is calculated correctly in various regions ' +
-        'when net + taxes >= 89,244,000', async function () {
+        'when net + taxes >= 89,244,000', async () => {
         // net + totalTax + 3_420_000 (SI + HI) + 1% 20*regionMinwage >= 93_600_000 (100% 20*regionMinwage)
         // net + totalTax >= 99% * 20 * regionMinwage - 3_420_000
         // net + totalTax >= 89_244_000
@@ -65,15 +65,15 @@ describe('Calculate total Insurances from Net and Taxes', async function () {
         assert.deepStrictEqual(actualInsurances, expectedInsurances)
     })
 })
-describe('Throw error', function () {
-    test('Exception is thrown when entering invalid region', async function () {
-        await calcTotalInsurance(89_000_000, 26_846_154, 5).catch(function (error) {
+describe('Throw error', () => {
+    test('Exception is thrown when entering invalid region', async () => {
+        await calcTotalInsurance(89_000_000, 26_846_154, 5).catch((error) =>{
             assert.equal(error.message, "Invalid region entered. Please enter again! (1, 2, 3, 4)")
         })
     })
 
-    test('Exception is thrown when entering start date out of update range', async function () {
-        await calcTotalInsurance(89_000_000, 26_846_154, 4, new Date("2020-06-01")).catch(function (error) {
+    test('Exception is thrown when entering start date out of update range', async () => {
+        await calcTotalInsurance(89_000_000, 26_846_154, 4, new Date("2020-06-01")).catch((error) => {
             assert.equal(error.message, "There is no salary policy available for the date provided")
         })
     })
