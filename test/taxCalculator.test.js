@@ -3,9 +3,9 @@ const Big = require('big.js');
 const assert = require('assert');
 const test = require('mocha').it;
 
-describe('Calculate taxes', function () {
+describe('Calculate taxes', () => {
 
-    test('It should return no tax when taxableIncome is lte 0', async function () {
+    test('It should return no tax when taxableIncome is lte 0', async () => {
         // taxableIncome <= 5m (tax level 1)
         const taxableIncome = -1;
 
@@ -20,7 +20,7 @@ describe('Calculate taxes', function () {
             })
     })
 
-    test('It applies tax rate 1 only', async function () {
+    test('It applies tax rate 1 only', async () => {
         // taxableIncome <= 5m (tax level 1)
 
         const expectedTaxes = {
@@ -37,7 +37,7 @@ describe('Calculate taxes', function () {
             })
     })
 
-    test('It applies 2 first tax rates', async function () {
+    test('It applies 2 first tax rates', async () => {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) 
         //5m < taxableIncome <= 10m
 
@@ -49,12 +49,12 @@ describe('Calculate taxes', function () {
             totalTax: 650_000
         };
 
-        await calculateTaxes(9_000_000).then(function (taxes) {
+        await calculateTaxes(9_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
 
-    test('It applies 3 first tax rates', async function () {
+    test('It applies 3 first tax rates', async () => {
         // 10m < taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3)
         //10m < taxableIncome <= 18m
         const expectedTaxes = {
@@ -65,12 +65,12 @@ describe('Calculate taxes', function () {
             totalTax: 1050000
         };
 
-        await calculateTaxes(12_000_000).then(function (taxes) {
+        await calculateTaxes(12_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
 
-    test('It applies 4 first tax rates', async function () {
+    test('It applies 4 first tax rates', async () => {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m(tax level 4)
         //18m < taxableIncome <= 32m
 
@@ -83,12 +83,12 @@ describe('Calculate taxes', function () {
             totalTax: 4_150_000
         };
 
-        await calculateTaxes(29_000_000).then(function (taxes) {
+        await calculateTaxes(29_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
 
-    test('It applies 5 first tax rates', async function () {
+    test('It applies 5 first tax rates', async () => {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) 
         //32m < taxableIncome <= 52m
 
@@ -102,13 +102,13 @@ describe('Calculate taxes', function () {
             totalTax: 4_996_336.25
         };
 
-        await calculateTaxes(32_985_345).then(function (taxes) {
+        await calculateTaxes(32_985_345).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
 
     })
 
-    test('It applies 6 first tax rates', async function () {
+    test('It applies 6 first tax rates', async () => {
         // taxableIncome <= 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) + 28m (tax level 6)
         //52m < taxableIncome <= 80m
 
@@ -123,12 +123,12 @@ describe('Calculate taxes', function () {
             totalTax: 10_614_000
         };
 
-        await calculateTaxes(54_880_000).then(function (taxes) {
+        await calculateTaxes(54_880_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
 
-    test('It applies with all 7 tax rates', async function () {
+    test('It applies with all 7 tax rates', async () => {
         // taxableIncome > 5m (tax level 1) +  5m (tax level 2) + 8m (tax level 3) + 14m (tax level 4) + 20m (tax level 5) + 28m (tax level 6) 
         // taxableIncome > 80m
 
@@ -143,7 +143,7 @@ describe('Calculate taxes', function () {
                 { name: 'Tax level 7', rate: 0.35, amount: 1_625_400 }],
             totalTax: 19775400
         };
-        await calculateTaxes(84_644_000).then(function (taxes) {
+        await calculateTaxes(84_644_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })

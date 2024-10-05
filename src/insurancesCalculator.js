@@ -24,7 +24,7 @@ module.exports = function calcInsuranceDetails(gross, region = 1, date = new Dat
             {name: 'Unemployment Insurance 1%', percentage: 0.01, maxGross: new Big(policy.minWage).times(BIG_20)}
         ]
 
-        const insurances = insuranceScheme.map(function to(eachScheme) {
+        const insurances = insuranceScheme.map((eachScheme) => {
             return {
                 name: eachScheme.name,
                 amount: Big(Math.min(eachScheme.maxGross, grossBig.toNumber())).times(eachScheme.percentage).toNumber()
@@ -32,10 +32,9 @@ module.exports = function calcInsuranceDetails(gross, region = 1, date = new Dat
         })
 
         // Reduce
-        const addIns = function (prevValue, currentValue) {
+        const addIns =  (prevValue, currentValue) =>
             // currentValue === insurances[currentIndex]
-            return prevValue.add(new Big(currentValue.amount))
-        };
+             prevValue.add(new Big(currentValue.amount));
 
         const total = insurances.reduce(addIns, new Big(0));
         resolve({total: total.toNumber(), insurances});
