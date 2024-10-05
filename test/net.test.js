@@ -3,12 +3,12 @@ const test = require('mocha').it;
 const sinon = require('sinon');
 const proxyquire = require("proxyquire");
 
-describe("Calculate net salary", function () {
+describe("Calculate net salary", () => {
     let insurancesCalcStub;
     let taxCalcStub;
     let net;
 
-    beforeEach(function () {
+    beforeEach(() => {
         insurancesCalcStub = sinon.stub();
         taxCalcStub = sinon.stub()
 
@@ -18,30 +18,30 @@ describe("Calculate net salary", function () {
         });
     });
 
-    afterEach(function () {
+    afterEach(() => {
         sinon.restore();
     })
 
-    describe('Check Dependent deduction', function () {
+    describe('Check Dependent deduction', () => {
         //Personal Income Tax (PIT)
         const mockedInsurance = { total: 0, insurances: [] };
         const mockedTaxes = { totalTax: 0, rates: [] };
-        beforeEach(function () {
+        beforeEach(() => {
             insurancesCalcStub.returns(Promise.resolve(mockedInsurance));
             // insurancesCalcStub.resolves(mockedInsurance);
 
             taxCalcStub.returns(
-                new Promise(function (resolve, reject) {
+                new Promise((resolve, reject) => {
                     resolve(mockedTaxes);
                 })
             )
         })
 
-        afterEach(function () {
+        afterEach(() => {
             sinon.restore();
         })
 
-        test('No dependent deducted', async function () {
+        test('No dependent deducted', async () => {
             //Gross income below 11 million is tax-exempt.
             const gross = 12_290_500;
 
@@ -58,13 +58,13 @@ describe("Calculate net salary", function () {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross).then(function (result) {
+            await net(gross).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(1_290_500));
         })
 
-        test('Dependent with no taxable income', async function () {
+        test('Dependent with no taxable income', async () => {
             //afterInsurance below 11 million is tax-exempt.
             const gross = 12_290_500;
 
@@ -81,13 +81,13 @@ describe("Calculate net salary", function () {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then(function (result) {
+            await net(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(0));
         })
 
-        test('Taxes fully deducted with dependents', async function () {
+        test('Taxes fully deducted with dependents', async () => {
             //11m < Gross - 10.5% Gross  <= 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //12.29m < Gross <=17.2067m
             const gross = 16_000_000;
@@ -105,14 +105,14 @@ describe("Calculate net salary", function () {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then(function (result) {
+            await net(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(600_000));
 
         })
 
-        test('Taxes partially deducted with dependents', async function () {
+        test('Taxes partially deducted with dependents', async () => {
             //Gross - 10.5% Gross  > 11m (Personal deductions) + 4.4m * dependents (Dependent deductions)
             //Gross > 17.2067m
             const gross = 23_463_687;
@@ -130,16 +130,16 @@ describe("Calculate net salary", function () {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then(function (result) {
+            await net(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(8_063_687));
         })
     });
 
-    describe('Check Insurance & Taxes deduction', function () {
+    describe('Check Insurance & Taxes deduction', () => {
 
-        test('It should correctly deduct total Insurance and total tax', async function () {
+        test('It should correctly deduct total Insurance and total tax', async () => {
             // Arrange
             const mockedInsurance = { total: 1, insurances: [] };
             const mockedTaxes = { totalTax: 2, rates: [] };
@@ -169,7 +169,7 @@ describe("Calculate net salary", function () {
             assert.deepStrictEqual(actualPayslip, expectedPayslip);
         })
 
-        test('Ensure correct default argument passing for accurate insurance calculations', async function () {
+        test('Ensure correct default argument passing for accurate insurance calculations', async () => {
             const mockedInsurance = { total: 0, insurances: [] };
             const mockedTaxes = { totalTax: 1, rates: [] };
 
@@ -198,7 +198,7 @@ describe("Calculate net salary", function () {
             assert.equal(argDate, expectedDate)
         })
 
-        test('Throw error message when having error calculating taxes', async function () {
+        test('Throw error message when having error calculating taxes', async () => {
             const mockedInsurance = { total: 0, insurances: [] };
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
@@ -209,7 +209,7 @@ describe("Calculate net salary", function () {
             })
         })
 
-        test('Throw error message when having error calculating insurances', async function () {
+        test('Throw error message when having error calculating insurances', async () => {
 
             insurancesCalcStub.withArgs(93_600_000, 1).rejects('Error calculating insurances')
 
