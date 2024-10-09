@@ -1,6 +1,5 @@
 const calculateTaxes = require('../src/taxCalculator.js')
 const Big = require('big.js');
-
 const assert = require('assert');
 const test = require('mocha').it;
 
