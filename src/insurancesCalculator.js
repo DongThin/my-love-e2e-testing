@@ -1,6 +1,6 @@
-const Big = require('big.js');
-const findInsurancePolicy = require('./findInsurancePolicy');
-const {BIG_20} = require("./salaryConstants");
+import Big from 'big.js';
+import {findInsurancePolicy} from './findInsurancePolicy';
+import {BIG_20} from './salaryConstants';
 
 /**
  *
@@ -10,7 +10,7 @@ const {BIG_20} = require("./salaryConstants");
  * @returns {Promise<{total: number, insurances: { name: string, amount: number }[]}>}
  */
 
-module.exports = function calcInsuranceDetails(gross, region = 1, date = new Date()) {
+export function calcInsuranceDetails(gross, region = 1, date = new Date()) {
     return new Promise(function (resolve, reject) {
 
         const grossBig = new Big(gross);

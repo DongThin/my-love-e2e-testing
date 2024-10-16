@@ -1,4 +1,4 @@
-const Big = require("big.js");
+import Big from 'big.js';
 const REGIONS = [1, 2, 3, 4];
 /**
  * If there are new policy changes, please add that on top!
@@ -34,7 +34,7 @@ const POLICY_UPDATES = [
  *     minWage: number
  * }}
  */
-module.exports = function findInsurancePolicy(region, date) {
+export function findInsurancePolicy(region, date) {
     if (!REGIONS.includes(region)) {
         throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)")
     }

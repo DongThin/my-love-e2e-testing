@@ -1,5 +1,5 @@
-const insurancesCalculator = require('../src/insurancesCalculator.js')
-const assert = require('assert');
+import insurancesCalculator from '../src/insurancesCalculator';
+import assert from 'assert';
 const test = require('mocha').it;
 
 describe('Calculate Insurances', async () => {
