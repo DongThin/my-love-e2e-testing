@@ -1,6 +1,6 @@
-const calculateTaxes = require('../src/taxCalculator.js')
+import assert from 'assert';
+import {calculateTaxes} from "../src/taxCalculator";
 const Big = require('big.js');
-const assert = require('assert');
 const test = require('mocha').it;
 
 describe('Calculate taxes', () => {

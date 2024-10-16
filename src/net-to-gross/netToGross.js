@@ -1,12 +1,12 @@
-const Big = require('big.js');
-const calculateTaxes = require('../taxCalculator.js');
-const calcTotalInsurance = require('./calcTotalInsurance.js');
-const calcTaxableIncome = require('./calcTaxableIncome.js');
-const calcInsDetails = require('../insurancesCalculator.js');
-const {DEDUCTION_PER_PERSON} = require("../salaryConstants");
+import Big from 'big.js';
+import {calculateTaxes} from '../taxCalculator';
+import {calcTotalInsurance} from './calcTotalInsurance';
+import calcTaxableIncome from './calcTaxableIncome';
+import calcInsDetails from '../insurancesCalculator';
+import {DEDUCTION_PER_PERSON} from '../salaryConstants';
 
 // Single source of truth
-module.exports = async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {
+export async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {
 
     const netBig = new Big(net)
     const payslip = {};
