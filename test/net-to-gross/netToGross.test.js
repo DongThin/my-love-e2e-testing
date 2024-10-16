@@ -1,7 +1,7 @@
-const assert = require('assert');
+import assert from 'assert';
 const test = require('mocha').it;
-const sinon = require('sinon');
-const proxyquire = require("proxyquire");
+import * as sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
 describe('Net to Gross', () =>{
     let calcTotalInsuranceStub;

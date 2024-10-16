@@ -1,6 +1,6 @@
-const assert = require('assert');
+import assert from 'assert';
 const test = require('mocha').it;
-const calcTaxableIncome = require('../../src/net-to-gross/calcTaxableIncome.js');
+import calcTaxableIncome from '../../src/net-to-gross/calcTaxableIncome';
 
 describe('Calculate Taxable Income',  () => {
 
