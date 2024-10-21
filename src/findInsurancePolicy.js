@@ -34,7 +34,7 @@ const POLICY_UPDATES = [
  *     minWage: number
  * }}
  */
-export function findInsurancePolicy(region, date) {
+export default function findInsurancePolicy(region, date) {
     if (!REGIONS.includes(region)) {
         throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)")
     }
