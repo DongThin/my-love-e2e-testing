@@ -3,7 +3,7 @@ const test = require('mocha').it;
 import * as sinon from 'sinon';
 import proxyquire from 'proxyquire';
 
-describe('Net to Gross', () =>{
+describe('Net to Gross', function () {
     let calcTotalInsuranceStub;
     let calcInsDetailsStub;
     let calcTaxableIncome;
@@ -15,7 +15,7 @@ describe('Net to Gross', () =>{
     const mockedTaxableIncome = 0;
     const mockedTaxes = {totalTax: 0, rates: []};
 
-    beforeEach(() => {
+    beforeEach(function () {
         calcTotalInsuranceStub = sinon.stub();
         calcInsDetailsStub = sinon.stub();
         calcTaxableIncome = sinon.stub();
@@ -34,11 +34,11 @@ describe('Net to Gross', () =>{
         calculateTaxesStub.resolves(mockedTaxes)
     });
 
-    afterEach(() => {
+    afterEach(function () {
         sinon.restore();
     })
 
-    test(' should be equal 0 when Net is less than or equal 0', async () => {
+    test(' should be equal 0 when Net is less than or equal 0', async function () {
 
         const inputNet = -19;
         await netToGross(inputNet).then(function (actual) {
@@ -46,7 +46,7 @@ describe('Net to Gross', () =>{
         })
     });
 
-    test('It should calculate gross income accurately', async () => {
+    test('It should calculate gross income accurately', async function () {
         const inputNet = 1_000_000_000_000
         const expectedPayslip = {
             dependents: 0,
@@ -61,7 +61,7 @@ describe('Net to Gross', () =>{
             netSalary: inputNet
         }
 
-        await netToGross(inputNet).then((actual) => {
+        await netToGross(inputNet).then(function (actual) {
             assert.deepStrictEqual(actual, expectedPayslip)
         })
     })
