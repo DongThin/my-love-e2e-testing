@@ -1,12 +1,12 @@
 import Big from 'big.js';
 import {calculateTaxes} from '../taxCalculator';
-import {calcTotalInsurance} from './calcTotalInsurance';
+import calcTotalInsurance from './calcTotalInsurance';
 import calcTaxableIncome from './calcTaxableIncome';
 import calcInsDetails from '../insurancesCalculator';
 import {DEDUCTION_PER_PERSON} from '../salaryConstants';
 
 // Single source of truth
-export async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {
+export default async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {
 
     const netBig = new Big(net)
     const payslip = {};
