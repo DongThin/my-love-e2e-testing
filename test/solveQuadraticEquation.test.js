@@ -1,6 +1,5 @@
-import assert from 'assert';
-import solveQuadraticEquation from '../src/solveQuadraticEquation';
-
+const solveQuadraticEquation = require('../src/solveQuadraticEquation.js')
+const assert = require('assert');
 const test = require('mocha').it;
 
 describe('Calculate quadratic equations', function () {

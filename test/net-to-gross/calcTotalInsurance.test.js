@@ -1,5 +1,5 @@
-import assert from 'assert';
-import {calcTotalInsurance} from '../../src/net-to-gross/calcTotalInsurance';
+const assert = require('assert');
+const calcTotalInsurance = require('../../src/net-to-gross/calcTotalInsurance');
 const test = require('mocha').it;
 
 /**

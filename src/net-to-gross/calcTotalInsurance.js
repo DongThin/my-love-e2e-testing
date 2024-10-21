@@ -1,6 +1,6 @@
-import Big from 'big.js';
-import {findInsurancePolicy} from '../findInsurancePolicy';
-import {BIG_20} from '../salaryConstants';
+const Big = require('big.js');
+const findInsurancePolicy = require('../findInsurancePolicy');
+const {BIG_20} = require("../salaryConstants");
 
 /**
  * @param net
@@ -12,7 +12,7 @@ import {BIG_20} from '../salaryConstants';
  *     gross: number
  * }>}
  */
-export function calcTotalInsurance(net, totalTax, region = 1, date = new Date()) {
+module.exports = function calcTotalInsurance(net, totalTax, region = 1, date = new Date()) {
     return new Promise(function (resolve, reject) {
         const netBig = new Big(net);
         const totalNetAndTax = netBig.add(totalTax);

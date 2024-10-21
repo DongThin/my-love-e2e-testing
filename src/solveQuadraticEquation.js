@@ -1,6 +1,6 @@
-import Big from 'big.js';
+const Big = require('big.js');
 
-export default function solveQuadraticEquation(a, b, c) {
+module.exports = function solveQuadraticEquation(a, b, c) {
     if (Big(a).eq(0)) {
         throw new Error('Error: a must not be zero.');
     }

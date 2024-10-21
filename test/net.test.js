@@ -1,7 +1,7 @@
-import assert from 'assert';
+const assert = require('assert');
 const test = require('mocha').it;
-import sinon from 'sinon';
-import proxyquire from 'proxyquire';
+const sinon = require('sinon');
+const proxyquire = require("proxyquire");
 
 describe("Calculate net salary", function () {
     let insurancesCalcStub;
