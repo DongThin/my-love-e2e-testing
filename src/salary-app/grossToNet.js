@@ -1,8 +1,8 @@
 import Big from 'big.js';
 const todayDate = new Date();
-import {calculateTaxes} from './taxCalculator';
-import calcInsuranceDetails from './insurancesCalculator';
-import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './salaryConstants';
+import calculateTaxes from './common/taxCalculator';
+import calcInsuranceDetails from './common/insurancesCalculator';
+import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
 
 export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
@@ -40,6 +40,7 @@ export default function grossToNet(gross, dependents = 0, region = 1, date = tod
             })
 
         }).catch(function (error) {
+            console.log("Error", error)
             reject('Error calculating insurances');
         });
     })

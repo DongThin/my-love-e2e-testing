@@ -1,21 +1,25 @@
 import assert from 'assert';
-const test = require('mocha').it;
+import {it as test} from 'mocha'
 import sinon from 'sinon';
 import proxyquire from 'proxyquire';
 
 describe("Calculate net salary", () => {
     let insurancesCalcStub;
     let taxCalcStub;
-    let net;
+    let grossToNet;
 
     beforeEach(() => {
-        insurancesCalcStub = sinon.stub();
+        insurancesCalcStub = sinon.stub() ;
         taxCalcStub = sinon.stub()
 
-        net = proxyquire("../src/net.js", {
-            "./insurancesCalculator.js": insurancesCalcStub,
-            "./taxCalculator.js": taxCalcStub,
-        });
+        grossToNet = proxyquire("./grossToNet", {
+            './common/insurancesCalculator': {
+                default: insurancesCalcStub
+            },
+            "./common/taxCalculator": {
+                default: taxCalcStub
+            } ,
+        }).default;
     });
 
     afterEach(() => {
@@ -58,7 +62,7 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross).then((result) => {
+            await grossToNet(gross).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(1_290_500));
@@ -81,7 +85,7 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then((result) => {
+            await grossToNet(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(0));
@@ -105,7 +109,7 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then((result) => {
+            await grossToNet(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(600_000));
@@ -130,7 +134,7 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await net(gross, 1).then((result) => {
+            await grossToNet(gross, 1).then((result) => {
                 assert.deepStrictEqual(result, expectedPayslip);
             })
             assert(taxCalcStub.calledWith(8_063_687));
@@ -151,7 +155,7 @@ describe("Calculate net salary", () => {
             taxCalcStub.withArgs(82_599_999).resolves(mockedTaxes)
 
             // Act
-            const actualPayslip = await net(93_600_000, 0, region, argDate);
+            const actualPayslip = await grossToNet(93_600_000, 0, region, argDate);
 
             // Verify
             const expectedPayslip = {
@@ -176,7 +180,7 @@ describe("Calculate net salary", () => {
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).resolves(mockedTaxes)
 
-            const actualPayslip = await net(93_600_000);
+            const actualPayslip = await grossToNet(93_600_000);
 
             const expectedPayslip = {
                 gross: 93_600_000,
@@ -204,7 +208,7 @@ describe("Calculate net salary", () => {
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).rejects('Error calculating taxes')
 
-            await net(93_600_000).catch(function (error) {
+            await grossToNet(93_600_000).catch(function (error) {
                 assert.equal(error, 'Error calculating taxes')
             })
         })
@@ -213,7 +217,7 @@ describe("Calculate net salary", () => {
 
             insurancesCalcStub.withArgs(93_600_000, 1).rejects('Error calculating insurances')
 
-            await net(93_600_000).catch(function (error) {
+            await grossToNet(93_600_000).catch(function (error) {
                 assert.equal(error, 'Error calculating insurances')
             })
         })

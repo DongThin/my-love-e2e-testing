@@ -1,6 +1,6 @@
 import Big from 'big.js';
-import {findInsurancePolicy} from '../findInsurancePolicy';
-import {BIG_20} from '../salaryConstants';
+import findInsurancePolicy from '../common/findInsurancePolicy';
+import {BIG_20} from '../common/salaryConstants';
 
 /**
  * @param net

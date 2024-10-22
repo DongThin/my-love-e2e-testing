@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {calculateTaxes} from "../src/taxCalculator";
+import calculateTaxes from "./taxCalculator";
 const Big = require('big.js');
 const test = require('mocha').it;
 

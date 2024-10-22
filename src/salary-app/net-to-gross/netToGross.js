@@ -1,9 +1,9 @@
 import Big from 'big.js';
-import {calculateTaxes} from '../taxCalculator';
+import calculateTaxes from '../common/taxCalculator';
 import calcTotalInsurance from './calcTotalInsurance';
 import calcTaxableIncome from './calcTaxableIncome';
-import calcInsDetails from '../insurancesCalculator';
-import {DEDUCTION_PER_PERSON} from '../salaryConstants';
+import calcInsDetails from '../common/insurancesCalculator';
+import {DEDUCTION_PER_PERSON} from '../common/salaryConstants';
 
 // Single source of truth
 export default async function netToGross(net, dependentCount = 0, region = 1, date = new Date()) {

@@ -1,5 +1,5 @@
 import assert from 'assert';
-const test = require('mocha').it;
+import {it as test} from 'mocha';
 import * as sinon from 'sinon';
 import proxyquire from 'proxyquire';
 
@@ -21,12 +21,20 @@ describe('Net to Gross', () =>{
         calcTaxableIncome = sinon.stub();
         calculateTaxesStub = sinon.stub();
 
-        netToGross = proxyquire('../../src/net-to-gross/netToGross.js', {
-            './calcTotalInsurance.js': calcTotalInsuranceStub,
-            '../insurancesCalculator.js': calcInsDetailsStub,
-            './calcTaxableIncome.js': calcTaxableIncome,
-            '../taxCalculator.js': calculateTaxesStub
-        })
+        netToGross = proxyquire('./netToGross', {
+            './calcTotalInsurance': {
+                default: calcTotalInsuranceStub
+            },
+            '../common/insurancesCalculator': {
+                default: calcInsDetailsStub
+            },
+            './calcTaxableIncome': {
+                default: calcTaxableIncome
+            },
+            '../common/taxCalculator': {
+                default: calculateTaxesStub
+            }
+        }).default;
 
         calcTotalInsuranceStub.resolves(mockedTotalInsurance);
         calcInsDetailsStub.resolves(mockedInsDetailsStub)

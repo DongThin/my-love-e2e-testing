@@ -1,6 +1,6 @@
-import insurancesCalculator from '../src/insurancesCalculator';
+import insurancesCalculator from './insurancesCalculator';
 import assert from 'assert';
-const test = require('mocha').it;
+import {it as test} from 'mocha'
 
 describe('Calculate Insurances', async () => {
 
