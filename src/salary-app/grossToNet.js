@@ -1,10 +1,10 @@
-const Big = require('big.js');
+import Big from 'big.js';
 const todayDate = new Date();
-const calculateTaxes = require('./taxCalculator.js');
-const calcInsuranceDetails = require('./insurancesCalculator.js');
-const {SELF_DEDUCTION, DEDUCTION_PER_PERSON} = require("./salaryConstants");
+import calculateTaxes from './common/taxCalculator';
+import calcInsuranceDetails from './common/insurancesCalculator';
+import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
 
-module.exports = function net(gross, dependents = 0, region = 1, date = todayDate) {
+export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
 
         const grossBig = new Big(gross);
@@ -40,6 +40,7 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
             })
 
         }).catch(function (error) {
+            console.log("Error", error)
             reject('Error calculating insurances');
         });
     })
