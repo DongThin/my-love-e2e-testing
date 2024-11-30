@@ -1,6 +1,6 @@
 import assert from 'assert';
 import calcTotalInsurance from './calcTotalInsurance';
-const test = require('mocha').it;
+import {it as test} from 'mocha';
 
 /**
  * Gross max for UI = 20x region min wage

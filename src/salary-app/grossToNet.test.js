@@ -13,10 +13,10 @@ describe("Calculate net salary", () => {
         taxCalcStub = sinon.stub()
 
         grossToNet = proxyquire("./grossToNet", {
-            './common/insurancesCalculator': {
+            './common/calcInsuranceDetails': {
                 default: insurancesCalcStub
             },
-            "./common/taxCalculator": {
+            "./common/calcTaxes": {
                 default: taxCalcStub
             } ,
         }).default;

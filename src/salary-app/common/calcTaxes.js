@@ -12,7 +12,7 @@ import {TAX_RATES} from './salaryConstants';
  * }]
  * }>}
  */
-export default function calculateTaxes(taxableIncome) {
+export default function calcTaxes(taxableIncome) {
     //Do not change type param default. If want to change, convert that variable to the other variable
     return new Promise(function (resolve, reject) {
         let taxableIncomeRemain = new Big(taxableIncome);

@@ -25,7 +25,7 @@ describe('Net to Gross', () =>{
             './calcTotalInsurance': {
                 default: calcTotalInsuranceStub
             },
-            '../common/insurancesCalculator': {
+            '../common/calcInsuranceDetails': {
                 default: calcInsDetailsStub
             },
             './calcTaxableIncome': {

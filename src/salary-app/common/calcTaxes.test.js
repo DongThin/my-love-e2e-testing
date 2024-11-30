@@ -1,7 +1,7 @@
 import assert from 'assert';
-import calculateTaxes from "./taxCalculator";
+import calcTaxes from "./calcTaxes";
 const Big = require('big.js');
-const test = require('mocha').it;
+import {it as test} from 'mocha';
 
 describe('Calculate taxes', () => {
 
@@ -14,7 +14,7 @@ describe('Calculate taxes', () => {
             totalTax: 0
         };
 
-        await calculateTaxes(taxableIncome)
+        await calcTaxes(taxableIncome)
             .then(function (actual) {
                 assert.deepStrictEqual(actual, expectedTaxes)
             })
@@ -30,7 +30,7 @@ describe('Calculate taxes', () => {
             totalTax: 61722.2
         };
 
-        await calculateTaxes(1_234_444)
+        await calcTaxes(1_234_444)
             .then(function (actual) {
                 assert.deepStrictEqual(actual, expectedTaxes)
 
@@ -49,7 +49,7 @@ describe('Calculate taxes', () => {
             totalTax: 650_000
         };
 
-        await calculateTaxes(9_000_000).then((taxes) => {
+        await calcTaxes(9_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
@@ -65,7 +65,7 @@ describe('Calculate taxes', () => {
             totalTax: 1050000
         };
 
-        await calculateTaxes(12_000_000).then((taxes) => {
+        await calcTaxes(12_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
@@ -83,7 +83,7 @@ describe('Calculate taxes', () => {
             totalTax: 4_150_000
         };
 
-        await calculateTaxes(29_000_000).then((taxes) => {
+        await calcTaxes(29_000_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
@@ -102,7 +102,7 @@ describe('Calculate taxes', () => {
             totalTax: 4_996_336.25
         };
 
-        await calculateTaxes(32_985_345).then((taxes) => {
+        await calcTaxes(32_985_345).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
 
@@ -123,7 +123,7 @@ describe('Calculate taxes', () => {
             totalTax: 10_614_000
         };
 
-        await calculateTaxes(54_880_000).then((taxes) => {
+        await calcTaxes(54_880_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })
@@ -143,7 +143,7 @@ describe('Calculate taxes', () => {
                 { name: 'Tax level 7', rate: 0.35, amount: 1_625_400 }],
             totalTax: 19775400
         };
-        await calculateTaxes(84_644_000).then((taxes) => {
+        await calcTaxes(84_644_000).then((taxes) => {
             assert.deepStrictEqual(taxes, expectedTaxes)
         })
     })

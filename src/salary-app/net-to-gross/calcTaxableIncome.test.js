@@ -1,5 +1,5 @@
 import assert from 'assert';
-const test = require('mocha').it;
+import {it as test} from 'mocha';
 import calcTaxableIncome from './calcTaxableIncome';
 
 describe('Calculate Taxable Income',  () => {

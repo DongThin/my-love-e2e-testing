@@ -1,5 +1,4 @@
 import Big from 'big.js';
-// const {TAX_RATES, DEDUCTION_PER_PERSON, SELF_DEDUCTION} = require('../salaryConstants');
 import {TAX_RATES, DEDUCTION_PER_PERSON, SELF_DEDUCTION} from '../common/salaryConstants';
 /**
  * Gross = Net + totalTax + totalInsurance

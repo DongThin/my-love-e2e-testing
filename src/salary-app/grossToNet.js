@@ -1,9 +1,9 @@
 import Big from 'big.js';
-const todayDate = new Date();
-import calculateTaxes from './common/taxCalculator';
-import calcInsuranceDetails from './common/insurancesCalculator';
+import calcTaxes from './common/calcTaxes';
+import calcInsuranceDetails from './common/calcInsuranceDetails';
 import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
 
+const todayDate = new Date();
 export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
 
@@ -28,7 +28,7 @@ export default function grossToNet(gross, dependents = 0, region = 1, date = tod
             taxableIncome = Math.max(0, taxableIncome.toNumber());
 
             //Calculate totalTax && all level tax 
-            calculateTaxes(taxableIncome).then(function (taxResult) {
+            calcTaxes(taxableIncome).then(function (taxResult) {
                 payslip.taxes = taxResult.rates;
                 payslip.totalTax = taxResult.totalTax;
                 payslip.netSalary = afterInsurance.minus(payslip.totalTax).toNumber();

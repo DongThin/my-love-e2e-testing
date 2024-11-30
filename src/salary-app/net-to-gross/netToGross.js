@@ -1,8 +1,8 @@
 import Big from 'big.js';
-import calculateTaxes from '../common/taxCalculator';
+import calcTaxes from '../common/calcTaxes';
 import calcTotalInsurance from './calcTotalInsurance';
 import calcTaxableIncome from './calcTaxableIncome';
-import calcInsDetails from '../common/insurancesCalculator';
+import calcInsDetails from '../common/calcInsuranceDetails';
 import {DEDUCTION_PER_PERSON} from '../common/salaryConstants';
 
 // Single source of truth
@@ -22,7 +22,7 @@ export default async function netToGross(net, dependentCount = 0, region = 1, da
     payslip.dependentDeductionAmount = dependentCount * DEDUCTION_PER_PERSON;
 
     const taxableIncome = await calcTaxableIncome(net, dependentCount)
-    const taxes = await calculateTaxes(taxableIncome);
+    const taxes = await calcTaxes(taxableIncome);
 
     payslip.totalTax = taxes.totalTax;
     payslip.taxes = taxes.rates;
