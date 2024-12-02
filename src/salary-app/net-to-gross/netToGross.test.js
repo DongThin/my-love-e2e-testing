@@ -31,7 +31,7 @@ describe('Net to Gross', () =>{
             './calcTaxableIncome': {
                 default: calcTaxableIncome
             },
-            '../common/taxCalculator': {
+            '../common/calcTaxes': {
                 default: calculateTaxesStub
             }
         }).default;

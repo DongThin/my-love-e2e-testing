@@ -1,6 +1,7 @@
 import findInsurancePolicy from './findInsurancePolicy';
 import assert from 'assert';
 import {it as test} from 'mocha'
+import Big from 'big.js';
 
 describe('Find Insurance Policy', () => {
     const july22 = new Date("2022-07-01");
@@ -21,8 +22,47 @@ describe('Find Insurance Policy', () => {
         })
 
     })
-    // describe("Find policy", ()=>{
-    //     test("")
-    // })
-})
+    describe('Find policy', () => {
 
+        test('Find policy for region 1 on July, 2022', () => {
+            const expectedResult = {
+                baseSalary: new Big(1_490_000),
+                minWage: 4_420_000
+            };
+
+            const result = findInsurancePolicy(1, july22);
+            assert.deepEqual(result, expectedResult);
+        });
+
+        test('Find policy for region 2 on July, 2023', () => {
+            const expectedResult = {
+                baseSalary: new Big(1_800_000),
+                minWage: 4_160_000
+            };
+
+            const result = findInsurancePolicy(2, july23);
+            assert.deepEqual(result, expectedResult);
+        })
+
+        test('Find policy for region 3 on July, 2024', () => {
+            const expectedResult = {
+                baseSalary: new Big(2_340_000),
+                minWage: 3_860_000
+            };
+
+            const result = findInsurancePolicy(3, july24);
+            assert.deepEqual(result, expectedResult);
+        })
+
+        test('Find policy for region 4 on July, 2024', () => {
+            const expectedResult = {
+                baseSalary: new Big(2_340_000),
+                minWage: 3_450_000
+            };
+
+            const result = findInsurancePolicy(4, july24);
+            assert.deepEqual(result, expectedResult);
+        })
+
+    });
+})

@@ -16,8 +16,8 @@ describe('Calculate total Insurances from Net and Taxes', async () => {
 
         const actualInsurances = await calcTotalInsurance(89_000_000, 26_846_154);
         const expectedInsurances = {
-            total: 4_356_000,
-            gross: 120_202_154
+            total: 5_438_000,
+            gross: 121_284_154
         }
         assert.deepStrictEqual(actualInsurances, expectedInsurances)
     })
@@ -31,8 +31,8 @@ describe('Calculate total Insurances from Net and Taxes', async () => {
 
         const actualInsurances = await calcTotalInsurance(36_000_000, 4_187_500);
         const expectedInsurances = {
-            total: 3_860_479.797979798,
-            gross: 44_047_979.797979794
+            total: 4_714_734.636871508,
+            gross: 44_902_234.63687151
         }
         assert.deepStrictEqual(actualInsurances, expectedInsurances)
     })
@@ -59,8 +59,8 @@ describe('Calculate total Insurances from Net and Taxes', async () => {
 
         const actualInsurances = await calcTotalInsurance(89_000_000, 26_846_154, 2);
         const expectedInsurances = {
-            total: 4252000,
-            gross: 120098154
+            total: 5_328_000,
+            gross: 121_174_154
         }
         assert.deepStrictEqual(actualInsurances, expectedInsurances)
     })
@@ -73,8 +73,9 @@ describe('Throw error', () => {
     })
 
     test('Exception is thrown when entering start date out of update range', async () => {
-        await calcTotalInsurance(89_000_000, 26_846_154, 4, new Date("2020-06-01")).catch((error) => {
-            assert.equal(error.message, "There is no salary policy available for the date provided")
+        const jun20 = new Date("2020-06-01");
+        await calcTotalInsurance(89_000_000, 26_846_154, 4, jun20).catch((error) => {
+            assert.equal(error.message, `There is no insurance policy available for the date provided ${jun20.toISOString()}`)
         })
     })
 
