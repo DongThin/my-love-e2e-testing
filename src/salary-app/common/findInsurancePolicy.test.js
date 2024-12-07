@@ -30,8 +30,8 @@ describe('Find Insurance Policy', () => {
                 minWage: 4_420_000
             };
 
-            const result = findInsurancePolicy(1, july22);
-            assert.deepEqual(result, expectedResult);
+            const actual = findInsurancePolicy(1, july22);
+            assert.deepEqual(actual, expectedResult);
         });
 
         test('Find policy for region 2 on July, 2023', () => {
@@ -40,8 +40,8 @@ describe('Find Insurance Policy', () => {
                 minWage: 4_160_000
             };
 
-            const result = findInsurancePolicy(2, july23);
-            assert.deepEqual(result, expectedResult);
+            const actual = findInsurancePolicy(2, july23);
+            assert.deepEqual(actual, expectedResult);
         })
 
         test('Find policy for region 3 on July, 2024', () => {
@@ -50,8 +50,8 @@ describe('Find Insurance Policy', () => {
                 minWage: 3_860_000
             };
 
-            const result = findInsurancePolicy(3, july24);
-            assert.deepEqual(result, expectedResult);
+            const actual = findInsurancePolicy(3, july24);
+            assert.deepEqual(actual, expectedResult);
         })
 
         test('Find policy for region 4 on July, 2024', () => {
@@ -60,8 +60,8 @@ describe('Find Insurance Policy', () => {
                 minWage: 3_450_000
             };
 
-            const result = findInsurancePolicy(4, july24);
-            assert.deepEqual(result, expectedResult);
+            const actual = findInsurancePolicy(4, july24);
+            assert.deepEqual(actual, expectedResult);
         })
 
     });

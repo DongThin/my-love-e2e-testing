@@ -40,7 +40,7 @@ export default function grossToNet(gross, dependents = 0, region = 1, date = tod
             })
 
         }).catch(function (error) {
-            console.log("Error", error)
+            console.log(error)
             reject('Error calculating insurances');
         });
     })
