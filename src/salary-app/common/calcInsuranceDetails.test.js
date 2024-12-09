@@ -20,8 +20,6 @@ describe('Calculate Insurances', async () => {
                 }
             }).default;
 
-            // findInsurancePolicyStub.resolves(mockedPolicy);
-
         });
 
         afterEach(() => {

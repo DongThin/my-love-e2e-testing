@@ -64,6 +64,18 @@ describe('Calculate total Insurances from Net and Taxes', async () => {
         }
         assert.deepStrictEqual(actualInsurances, expectedInsurances)
     })
+
+    test('Gross is calculated correctly in various regions when ' +
+        'total Net and tax is greater than max Gross for SI or HI', async ()=> {
+        console.log("ansnsnsj")
+        const actualInsurances =await calcTotalInsurance(50_000_000, 8_666_667, 1);
+        const expectedInsurances = {
+            total: 5083501.686868687,
+            gross:63750168.68686869
+        }
+        assert.deepStrictEqual(actualInsurances, expectedInsurances)
+        console.log(actualInsurances.total)
+    })
 })
 describe('Throw error', () => {
     test('Exception is thrown when entering invalid region', async () => {

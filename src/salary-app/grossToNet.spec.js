@@ -1,8 +1,8 @@
 import assert from 'assert';
-import sinon from "sinon";
+import sinon from 'sinon';
 import * as calcTaxesModule from "./common/calcTaxes";
 import grossToNet from "./grossToNet";
-import *as calcInsuranceDetailsModule from './common/calcInsuranceDetails';
+import * as calcInsuranceDetailsModule from './common/calcInsuranceDetails';
 
 describe('Gross to Net Integration', () => {
 
@@ -10,13 +10,13 @@ describe('Gross to Net Integration', () => {
         sinon.restore();
     })
 
-    it('Should be able to get all net integrations', async () => {
+    it('should correctly calculate net salary and verify that ' +
+        'calcTaxesModule and calcInsuranceDetailsModule are called with the correct arguments ', async () => {
         const spyCalcTaxes = sinon.spy(calcTaxesModule, "default");
         const spyInsurance = sinon.spy(calcInsuranceDetailsModule, "default")
 
         const actual = await grossToNet(17_000_000);
-
-        assert.deepStrictEqual(actual, {
+        const expect = {
             "afterInsurance": 15215000,
             "dependentDeductionAmount": 0,
             "dependents": 0,
@@ -46,14 +46,13 @@ describe('Gross to Net Integration', () => {
             ],
             "totalInsurance": 1785000,
             "totalTax": 210750
-        });
+        }
 
-        assert.equal(spyCalcTaxes.args[0], 4_215_000);
+        assert.deepStrictEqual(actual, expect);
+
+        assert.equal(spyCalcTaxes.args[0], 4215000);
         assert.equal(spyCalcTaxes.callCount, 1)
 
-        // assert.equal(spyInsurance.args[0], 17000000);
-        const socialInsurance = actual.insurances.find(insurance => insurance.name === 'Social Insurance 8%');
-        assert.equal(socialInsurance.amount, 1360000);
+        spyInsurance.calledWithMatch(17000000, 1, new Date());
     })
-
 })
