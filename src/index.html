@@ -1,10 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Dong Thin website</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: aliceblue;
+            margin: 10px
+        }
+
+        table {
+            width: 500px;
+            border-collapse: collapse;
+            margin: 1px;
+
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            background-color: white;
+        }
+
+        tr:hover {
+            background-color: aquamarine;
+        }
+
+        .my-input {
+            width: 185px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+
+    </style>
+
 </head>
+
 <body>
-<h1>Welcome to Dong Thin website</h1>
+    <h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
+    <form>
+        <label for="name" style="display: block;">Thu nhập</label> 
+        <input type="number" placeholder="(VND)" class="my-input"> <br>
+
+        <button style="color: white;
+    background-color: green; 
+    border-radius: 10px; 
+    border: none; 
+    padding: 4px;">
+            Gross sang Net
+        </button>
+
+        <button style="color: black;
+         background-color: white; 
+    border-radius: 10px; 
+    border: 1px solid green;
+    padding: 4px;">
+            Net sang Gross
+        </button> <br>
+
+        <table>
+            <br>
+            <caption style="text-align: left;">Kết quả</caption>
+            <tr>
+
+                <td>Lương Gross</td>
+                <td>Bảo hiểm</td>
+                <td>Thuế TNCN</td>
+                <td>Lương Net</td>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </table>
+
+    </form>
 </body>
+
 </html>
