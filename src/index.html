@@ -36,52 +36,66 @@
             padding: 10px;
             border: 1px solid #ccc;
         }
-    </style>
+
+        .box {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .my-button {
+            margin-right: 40px;
+        }
 
     </style>
 
 </head>
 
 <body>
-    <h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
-    <form>
-        <label for="name" style="display: block;">Thu nhập</label> 
-        <input type="number" placeholder="(VND)" class="my-input"> <br>
+<h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
+<form>
+    <label for="name" style="display: block;">Thu nhập</label>
+    <input type="number" id="name" placeholder="(VND)" class="my-input"> <br>
 
-        <button style="color: white;
-    background-color: green; 
-    border-radius: 10px; 
-    border: none; 
+    <div class="box">
+        <div class="my-button">
+            <button style="color: white;
+    background-color: green;
+    border-radius: 10px;
+    border: none;
     padding: 4px;">
-            Gross sang Net
-        </button>
-
-        <button style="color: black;
-         background-color: white; 
-    border-radius: 10px; 
+                Gross sang Net
+            </button>
+        </div>
+        <div class="my-button">
+            <button style="color: black;
+         background-color: white;
+    border-radius: 10px;
     border: 1px solid green;
     padding: 4px;">
-            Net sang Gross
-        </button> <br>
+                Net sang Gross
+            </button>
+        </div>
+    </div>
 
-        <table>
-            <br>
-            <caption style="text-align: left;">Kết quả</caption>
-            <tr>
 
-                <td>Lương Gross</td>
-                <td>Bảo hiểm</td>
-                <td>Thuế TNCN</td>
-                <td>Lương Net</td>
-            <tr>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-        </table>
+    <table>
+        <br>
+        <caption style="text-align: left;">Kết quả</caption>
+        <tr>
 
-    </form>
+            <td>Lương Gross</td>
+            <td>Bảo hiểm</td>
+            <td>Thuế TNCN</td>
+            <td>Lương Net</td>
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+
+</form>
 </body>
 
 </html>
