@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: aliceblue;
+    margin: 10px
+}
+
+table {
+    width: 500px;
+    border-collapse: collapse;
+    margin: 1px;
+
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    background-color: white;
+}
+
+tr:hover {
+    background-color: aquamarine;
+}
+
+.my-input {
+    width: 235px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.box {
+    display: flex;
+    margin-top: 20px;
+}
+
+.my-button {
+    margin-right: 20px;
+    padding: 0px;
+    box-shadow: 2px 2px 3px rgba(9, 96, 63, 0);
+    border: 0.5px;
+    border-color: rgb(231, 226, 226);
+    border-style: solid;
+}
+
+.style-selected-button {
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    padding: 9px;
+}
+
+.style-unselected-button {
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    padding: 9px;
+}
+
+button:hover {
+    background-color: rgb(144, 188, 144);
+    color: black;
+    box-shadow: 0 1px;
+    transform: scale(1);
+}
+
+
+
