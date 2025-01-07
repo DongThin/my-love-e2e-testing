@@ -32,7 +32,7 @@
         }
 
         .my-input {
-            width: 185px;
+            width: 235px;
             padding: 10px;
             border: 1px solid #ccc;
         }
@@ -43,9 +43,33 @@
         }
 
         .my-button {
-            margin-right: 40px;
+            margin-right: 20px;
+            padding: 5px;
+            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
         }
 
+        .style-selected-button {
+            color: white;
+            background-color: green;
+            border-radius: 10px;
+            border: none;
+            padding: 9px;
+        }
+
+        .style-unselected-button {
+            color: black;
+            background-color: white;
+            border-radius: 10px;
+            border: none;
+            padding: 9px;
+        }
+
+        button:hover {
+            background-color: rebeccapurple;
+            color: black;
+            box-shadow: 0 1px;
+            transform: scale(1);
+        }
     </style>
 
 </head>
@@ -58,25 +82,18 @@
 
     <div class="box">
         <div class="my-button">
-            <button style="color: white;
-    background-color: green;
-    border-radius: 10px;
-    border: none;
-    padding: 4px;">
+            <button class="style-selected-button">
                 Gross sang Net
             </button>
         </div>
+
         <div class="my-button">
-            <button style="color: black;
-         background-color: white;
-    border-radius: 10px;
-    border: 1px solid green;
-    padding: 4px;">
+            <button class="style-unselected-button">
                 Net sang Gross
             </button>
         </div>
-    </div>
 
+    </div>
 
     <table>
         <br>
