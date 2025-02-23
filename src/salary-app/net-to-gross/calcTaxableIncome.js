@@ -1,5 +1,5 @@
-const Big = require('big.js');
-const {TAX_RATES, DEDUCTION_PER_PERSON, SELF_DEDUCTION} = require('../salaryConstants');
+import Big from 'big.js';
+import {TAX_RATES, DEDUCTION_PER_PERSON, SELF_DEDUCTION} from '../common/salaryConstants';
 /**
  * Gross = Net + totalTax + totalInsurance
  * Unit: a million (Ex: 11 means 11 million)
@@ -66,7 +66,7 @@ const TAX_FACTOR_RANGES = [
  * @returns {Promise: number}
  */
 
-module.exports = function calcTaxableIncome(netIncome, dependentCount = 0) {
+export default function calcTaxableIncome(netIncome, dependentCount = 0) {
     return new Promise(function (resolve, reject) {
         let netBig = new Big(netIncome);
         let ti = new Big(0)

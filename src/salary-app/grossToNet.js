@@ -1,10 +1,10 @@
-const Big = require('big.js');
-const todayDate = new Date();
-const calculateTaxes = require('./taxCalculator.js');
-const calcInsuranceDetails = require('./insurancesCalculator.js');
-const {SELF_DEDUCTION, DEDUCTION_PER_PERSON} = require("./salaryConstants");
+import Big from 'big.js';
+import calcTaxes from './common/calcTaxes';
+import calcInsuranceDetails from './common/calcInsuranceDetails';
+import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
 
-module.exports = function net(gross, dependents = 0, region = 1, date = todayDate) {
+const todayDate = new Date();
+export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
 
         const grossBig = new Big(gross);
@@ -28,7 +28,7 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
             taxableIncome = Math.max(0, taxableIncome.toNumber());
 
             //Calculate totalTax && all level tax 
-            calculateTaxes(taxableIncome).then(function (taxResult) {
+            calcTaxes(taxableIncome).then(function (taxResult) {
                 payslip.taxes = taxResult.rates;
                 payslip.totalTax = taxResult.totalTax;
                 payslip.netSalary = afterInsurance.minus(payslip.totalTax).toNumber();
@@ -40,6 +40,7 @@ module.exports = function net(gross, dependents = 0, region = 1, date = todayDat
             })
 
         }).catch(function (error) {
+            console.log(error)
             reject('Error calculating insurances');
         });
     })
