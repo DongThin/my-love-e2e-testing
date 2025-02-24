@@ -1,52 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Dong Thin website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính lương Gross sang Net</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
 
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script> <!-- Liên kết đến tệp JS -->
+        h1 {
+            font-size: 20px;
+        }
+
+        input {
+            width: 200px;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 20px;
+        }
+
+        .active {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .inactive {
+            background-color: #f1f1f1;
+            color: black;
+            box-shadow: none;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: green;
+            color: white;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: gray;
+            font-size: 14px;
+        }
+    </style>
 </head>
-
-</head>
-
 <body>
-    <h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
-    <form>
-        <label for="incomeInput" style="display: block;">Thu nhập</label>
-        <input type="number" id="incomeInput" placeholder="(VND)" class="my-input"> <br>
+<h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
+<label for="income">Thu nhập</label><br>
+<input type="text" id="income" placeholder="(VND)"><br>
 
-        <div class="box">
-            
-                <button class="my-button style-selected-button" id="grossToNetButton">
-                    Gross sang Net
-                </button>
+<div class="buttons">
+    <button class="active">Gross sang Net</button>
+    <button class="inactive">Net sang Gross</button>
+</div>
 
-            <button class="my-button style-unselected-button" id="netToGrossButton">
-                Net sang Gross
-            </button>
+<h2>Kết quả</h2>
+<table>
+    <tr>
+        <th>Lương Net</th>
+        <th>Bảo hiểm</th>
+        <th>Thuế TNCN</th>
+        <th>Lương Gross</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 
-        </div>
-
-        <table>
-            <br>
-            <caption style="text-align: left;">Kết quả</caption>
-            <tr>
-
-                <td>Lương Gross</td>
-                <td>Bảo hiểm</td>
-                <td>Thuế TNCN</td>
-                <td>Lương Net</td>
-            <tr>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-        </table>
-
-    </form>
+<div class="footer">
+    Sẽ có thêm nhiều tính năng trong thời gian tới.<br>
+    Made with love by Dong Thin
+</div>
 </body>
-
 </html>
