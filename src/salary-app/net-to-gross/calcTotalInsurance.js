@@ -1,6 +1,6 @@
-const Big = require('big.js');
-const findInsurancePolicy = require('../findInsurancePolicy');
-const {BIG_20} = require("../salaryConstants");
+import Big from 'big.js';
+import findInsurancePolicy from '../common/findInsurancePolicy';
+import {BIG_20} from '../common/salaryConstants';
 
 /**
  * @param net
@@ -12,7 +12,7 @@ const {BIG_20} = require("../salaryConstants");
  *     gross: number
  * }>}
  */
-module.exports = function calcTotalInsurance(net, totalTax, region = 1, date = new Date()) {
+export default function calcTotalInsurance(net, totalTax, region = 1, date = new Date()) {
     return new Promise(function (resolve, reject) {
         const netBig = new Big(net);
         const totalNetAndTax = netBig.add(totalTax);
@@ -23,6 +23,8 @@ module.exports = function calcTotalInsurance(net, totalTax, region = 1, date = n
         const maxUI = Big(insurancePolicy.minWage).times(BIG_20);
         const gte20TimeRegion = Big(0.99).times(maxUI).minus(3_420_000);
         const maxGrossForSIorHI = new Big((insurancePolicy.baseSalary).times(BIG_20));
+
+        console.log("maxGross", maxGrossForSIorHI.toNumber())
 
         // employee has to pay
         const maxTotalPaidForSIAndHI = Big(0.08)
@@ -48,6 +50,7 @@ module.exports = function calcTotalInsurance(net, totalTax, region = 1, date = n
             // net + totalTax >= 99% * 36_000_000 - 3_420_000
             // net + totalTax >= 32_220_000
 
+            console.log("a")
             insurances.gross = totalNetAndTax.add(maxTotalPaidForSIAndHI).div(0.99).toNumber()
             insurances.total = maxTotalPaidForSIAndHI.add(Big(0.01).times(insurances.gross)).toNumber()
         }

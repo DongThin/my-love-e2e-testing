@@ -1,9 +1,21 @@
-const Big = require("big.js");
+import Big from 'big.js';
 const REGIONS = [1, 2, 3, 4];
 /**
  * If there are new policy changes, please add that on top!
  */
 const POLICY_UPDATES = [
+
+    {
+        startDate: new Date("2024-07-01"),
+        regionMinWages: [
+            {region: 1, minWage: 4_960_000},
+            {region: 2, minWage: 4_410_000},
+            {region: 3, minWage: 3_860_000},
+            {region: 4, minWage: 3_450_000}
+        ],
+        baseSalary: new Big(2_340_000)
+    },
+
     {
         startDate: new Date("2023-07-01"),
         regionMinWages: [
@@ -28,28 +40,26 @@ const POLICY_UPDATES = [
 
 /**
  * @param region {1|2|3|4}
- * @param date {Date}
+ * @param effectiveDate {Date}
  * @returns {{
  *     baseSalary: Big,
  *     minWage: number
  * }}
  */
-module.exports = function findInsurancePolicy(region, date) {
+export default function findInsurancePolicy(region, effectiveDate) {
     if (!REGIONS.includes(region)) {
         throw new Error("Invalid region entered. Please enter again! (1, 2, 3, 4)")
     }
 
-    const policyUpdate = POLICY_UPDATES.find(function (update) {
-        return update.startDate.getTime() <= date.getTime()
-    })
+    const policyUpdate = POLICY_UPDATES.find(update => update.startDate.getTime() <=effectiveDate.getTime())
 
     if (!policyUpdate) {
-        throw new Error("There is no salary policy available for the date provided");
+        throw new Error(`There is no insurance policy available for the date provided ${effectiveDate.toISOString()}`);
     }
 
-    const regionInfo = policyUpdate.regionMinWages.find(function (minWage) {
-        return minWage.region === region;
-    })
+    const regionInfo = policyUpdate.regionMinWages.find((minWage) =>
+        minWage.region === region
+    )
 
     return {
         baseSalary: policyUpdate.baseSalary,
