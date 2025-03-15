@@ -4,78 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Dong Thin website</title>
-
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: aliceblue;
-            margin: 10px
-        }
-
-        table {
-            width: 500px;
-            border-collapse: collapse;
-            margin: 1px;
-
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-            background-color: white;
-        }
-
-        tr:hover {
-            background-color: aquamarine;
-        }
-
-        .my-input {
-            width: 235px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .box {
-            display: flex;
-            margin-top: 20px;
-        }
-
-        .my-button {
-            margin-right: 20px;
-            padding: 5px;
-            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .style-selected-button {
-            color: white;
-            background-color: green;
-            border-radius: 10px;
-            border: none;
-            padding: 9px;
-            cursor: pointer;
-        }
-
-        .style-unselected-button {
-            color: black;
-            background-color: white;
-            border-radius: 10px;
-            border: none;
-            padding: 9px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: rebeccapurple;
-            color: black;
-            box-shadow: 0 1px;
-            transform: scale(1);
-        }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
+<!--    <script src="script.js" defer></script> &lt;!&ndash; Liên kết đến tệp JS &ndash;&gt;-->
 </head>
 
 <body>
+
 <h1>Công cụ tính lương Gross sang Net và ngược lại [Chuẩn 2025]</h1>
 <form>
     <label for="income" style="display: block;">Thu nhập</label>
@@ -92,14 +26,13 @@
             <button class="style-unselected-button" type="button" onclick="calculateNetToGross()">
                 Net sang Gross
             </button>
+
         </div>
 
-    </div>
-
-    <table>
-        <br>
-        <caption style="text-align: left;">Kết quả</caption>
-        <tr>
+        <table>
+            <br>
+            <caption style="text-align: left;">Kết quả</caption>
+            <tr>
 
             <td>Lương Gross</td>
             <td>Bảo hiểm</td>
@@ -114,10 +47,12 @@
             <td id="net">0</td>
         </tr>
     </table>
+    </div>
 
 </form>
 <script src="./lib/big.js"></script>
 <script type="module" src="./salaryCalculator.js"></script>
+
 </body>
 
 </html>
