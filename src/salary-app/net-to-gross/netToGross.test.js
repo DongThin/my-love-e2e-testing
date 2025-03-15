@@ -1,9 +1,9 @@
-const assert = require('assert');
-const test = require('mocha').it;
-const sinon = require('sinon');
-const proxyquire = require("proxyquire");
+import assert from 'assert';
+import {it as test} from 'mocha';
+import * as sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-describe('Net to Gross', function () {
+describe('Net to Gross', () =>{
     let calcTotalInsuranceStub;
     let calcInsDetailsStub;
     let calcTaxableIncome;
@@ -15,18 +15,26 @@ describe('Net to Gross', function () {
     const mockedTaxableIncome = 0;
     const mockedTaxes = {totalTax: 0, rates: []};
 
-    beforeEach(function () {
+    beforeEach(() => {
         calcTotalInsuranceStub = sinon.stub();
         calcInsDetailsStub = sinon.stub();
         calcTaxableIncome = sinon.stub();
         calculateTaxesStub = sinon.stub();
 
-        netToGross = proxyquire('../../src/net-to-gross/netToGross.js', {
-            './calcTotalInsurance.js': calcTotalInsuranceStub,
-            '../insurancesCalculator.js': calcInsDetailsStub,
-            './calcTaxableIncome.js': calcTaxableIncome,
-            '../taxCalculator.js': calculateTaxesStub
-        })
+        netToGross = proxyquire('./netToGross', {
+            './calcTotalInsurance': {
+                default: calcTotalInsuranceStub
+            },
+            '../common/calcInsuranceDetails': {
+                default: calcInsDetailsStub
+            },
+            './calcTaxableIncome': {
+                default: calcTaxableIncome
+            },
+            '../common/calcTaxes': {
+                default: calculateTaxesStub
+            }
+        }).default;
 
         calcTotalInsuranceStub.resolves(mockedTotalInsurance);
         calcInsDetailsStub.resolves(mockedInsDetailsStub)
@@ -34,11 +42,11 @@ describe('Net to Gross', function () {
         calculateTaxesStub.resolves(mockedTaxes)
     });
 
-    afterEach(function () {
+    afterEach(() => {
         sinon.restore();
     })
 
-    test(' should be equal 0 when Net is less than or equal 0', async function () {
+    test(' should be equal 0 when Net is less than or equal 0', async () => {
 
         const inputNet = -19;
         await netToGross(inputNet).then(function (actual) {
@@ -46,7 +54,7 @@ describe('Net to Gross', function () {
         })
     });
 
-    test('It should calculate gross income accurately', async function () {
+    test('It should calculate gross income accurately', async () => {
         const inputNet = 1_000_000_000_000
         const expectedPayslip = {
             dependents: 0,
@@ -61,7 +69,7 @@ describe('Net to Gross', function () {
             netSalary: inputNet
         }
 
-        await netToGross(inputNet).then(function (actual) {
+        await netToGross(inputNet).then((actual) => {
             assert.deepStrictEqual(actual, expectedPayslip)
         })
     })
