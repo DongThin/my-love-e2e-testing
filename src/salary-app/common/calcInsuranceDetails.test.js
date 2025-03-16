@@ -1,9 +1,8 @@
-import insurancesCalculator from './calcInsuranceDetails';
 import assert from 'assert';
 import {it as test} from 'mocha'
 import * as sinon from "sinon";
 import proxyquire from "proxyquire";
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 
 describe('Calculate Insurances', async () => {
 

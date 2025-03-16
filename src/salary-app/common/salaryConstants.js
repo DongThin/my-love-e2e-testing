@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 
 export const DEDUCTION_PER_PERSON = 4_400_000;
 

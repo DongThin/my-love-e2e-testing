@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 const REGIONS = [1, 2, 3, 4];
 /**
  * If there are new policy changes, please add that on top!

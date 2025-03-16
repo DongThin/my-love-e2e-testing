@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 import {TAX_RATES} from './salaryConstants';
 
 /**
