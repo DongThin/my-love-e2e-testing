@@ -3,6 +3,8 @@ import calcTaxes from './common/calcTaxes';
 import calcInsuranceDetails from './common/calcInsuranceDetails';
 import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
 
+console.log("Mot cong mot lon hon hai!")
+
 const todayDate = new Date();
 export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
