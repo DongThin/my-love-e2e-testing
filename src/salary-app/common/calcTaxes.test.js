@@ -1,6 +1,5 @@
 import assert from 'assert';
 import calcTaxes from "./calcTaxes";
-const Big = require('big.js');
 import {it as test} from 'mocha';
 
 describe('Calculate taxes', () => {

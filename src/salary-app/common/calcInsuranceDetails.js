@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 import findInsurancePolicy from './findInsurancePolicy';
 import {BIG_20} from './salaryConstants';
 

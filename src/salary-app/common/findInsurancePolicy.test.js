@@ -1,7 +1,7 @@
 import findInsurancePolicy from './findInsurancePolicy';
 import assert from 'assert';
 import {it as test} from 'mocha'
-import Big from 'big.js';
+import Big from "../../lib/big.js";
 
 describe('Find Insurance Policy', () => {
     const july22 = new Date("2022-07-01");
