@@ -4,7 +4,7 @@
  *  Copyright (c) 2024 Michael Mclaughlin
  *  https://github.com/MikeMcl/big.js/LICENCE.md
  */
-;(function (GLOBAL) {
+export default function BigT(args) {
   'use strict';
   var Big,
 
@@ -77,8 +77,7 @@
   /*
    * Create and return a Big constructor.
    */
-  function _Big_() {
-
+  function _Big_(args) {
     /*
      * The Big constructor and exported function.
      * Create and return a new instance of a Big number object.
@@ -125,7 +124,7 @@
     Big.roundHalfEven = 2;
     Big.roundUp = 3;
 
-    return Big;
+    return Big.apply(this, [args]);
   }
 
 
@@ -630,8 +629,8 @@
 
     return this.minus(x.times(y));
   };
-  
-  
+
+
   /*
    * Return a new Big whose value is the value of this Big negated.
    */
@@ -1024,20 +1023,7 @@
   // Export
 
 
-  Big = _Big_();
+  Big = _Big_(args)
 
-  Big['default'] = Big.Big = Big;
-
-  //AMD.
-  if (typeof define === 'function' && define.amd) {
-    define(function () { return Big; });
-
-  // Node and other CommonJS-like environments that support module.exports.
-  } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Big;
-
-  //Browser.
-  } else {
-    GLOBAL.Big = Big;
-  }
-})(this);
+  return Big
+}
