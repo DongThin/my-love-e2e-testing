@@ -1,26 +1,14 @@
- function convertGrossToNet() {  
-    // Lấy giá trị thu nhập từ input  
-    const incomeInput = document.getElementById('incomeInput').value; 
-     
-    // Lấy phần tử bảng cho các ô hiển thị kết quả (Hàng thứ 2, cột thứ 1)
-    const grossCell = document.querySelector('table tr:nth-child(2) td:nth-child(1)');  
-    
-    // Cập nhật giá trị Lương Gross trong bảng  
-    grossCell.textContent = incomeInput || 0; // Nếu không có giá trị, hiển thị 0  
-}  
+import grossToNet from "./salary-app/grossToNet.js";
+import Big from "./lib/big.js";
+const A = Big(0.1).plus(Big(0.2)).toNumber();
+console.log(A);
 
-// Ngăn không cho form tự động gửi và tải lại trang khi nút được nhấn  
-function preventFormSubmission(event) {  
-    event.preventDefault();  
-}  
+document.querySelector(".btn-primary").addEventListener("click", async function () {
 
-// Hàm gắn sự kiện khi trang được tải  
-window.onload = function() {  
-    // Thêm sự kiện click cho nút Gross sang Net  
-    document.getElementById('grossToNetButton').addEventListener('click', function(event) {  
-        preventFormSubmission(event); // Ngăn gửi form  
-        
-        this.classList.toggle("style-selected-button")
-        convertGrossToNet(); // Gọi hàm để chuyển đổi  
-    });  
-};
+    let income = parseFloat(document.getElementById("income").value); // Lấy dữ liệu từ input
+    let result = await grossToNet(income); // Gọi hàm tính toán
+    document.getElementById("gross").textContent = result.gross.toLocaleString("de-DE"); // Lương Gross
+    document.getElementById("insurance").textContent = result.totalInsurance.toLocaleString("de-DE"); // Tổng bảo hiểm
+    document.getElementById("tax").textContent = result.totalTax.toLocaleString("de-DE");
+    document.getElementById("net").textContent = result.netSalary.toLocaleString("de-DE");
+});

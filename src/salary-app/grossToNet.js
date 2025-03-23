@@ -1,7 +1,7 @@
 import Big from "../lib/big.js";
-import calcTaxes from './common/calcTaxes';
-import calcInsuranceDetails from './common/calcInsuranceDetails';
-import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
+import calcTaxes from './common/calcTaxes.js';
+import calcInsuranceDetails from './common/calcInsuranceDetails.js';
+import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants.js';
 
 console.log("Mot cong mot lon hon hai!")
 
