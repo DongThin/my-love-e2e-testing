@@ -36,12 +36,11 @@ export default function grossToNet(gross, dependents = 0, region = 1, date = tod
                 resolve(payslip);
 
             }).catch(function (error) {
-                reject('Error calculating taxes');
+                reject(new Error('Error calculating taxes'));
             })
 
         }).catch(function (error) {
-            console.log(error)
-            reject('Error calculating insurances');
+            reject(new Error('Error calculating insurances'));
         });
     })
 }
