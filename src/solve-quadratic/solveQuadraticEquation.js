@@ -1,28 +1,65 @@
 import Big from 'big.js';
 
+// Custom error class for quadratic equation-specific errors
+class QuadraticEquationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'QuadraticEquationError';
+    }
+}
+
+// Constants to avoid creating new Big instances repeatedly
+const TWO = Big(2);
+const FOUR = Big(4);
+
+/**
+ * Solves a quadratic equation of the form ax² + bx + c = 0
+ * @param {number} a - Coefficient of x²
+ * @param {number} b - Coefficient of x
+ * @param {number} c - Constant term
+ * @returns {Array<{real: number, imaginary: number}>} Array of solutions as objects with real and imaginary parts
+ * @throws {QuadraticEquationError} If a is zero
+ * @throws {TypeError} If inputs are not numbers
+ */
 export default function solveQuadraticEquation(a, b, c) {
-    if (Big(a).eq(0)) {
-        throw new Error('Error: a must not be zero.');
+    // Input validation
+    if ([a, b, c].some(x => typeof x !== 'number')) {
+        throw new TypeError('All coefficients must be numbers');
     }
 
-    const delta = Big(b).pow(2).minus(Big(4).times(a).times(c));
-    const twoA = Big(2).times(a);
-    const negB = Big(-b);
+    // Handle NaN and Infinity
+    if ([a, b, c].some(x => !Number.isFinite(x))) {
+        throw new QuadraticEquationError('Coefficients must be finite numbers');
+    }
 
-    const roots = [];
+    const bigA = Big(a);
+    if (bigA.eq(0)) {
+        throw new QuadraticEquationError('Coefficient a must not be zero');
+    }
+
+    const bigB = Big(b);
+    const bigC = Big(c);
+
+    const delta = bigB.pow(2).minus(FOUR.times(bigA).times(bigC));
+    const twoA = TWO.times(bigA);
+    const negB = bigB.times(-1);
+
+    // Calculate real part (common for all cases)
+    const realPart = negB.div(twoA);
 
     if (delta.gt(0)) {
-        const sqrtDelta = delta.sqrt();
-        const x1 = negB.plus(sqrtDelta).div(twoA);
-        const x2 = negB.minus(sqrtDelta).div(twoA);
-
-        roots.push(x1.toNumber(), x2.toNumber());
-
+        const sqrtDelta = delta.sqrt().div(twoA);
+        return [
+            { real: realPart.plus(sqrtDelta).toNumber(), imaginary: 0 },
+            { real: realPart.minus(sqrtDelta).toNumber(), imaginary: 0 }
+        ];
     } else if (delta.eq(0)) {
-        const x1 = negB.div(twoA);
-
-        roots.push(x1.toNumber());
+        return [{ real: realPart.toNumber(), imaginary: 0 }];
+    } else {
+        const imaginaryPart = delta.abs().sqrt().div(twoA).toNumber();
+        return [
+            { real: realPart.toNumber(), imaginary: imaginaryPart },
+            { real: realPart.toNumber(), imaginary: -imaginaryPart }
+        ];
     }
-
-    return roots;
 }
