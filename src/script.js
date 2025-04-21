@@ -19,6 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
     netElement = document.getElementById("net");
     incomeInput = document.getElementById("income");
     
+    // Convert back to plain number when focusing
+    incomeInput.addEventListener('focus', function() {
+        if (this.value) {
+            const numValue = parseFloat(this.value.replace(/[^\d]/g, ''));
+            if (!isNaN(numValue)) {
+                this.value = numValue;
+            }
+        }
+    });
+    
     // Format when clicking outside
     incomeInput.addEventListener('blur', function() {
         if (this.value) {
