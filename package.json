@@ -23,7 +23,9 @@
   },
   "nyc": {
     "exclude": [
-      "src/lib/**"
+      "src/lib/**",
+      "src/**/*.test.js",
+      "src/**/*.spec.js"
     ]
   }
 }

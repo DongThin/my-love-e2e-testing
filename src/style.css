@@ -57,24 +57,22 @@ tr:hover {
     cursor: pointer;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
-
-.btn-secondary {
-    color: black;
-    background-color: white;
-    border-radius: 10px;
-    border: none;
-    padding: 9px;
-    cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+.btn-primary:disabled {
+    background-color: lightgray;
+    color: gray;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
-button:hover {
+button:not([disabled]):hover,
+button:not([disabled]):focus {
     background-color: green;
     color: white;
     box-shadow: 0 1px;
     transform: scale(1);
     outline: none;
 }
+
 .footer{
     margin-top: 20px;
     color: gray;

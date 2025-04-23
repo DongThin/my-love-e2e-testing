@@ -1,11 +1,32 @@
 import Big from "../lib/big.js";
-import calcTaxes from './common/calcTaxes';
-import calcInsuranceDetails from './common/calcInsuranceDetails';
-import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants';
-
-console.log("Mot cong mot lon hon hai!")
+import calcTaxes from './common/calcTaxes.js';
+import calcInsuranceDetails from './common/calcInsuranceDetails.js';
+import {SELF_DEDUCTION, DEDUCTION_PER_PERSON} from './common/salaryConstants.js';
 
 const todayDate = new Date();
+
+/**
+ * Calculates the net salary from gross salary considering insurance, dependents, and taxes
+ * 
+ * @param {number} gross - The gross salary amount
+ * @param {number} [dependents=0] - Number of dependents for tax deduction
+ * @param {(1|2|3|4)} [region=1] - Region code for insurance calculation (must be 1, 2, 3, or 4)
+ * @param {Date} [date=todayDate] - Date for calculating insurance rates, defaults to current date
+ * @returns {Promise<{
+*   gross: number,
+*   region: number,
+*   totalInsurance: number,
+*   insurances: Object,
+*   afterInsurance: number,
+*   dependents: number,
+*   dependentDeductionAmount: number,
+*   taxes: Array,
+*   totalTax: number,
+*   netSalary: number
+* }>} Promise that resolves with the payslip object containing all salary calculations
+* @throws {Error} When there's an error calculating insurances or taxes
+*/
+
 export default function grossToNet(gross, dependents = 0, region = 1, date = todayDate) {
     return new Promise(function (resolve, reject) {
 
@@ -38,12 +59,11 @@ export default function grossToNet(gross, dependents = 0, region = 1, date = tod
                 resolve(payslip);
 
             }).catch(function (error) {
-                reject('Error calculating taxes');
+                reject(new Error('Error calculating taxes'));
             })
 
         }).catch(function (error) {
-            console.log(error)
-            reject('Error calculating insurances');
+            reject(new Error('Error calculating insurances'));
         });
     })
 }

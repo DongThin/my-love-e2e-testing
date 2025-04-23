@@ -1,5 +1,5 @@
 import Big from "../../lib/big.js";
-import {TAX_RATES} from './salaryConstants';
+import {TAX_RATES} from './salaryConstants.js';
 
 /**
  * @param {number} taxableIncome

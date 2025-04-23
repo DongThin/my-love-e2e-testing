@@ -1,26 +1,54 @@
- function convertGrossToNet() {  
-    // Lấy giá trị thu nhập từ input  
-    const incomeInput = document.getElementById('incomeInput').value; 
-     
-    // Lấy phần tử bảng cho các ô hiển thị kết quả (Hàng thứ 2, cột thứ 1)
-    const grossCell = document.querySelector('table tr:nth-child(2) td:nth-child(1)');  
-    
-    // Cập nhật giá trị Lương Gross trong bảng  
-    grossCell.textContent = incomeInput || 0; // Nếu không có giá trị, hiển thị 0  
-}  
+import grossToNet from "./salary-app/grossToNet.js";
 
-// Ngăn không cho form tự động gửi và tải lại trang khi nút được nhấn  
-function preventFormSubmission(event) {  
-    event.preventDefault();  
-}  
+const numberFormatter = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+});
 
-// Hàm gắn sự kiện khi trang được tải  
-window.onload = function() {  
-    // Thêm sự kiện click cho nút Gross sang Net  
-    document.getElementById('grossToNetButton').addEventListener('click', function(event) {  
-        preventFormSubmission(event); // Ngăn gửi form  
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM fully loaded and parsed');
+
+    // Cache DOM elements
+    const grossElement = document.getElementById("gross");
+    const insuranceElement = document.getElementById("insurance");
+    const taxElement = document.getElementById("tax");
+    const netElement = document.getElementById("net");
+    const incomeInput = document.getElementById("income");
+
+    // Clean input on change to ensure only numbers
+    incomeInput.addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/[^\d]/g, '');
+    });
+
+    // Convert back to plain number when focusing
+    incomeInput.addEventListener('focus', function (e) {
+        if (e.target.value === "") {
+            return;
+        }
+
+        e.target.value = e.target.value.replace(/[^\d]/g, '');
+    });
+
+    // Format when clicking outside
+    incomeInput.addEventListener('blur', function (e) {
+        if (e.target.value === "") {
+            return;
+        }
+
+        const numValue = parseFloat(e.target.value);
+        e.target.value = numberFormatter.format(numValue);
+
+    });
+
+    document.getElementById("btnGrossToNet").addEventListener("click", async function () {
+        const income = parseFloat(incomeInput.value.replace(/[^\d]/g, ''));
+        const result = await grossToNet(income);
         
-        this.classList.toggle("style-selected-button")
-        convertGrossToNet(); // Gọi hàm để chuyển đổi  
-    });  
-};
+        grossElement.textContent = numberFormatter.format(result.gross);
+        insuranceElement.textContent = numberFormatter.format(result.totalInsurance);
+        taxElement.textContent = numberFormatter.format(result.totalTax);
+        netElement.textContent = numberFormatter.format(result.netSalary);
+    });
+});

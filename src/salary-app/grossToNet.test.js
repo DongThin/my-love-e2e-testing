@@ -9,7 +9,7 @@ describe("Calculate net salary", () => {
     let grossToNet;
 
     beforeEach(() => {
-        insurancesCalcStub = sinon.stub() ;
+        insurancesCalcStub = sinon.stub();
         taxCalcStub = sinon.stub()
 
         grossToNet = proxyquire("./grossToNet", {
@@ -18,7 +18,7 @@ describe("Calculate net salary", () => {
             },
             "./common/calcTaxes": {
                 default: taxCalcStub
-            } ,
+            },
         }).default;
     });
 
@@ -28,8 +28,8 @@ describe("Calculate net salary", () => {
 
     describe('Check Dependent deduction', () => {
         //Personal Income Tax (PIT)
-        const mockedInsurance = { total: 0, insurances: [] };
-        const mockedTaxes = { totalTax: 0, rates: [] };
+        const mockedInsurance = {total: 0, insurances: []};
+        const mockedTaxes = {totalTax: 0, rates: []};
         beforeEach(() => {
             insurancesCalcStub.returns(Promise.resolve(mockedInsurance));
             // insurancesCalcStub.resolves(mockedInsurance);
@@ -145,8 +145,8 @@ describe("Calculate net salary", () => {
 
         test('It should correctly deduct total Insurance and total tax', async () => {
             // Arrange
-            const mockedInsurance = { total: 1, insurances: [] };
-            const mockedTaxes = { totalTax: 2, rates: [] };
+            const mockedInsurance = {total: 1, insurances: []};
+            const mockedTaxes = {totalTax: 2, rates: []};
 
             const region = 3;
             const argDate = new Date("2023-06-01");
@@ -174,8 +174,8 @@ describe("Calculate net salary", () => {
         })
 
         test('Ensure correct default argument passing for accurate insurance calculations', async () => {
-            const mockedInsurance = { total: 0, insurances: [] };
-            const mockedTaxes = { totalTax: 1, rates: [] };
+            const mockedInsurance = {total: 0, insurances: []};
+            const mockedTaxes = {totalTax: 1, rates: []};
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).resolves(mockedTaxes)
@@ -203,22 +203,25 @@ describe("Calculate net salary", () => {
         })
 
         test('Throw error message when having error calculating taxes', async () => {
-            const mockedInsurance = { total: 0, insurances: [] };
+            const mockedInsurance = {total: 0, insurances: []};
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
-            taxCalcStub.withArgs(82_600_000).rejects('Error calculating taxes')
 
-            await grossToNet(93_600_000).catch(function (error) {
-                assert.equal(error, 'Error calculating taxes')
+            taxCalcStub.withArgs(82_600_000).rejects(new Error())
+
+            await assert.rejects(() => grossToNet(93_600_000), (error) => {
+                assert.equal(error.message, 'Error calculating taxes')
+                return true;
             })
         })
 
         test('Throw error message when having error calculating insurances', async () => {
 
-            insurancesCalcStub.withArgs(93_600_000, 1).rejects('Error calculating insurances')
+            insurancesCalcStub.withArgs(93_600_000, 1).rejects(new Error())
 
-            await grossToNet(93_600_000).catch(function (error) {
-                assert.equal(error, 'Error calculating insurances')
+            await assert.rejects(() => grossToNet(93_600_000), (error) => {
+                assert.equal(error.message, 'Error calculating insurances')
+                return true;
             })
         })
     })

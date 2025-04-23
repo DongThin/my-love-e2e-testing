@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Welcome to Dong Thin website</title>
     <link rel="stylesheet" href="style.css">
-    <!--    <script src="script.js" defer></script> &lt;!&ndash; Liên kết đến tệp JS &ndash;&gt;-->
+
 </head>
 
 <body>
@@ -14,15 +14,15 @@
 <form class ="salary-form">
     <div class ="input-group">
         <label for="income">Thu nhập</label>
-        <input type="number" id="income" placeholder="(VND)" class="salary-input"> <br>
+        <input type="text" id="income" placeholder="(VND)" class="salary-input"> <br>
     </div>
 
     <div class="button-group">
-        <button class="btn-primary" type="button">
+        <button id="btnGrossToNet" class="btn-primary" type="button">
             Gross sang Net
         </button>
 
-        <button class="btn-secondary" type="button">
+        <button disabled="true" class="btn-primary" type="button">
             Net sang Gross
         </button>
     </div>
@@ -47,8 +47,7 @@
     </tr>
 </table>
 
-<script src="./lib/big.js"></script>
-<script type="module" src="./salaryCalculator.js"></script>
+<script type="module" src="./script.js"></script>
 
 </body>
 
