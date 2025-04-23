@@ -14,15 +14,15 @@
 <form class ="salary-form">
     <div class ="input-group">
         <label for="income">Thu nhập</label>
-        <input type="text" id="income" placeholder="(VND)" class="salary-input" inputmode="numeric" pattern="[0-9]*"> <br>
+        <input type="text" id="income" placeholder="(VND)" class="salary-input"> <br>
     </div>
 
-    <div id="btnGrossToNet" class="button-group">
-        <button class="btn-primary" type="button">
+    <div class="button-group">
+        <button id="btnGrossToNet" class="btn-primary" type="button">
             Gross sang Net
         </button>
 
-        <button class="btn-secondary" type="button">
+        <button disabled="true" class="btn-primary" type="button">
             Net sang Gross
         </button>
     </div>
