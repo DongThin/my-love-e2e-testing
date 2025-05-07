@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Clean input on change to ensure only numbers
     incomeInput.addEventListener('input', function (e) {
         e.target.value = e.target.value.replace(/[^\d]/g, '');
+        if (e.target.value.length > 16) {
+            e.target.value = e.target.value.slice(0, 16);
+        }
     });
 
     // Convert back to plain number when focusing
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("btnGrossToNet").addEventListener("click", async function () {
         const income = parseFloat(incomeInput.value.replace(/[^\d]/g, ''));
         const result = await grossToNet(income);
-        
+
         grossElement.textContent = numberFormatter.format(result.gross);
         insuranceElement.textContent = numberFormatter.format(result.totalInsurance);
         taxElement.textContent = numberFormatter.format(result.totalTax);
