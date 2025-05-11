@@ -153,7 +153,7 @@ describe('Calculate taxes', () => {
         expect(result).to.have.property('rates').that.is.an('array').with.lengthOf(7);
         expect(result).to.have.property('totalTax').that.equals(expectedTaxes.totalTax);
         expect(result).to.deep.equal(expectedTaxes);
-
+    });
     test('It applies tax rate 7 correctly for very large incomes', async () => {
         // Testing with income significantly above 80M to verify 35% rate
         const taxableIncome = 983_562_000;
@@ -177,4 +177,4 @@ describe('Calculate taxes', () => {
         expect(result).to.deep.equal(expectedTaxes);
     });
 })
-})
+

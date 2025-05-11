@@ -20,8 +20,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Clean input on change to ensure only numbers
     incomeInput.addEventListener('input', function (e) {
         e.target.value = e.target.value.replace(/[^\d]/g, '');
+        
+        // Limit to 16 digits
         if (e.target.value.length > 16) {
             e.target.value = e.target.value.slice(0, 16);
+        }
+
+        // Check if value exceeds MAX_SAFE_INTEGER
+        const numValue = parseInt(e.target.value || '0');
+        if (numValue > Number.MAX_SAFE_INTEGER) {
+            e.target.value = String(Number.MAX_SAFE_INTEGER);
         }
     });
 
