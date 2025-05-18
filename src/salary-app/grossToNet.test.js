@@ -1,5 +1,5 @@
-import assert from 'assert';
-import {it as test} from 'mocha'
+import { expect } from 'chai';
+import { it as test } from 'mocha'
 import sinon from 'sinon';
 import proxyquire from 'proxyquire';
 
@@ -28,8 +28,8 @@ describe("Calculate net salary", () => {
 
     describe('Check Dependent deduction', () => {
         //Personal Income Tax (PIT)
-        const mockedInsurance = {total: 0, insurances: []};
-        const mockedTaxes = {totalTax: 0, rates: []};
+        const mockedInsurance = { total: 0, insurances: [] };
+        const mockedTaxes = { totalTax: 0, rates: [] };
         beforeEach(() => {
             insurancesCalcStub.returns(Promise.resolve(mockedInsurance));
             // insurancesCalcStub.resolves(mockedInsurance);
@@ -62,10 +62,9 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await grossToNet(gross).then((result) => {
-                assert.deepStrictEqual(result, expectedPayslip);
-            })
-            assert(taxCalcStub.calledWith(1_290_500));
+            const result = await grossToNet(gross);
+            expect(result).to.deep.equal(expectedPayslip);
+            expect(taxCalcStub.calledWith(1_290_500)).to.be.true;
         })
 
         test('Dependent with no taxable income', async () => {
@@ -85,10 +84,9 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await grossToNet(gross, 1).then((result) => {
-                assert.deepStrictEqual(result, expectedPayslip);
-            })
-            assert(taxCalcStub.calledWith(0));
+            const result = await grossToNet(gross, 1);
+            expect(result).to.be.an('object').to.deep.equal(expectedPayslip);
+            expect(taxCalcStub.calledWith(0)).to.be.true;
         })
 
         test('Taxes fully deducted with dependents', async () => {
@@ -109,11 +107,10 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await grossToNet(gross, 1).then((result) => {
-                assert.deepStrictEqual(result, expectedPayslip);
-            })
-            assert(taxCalcStub.calledWith(600_000));
+            const result = await grossToNet(gross, 1);
 
+            expect(result).to.be.an('object').to.deep.equal(expectedPayslip);
+            expect(taxCalcStub.calledWith(600_000)).to.be.true;
         })
 
         test('Taxes partially deducted with dependents', async () => {
@@ -134,10 +131,10 @@ describe("Calculate net salary", () => {
                 netSalary: gross - mockedTaxes.totalTax - mockedInsurance.total
             };
 
-            await grossToNet(gross, 1).then((result) => {
-                assert.deepStrictEqual(result, expectedPayslip);
-            })
-            assert(taxCalcStub.calledWith(8_063_687));
+            const result = await grossToNet(gross, 1);
+
+            expect(result).to.be.an('object').to.deep.equal(expectedPayslip);
+            expect(taxCalcStub.calledWith(8_063_687)).to.be.true;
         })
     });
 
@@ -145,8 +142,8 @@ describe("Calculate net salary", () => {
 
         test('It should correctly deduct total Insurance and total tax', async () => {
             // Arrange
-            const mockedInsurance = {total: 1, insurances: []};
-            const mockedTaxes = {totalTax: 2, rates: []};
+            const mockedInsurance = { total: 1, insurances: [] };
+            const mockedTaxes = { totalTax: 2, rates: [] };
 
             const region = 3;
             const argDate = new Date("2023-06-01");
@@ -170,12 +167,12 @@ describe("Calculate net salary", () => {
                 totalTax: mockedTaxes.totalTax,
                 netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
             };
-            assert.deepStrictEqual(actualPayslip, expectedPayslip);
+            expect(actualPayslip).to.be.an('object').to.deep.equal(expectedPayslip);
         })
 
         test('Ensure correct default argument passing for accurate insurance calculations', async () => {
-            const mockedInsurance = {total: 0, insurances: []};
-            const mockedTaxes = {totalTax: 1, rates: []};
+            const mockedInsurance = { total: 0, insurances: [] };
+            const mockedTaxes = { totalTax: 1, rates: [] };
 
             insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
             taxCalcStub.withArgs(82_600_000).resolves(mockedTaxes)
@@ -195,34 +192,36 @@ describe("Calculate net salary", () => {
                 netSalary: actualPayslip.afterInsurance - mockedTaxes.totalTax
             };
 
-            assert.deepStrictEqual(actualPayslip, expectedPayslip);
+            expect(actualPayslip).to.be.an('object').to.deep.equal(expectedPayslip);
             const argDate = insurancesCalcStub.getCall(0).args[2].toISOString().substring(0, 10);
             const expectedDate = new Date().toISOString().substring(0, 10);
-
-            assert.equal(argDate, expectedDate)
+            expect(argDate).to.equal(expectedDate)
         })
 
-        test('Throw error message when having error calculating taxes', async () => {
-            const mockedInsurance = {total: 0, insurances: []};
+        test('should throw error message when tax calculation fails', async () => {
+            const mockedInsurance = { total: 0, insurances: [] };
+            insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance);
+            taxCalcStub.withArgs(82_600_000).rejects(new Error());
 
-            insurancesCalcStub.withArgs(93_600_000, 1).resolves(mockedInsurance)
-
-            taxCalcStub.withArgs(82_600_000).rejects(new Error())
-
-            await assert.rejects(() => grossToNet(93_600_000), (error) => {
-                assert.equal(error.message, 'Error calculating taxes')
-                return true;
-            })
-        })
+            try {
+                await grossToNet(93_600_000);
+                expect.fail('Should have thrown an error');
+            } catch (error) {
+                expect(error).to.be.an('error');
+                expect(error.message).to.equal('Error calculating taxes');
+            }
+        });
 
         test('Throw error message when having error calculating insurances', async () => {
 
             insurancesCalcStub.withArgs(93_600_000, 1).rejects(new Error())
-
-            await assert.rejects(() => grossToNet(93_600_000), (error) => {
-                assert.equal(error.message, 'Error calculating insurances')
-                return true;
-            })
+            try {
+                await grossToNet(93_600_000);
+                expect.fail('Should have thrown an error');
+            } catch (error) {
+                expect(error).to.be.an('error');
+                expect(error.message).to.equal('Error calculating insurances');
+            }
         })
     })
 })

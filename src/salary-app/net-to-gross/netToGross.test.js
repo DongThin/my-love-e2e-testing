@@ -1,4 +1,4 @@
-import assert from 'assert';
+import {assert, expect} from 'chai';
 import {it as test} from 'mocha';
 import * as sinon from 'sinon';
 import proxyquire from 'proxyquire';
@@ -46,12 +46,12 @@ describe('Net to Gross', () =>{
         sinon.restore();
     })
 
-    test(' should be equal 0 when Net is less than or equal 0', async () => {
-
+    test('should return object with gross equal to 0 when Net is less than or equal 0', async () => {
         const inputNet = -19;
         await netToGross(inputNet).then(function (actual) {
-            assert.equal(actual.gross, 0)
-        })
+            expect(actual).to.be.an('object');
+            expect(actual.gross).to.equal(0);
+        });
     });
 
     test('It should calculate gross income accurately', async () => {
@@ -70,7 +70,7 @@ describe('Net to Gross', () =>{
         }
 
         await netToGross(inputNet).then((actual) => {
-            assert.deepStrictEqual(actual, expectedPayslip)
+           expect(actual).to.be.an('object').to.deep.equal(expectedPayslip);
         })
     })
 

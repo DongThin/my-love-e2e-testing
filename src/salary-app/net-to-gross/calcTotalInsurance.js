@@ -24,8 +24,6 @@ export default function calcTotalInsurance(net, totalTax, region = 1, date = new
         const gte20TimeRegion = Big(0.99).times(maxUI).minus(3_420_000);
         const maxGrossForSIorHI = new Big((insurancePolicy.baseSalary).times(BIG_20));
 
-        console.log("maxGross", maxGrossForSIorHI.toNumber())
-
         // employee has to pay
         const maxTotalPaidForSIAndHI = Big(0.08)
             .times(maxGrossForSIorHI)
