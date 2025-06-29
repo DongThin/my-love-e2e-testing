@@ -1,5 +1,5 @@
-import assert from 'assert';
-import {it as test} from 'mocha'
+import { expect } from 'chai';
+import { it as test } from 'mocha'
 import * as sinon from "sinon";
 import proxyquire from "proxyquire";
 import Big from "../../lib/big.js";
@@ -61,7 +61,7 @@ describe('Calculate Insurances', async () => {
                 total: 0.105
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
 
 
@@ -97,7 +97,7 @@ describe('Calculate Insurances', async () => {
                 total: 3139500
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
 
         test('It applies max threshold (88.4m) of region 1 for Unemployment Insurance (1%)', async () => {
@@ -131,7 +131,7 @@ describe('Calculate Insurances', async () => {
                 total: 3715000
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
 
         test('It applies max threshold (78.4m) of region 2 for Unemployment Insurance (1%)', async () => {
@@ -164,7 +164,7 @@ describe('Calculate Insurances', async () => {
                 total: 3615000
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
         test('It applies max threshold (68.6m) of region 3 for Unemployment Insurance (1%)', async () => {
             // Social Insurance: 8% of 29.8 million
@@ -196,7 +196,7 @@ describe('Calculate Insurances', async () => {
                 total: 3517000
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
 
         test('It applies max threshold (61.4m) of region 4 for Unemployment Insurance (1%)', async () => {
@@ -229,28 +229,31 @@ describe('Calculate Insurances', async () => {
                 total: 3445000
             }
 
-            assert.deepStrictEqual(actualInsurances, expectedInsurances)
+            expect(actualInsurances).to.deep.equal(expectedInsurances);
         })
 
-        const invalidRegionError = new Error('Invalid region entered. Please enter again! (1, 2, 3, 4)');
         test('Throw Exception when entering invalid region', async () => {
+            findInsurancePolicyStub.throws(new Error('Invalid region entered. Please enter again! (1, 2, 3, 4)'));
 
-            findInsurancePolicyStub.throws(invalidRegionError);
-
-            await assert.rejects(
-                insurancesCalculator(88_888_888, 5, july23),
-                invalidRegionError
-            );
+            try {
+                await insurancesCalculator(88_888_888, 5, july23);
+                expect.fail('Should have thrown an error');
+            } catch (error) {
+                expect(error).to.be.an('error');
+                expect(error.message).to.equal('Invalid region entered. Please enter again! (1, 2, 3, 4)');
+            }
         })
 
-        const salaryPolicyNotFoundError = new Error('There is no salary policy available for the date provided');
         test('Throw Exception when there is no salary policy available for the date provided', async () => {
+            findInsurancePolicyStub.throws(new Error('There is no salary policy available for the date provided'));
 
-            findInsurancePolicyStub.throws(salaryPolicyNotFoundError);
-            await assert.rejects(
-                insurancesCalculator(88_888_888, 3, new Date("2021-01-01")),
-                salaryPolicyNotFoundError
-            );
+            try {
+                await insurancesCalculator(88_888_888, 3, new Date("2021-01-01"));
+                expect.fail('Should have thrown an error');
+            } catch (error) {
+                expect(error).to.be.an('error'); 
+                expect(error.message).to.equal('There is no salary policy available for the date provided');
+            }
         })
 
 
@@ -266,9 +269,6 @@ describe('Calculate Insurances', async () => {
                         default: findInsurancePolicyStub
                     }
                 }).default;
-
-                // findInsurancePolicyStub.resolves(mockedPolicy);
-
             });
 
             afterEach(() => {
@@ -307,7 +307,7 @@ describe('Calculate Insurances', async () => {
                     total: 3279617.88
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
 
             test('It applies max threshold (36m) for Social Insurance (8%) and Health Insurance (1.5%) ' +
@@ -342,7 +342,7 @@ describe('Calculate Insurances', async () => {
                     total: 3787891.23
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
 
             test('It applies max threshold (93.6m) of region 1 for Unemployment Insurance (1%)', async () => {
@@ -376,7 +376,7 @@ describe('Calculate Insurances', async () => {
                     total: 4356000
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
 
             test('It applies max threshold (83.2m) of region 2 for Unemployment Insurance (1%)', async () => {
@@ -410,7 +410,7 @@ describe('Calculate Insurances', async () => {
                     total: 4252000
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
 
             test('It applies max threshold (72.8m) of region 3 for Unemployment Insurance (1%)', async () => {
@@ -443,7 +443,7 @@ describe('Calculate Insurances', async () => {
                     total: 4148000
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
 
             test('It applies max threshold (65m) of region 4 for Unemployment Insurance (1%)', async () => {
@@ -477,7 +477,7 @@ describe('Calculate Insurances', async () => {
                     total: 4070000
                 }
 
-                assert.deepStrictEqual(actualInsurances, expectedInsurances)
+                expect(actualInsurances).to.deep.equal(expectedInsurances);
             })
         })
     })
