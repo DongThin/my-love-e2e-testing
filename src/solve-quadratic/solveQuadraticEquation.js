@@ -46,20 +46,23 @@ export default function solveQuadraticEquation(a, b, c) {
 
     // Calculate real part (common for all cases)
     const realPart = negB.div(twoA);
+    // Convert -0 to +0 if needed
+    const realValue = realPart.toNumber();
+    const normalizedReal = realValue === 0 ? 0 : realValue;
 
     if (delta.gt(0)) {
         const sqrtDelta = delta.sqrt().div(twoA);
         return [
-            { real: realPart.plus(sqrtDelta).toNumber(), imaginary: 0 },
-            { real: realPart.minus(sqrtDelta).toNumber(), imaginary: 0 }
+            { real: normalizedReal + sqrtDelta.toNumber(), imaginary: 0 },
+            { real: normalizedReal - sqrtDelta.toNumber(), imaginary: 0 }
         ];
     } else if (delta.eq(0)) {
-        return [{ real: realPart.toNumber(), imaginary: 0 }];
+        return [{ real: normalizedReal, imaginary: 0 }];
     } else {
         const imaginaryPart = delta.abs().sqrt().div(twoA).toNumber();
         return [
-            { real: realPart.toNumber(), imaginary: imaginaryPart },
-            { real: realPart.toNumber(), imaginary: -imaginaryPart }
+            { real: normalizedReal, imaginary: imaginaryPart },
+            { real: normalizedReal, imaginary: -imaginaryPart }
         ];
     }
 }
