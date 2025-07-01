@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Check if value exceeds MAX_SAFE_INTEGER
-        const numValue = parseInt(e.target.value || '0');
+        const numValue = parseInt(e.target.value || '0', 10);
         if (numValue > Number.MAX_SAFE_INTEGER) {
             e.target.value = String(Number.MAX_SAFE_INTEGER);
         }

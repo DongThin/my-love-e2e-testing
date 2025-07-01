@@ -17,7 +17,7 @@ const FOUR = Big(4);
  * @param {number} a - Coefficient of x²
  * @param {number} b - Coefficient of x
  * @param {number} c - Constant term
- * @returns {Array<{real: number, imaginary: number}>} Array of solutions as objects with real and imaginary parts
+ * @returns {Array<{real?: number, imaginary?: number}>} Array of solutions as objects with real and/or imaginary parts
  * @throws {QuadraticEquationError} If a is zero
  * @throws {TypeError} If inputs are not numbers
  */
@@ -46,23 +46,29 @@ export default function solveQuadraticEquation(a, b, c) {
 
     // Calculate real part (common for all cases)
     const realPart = negB.div(twoA);
-    // Convert -0 to +0 if needed
     const realValue = realPart.toNumber();
-    const normalizedReal = realValue === 0 ? 0 : realValue;
+    
+    // Helper to create root object without undefined values
+    const createRoot = (real, imaginary) => {
+        const root = {};
+        if (real !== 0 && real !== undefined) root.real = real;
+        if (imaginary !== undefined) root.imaginary = imaginary;
+        return root;
+    };
 
     if (delta.gt(0)) {
         const sqrtDelta = delta.sqrt().div(twoA);
         return [
-            { real: normalizedReal + sqrtDelta.toNumber(), imaginary: 0 },
-            { real: normalizedReal - sqrtDelta.toNumber(), imaginary: 0 }
+            createRoot(realValue + sqrtDelta.toNumber()),
+            createRoot(realValue - sqrtDelta.toNumber())
         ];
     } else if (delta.eq(0)) {
-        return [{ real: normalizedReal, imaginary: 0 }];
+        return [createRoot(realValue)];
     } else {
         const imaginaryPart = delta.abs().sqrt().div(twoA).toNumber();
         return [
-            { real: normalizedReal, imaginary: imaginaryPart },
-            { real: normalizedReal, imaginary: -imaginaryPart }
+            createRoot(realValue, imaginaryPart),
+            createRoot(realValue, -imaginaryPart)
         ];
     }
 }

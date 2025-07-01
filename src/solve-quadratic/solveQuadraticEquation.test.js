@@ -15,7 +15,7 @@ describe('Quadratic Equation Solver', () => {
         it('should reject infinite coefficients', () => {
             // Given/When/Then: it should throw Error for Infinity
             expect(() => solveQuadraticEquation(Infinity, 2, 3))
-                .to.throw(Error, 'Coefficients must be finite numbers');
+                .to.throw(QuadraticEquationError, 'Coefficients must be finite numbers');
         });
 
         it('should reject zero leading coefficient', () => {
@@ -35,8 +35,8 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return roots 2 and 3
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
-            expect(actual[0]).to.deep.include({ real: 3, imaginary: 0 });
-            expect(actual[1]).to.deep.include({ real: 2, imaginary: 0 });
+            expect(actual[0]).to.deep.equal({ real: 3 });
+            expect(actual[1]).to.deep.equal({ real: 2 });
         });
 
         it('should solve equation x² + 3x + 2 = 0', () => {
@@ -48,8 +48,8 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return roots -1 and -2
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
-            expect(actual[0]).to.deep.include({ real: -1, imaginary: 0 });
-            expect(actual[1]).to.deep.include({ real: -2, imaginary: 0 });
+            expect(actual[0]).to.deep.equal({ real: -1 });
+            expect(actual[1]).to.deep.equal({ real: -2 });
         });
 
         it('should solve equation 21x² - 4x - 1 = 0', () => {
@@ -62,9 +62,9 @@ describe('Quadratic Equation Solver', () => {
             // Then: it should return fractional roots 1/3 and -1/7
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
             expect(actual[0].real).to.be.closeTo(1 / 3, 0.001);
-            expect(actual[0].imaginary).to.equal(0);
+            expect(actual[0]).to.not.have.property('imaginary');
             expect(actual[1].real).to.be.closeTo(-1 / 7, 0.001);
-            expect(actual[1].imaginary).to.equal(0);
+            expect(actual[1]).to.not.have.property('imaginary');
         });
     });
 
@@ -78,7 +78,7 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return double root x = 2
             expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
-            expect(actual[0]).to.deep.include({ real: 2, imaginary: 0 });
+            expect(actual[0]).to.deep.equal({ real: 2 });
         });
 
         it('should solve equation x² + 2x + 1 = 0', () => {
@@ -90,7 +90,7 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return double root x = -1
             expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
-            expect(actual[0]).to.deep.include({ real: -1, imaginary: 0 });
+            expect(actual[0]).to.deep.equal({ real: -1 });
         });
 
         it('should solve equation x² = 0', () => {
@@ -102,7 +102,8 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return double root x = 0
             expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
-            expect(actual[0]).to.deep.include({ real: 0, imaginary: 0 });
+            expect(actual[0]).to.not.have.property('real');
+            expect(actual[0]).to.deep.equal({});
         });
     });
 
@@ -116,8 +117,8 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return complex roots ±i
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
-            expect(actual[0]).to.deep.include({ real: 0, imaginary: 1 });
-            expect(actual[1]).to.deep.include({ real: 0, imaginary: -1 });
+            expect(actual[0]).to.deep.equal({ imaginary: 1 });
+            expect(actual[1]).to.deep.equal({ imaginary: -1 });
         });
 
         it('should solve equation x² + 2x + 2 = 0', () => {
@@ -129,8 +130,8 @@ describe('Quadratic Equation Solver', () => {
 
             // Then: it should return complex roots -1 ± i
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
-            expect(actual[0]).to.deep.include({ real: -1, imaginary: 1 });
-            expect(actual[1]).to.deep.include({ real: -1, imaginary: -1 });
+            expect(actual[0]).to.deep.equal({ real: -1, imaginary: 1 });
+            expect(actual[1]).to.deep.equal({ real: -1, imaginary: -1 });
         });
 
         it('should solve equation 2x² + 4x + 5 = 0', () => {
@@ -143,10 +144,14 @@ describe('Quadratic Equation Solver', () => {
             // Then: it should return complex roots -1 ± √1.5i
             const expectedImaginary = Math.sqrt(1.5);
             expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
-            expect(actual[0].real).to.equal(-1);
-            expect(actual[0].imaginary).to.be.closeTo(expectedImaginary, 0.001);
-            expect(actual[1].real).to.equal(-1);
-            expect(actual[1].imaginary).to.be.closeTo(-expectedImaginary, 0.001);
+            expect(actual[0]).to.deep.equal({
+                real: -1,
+                imaginary: expectedImaginary
+            });
+            expect(actual[1]).to.deep.equal({
+                real: -1,
+                imaginary: -expectedImaginary
+            });
         });
     });
 });

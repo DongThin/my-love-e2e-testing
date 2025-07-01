@@ -29,10 +29,6 @@ describe('Calculate taxes', () => {
         };
 
         const actual = await calcTaxes(1_234_444)
-        expect(actual.rates[0]).to.have.property('name', 'Tax level 1');
-        expect(actual.rates[0]).to.have.property('rate', 0.05);
-        expect(actual).to.have.property('totalTax', 61722.2);
-        expect(actual.rates).to.have.lengthOf(1);
         expect(actual).to.deep.equal(expectedTaxes);
 
     })
@@ -50,11 +46,6 @@ describe('Calculate taxes', () => {
         };
         const actual = await calcTaxes(9_000_000)
         expect(actual).to.deep.equal(expectedTaxes);
-        expect(actual.rates[0]).to.have.property('name', 'Tax level 1');
-        expect(actual.rates[0]).to.have.property('rate', 0.05);
-        expect(actual.rates[1]).to.have.property('name', 'Tax level 2');
-        expect(actual.rates[1]).to.have.property('rate', 0.1);
-        expect(actual).to.have.property('totalTax', 650_000);
     })
 
     test('It applies 3 first tax rates', async () => {
@@ -69,13 +60,6 @@ describe('Calculate taxes', () => {
         };
         const actual = await calcTaxes(12_000_000)
         expect(actual).to.deep.equal(expectedTaxes);
-        expect(actual.rates[0]).to.have.property('name', 'Tax level 1');
-        expect(actual.rates[0]).to.have.property('rate', 0.05);
-        expect(actual.rates[1]).to.have.property('name', 'Tax level 2');
-        expect(actual.rates[1]).to.have.property('rate', 0.1);
-        expect(actual.rates[2]).to.have.property('name', 'Tax level 3');
-        expect(actual.rates[2]).to.have.property('rate', 0.15);
-        expect(actual).to.have.property('totalTax', 1050000);
     })
 
     test('It applies 4 first tax rates', async () => {
@@ -92,15 +76,6 @@ describe('Calculate taxes', () => {
         };
         const actual = await calcTaxes(29_000_000)
         expect(actual).to.deep.equal(expectedTaxes);
-        expect(actual.rates[0]).to.have.property('name', 'Tax level 1');
-        expect(actual.rates[0]).to.have.property('rate', 0.05);
-        expect(actual.rates[1]).to.have.property('name', 'Tax level 2');
-        expect(actual.rates[1]).to.have.property('rate', 0.1);
-        expect(actual.rates[2]).to.have.property('name', 'Tax level 3');
-        expect(actual.rates[2]).to.have.property('rate', 0.15);
-        expect(actual.rates[3]).to.have.property('name', 'Tax level 4');
-        expect(actual.rates[3]).to.have.property('rate', 0.2);
-        expect(actual).to.have.property('totalTax', 4_150_000);
     })
 
     test('It applies 5 first tax rates', async () => {
