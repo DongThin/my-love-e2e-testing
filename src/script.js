@@ -20,6 +20,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Clean input on change to ensure only numbers
     incomeInput.addEventListener('input', function (e) {
         e.target.value = e.target.value.replace(/[^\d]/g, '');
+        
+        // Limit to 16 digits
+        if (e.target.value.length > 16) {
+            e.target.value = e.target.value.slice(0, 16);
+        }
+
+        // Check if value exceeds MAX_SAFE_INTEGER
+        const numValue = parseInt(e.target.value || '0', 10);
+        if (numValue > Number.MAX_SAFE_INTEGER) {
+            e.target.value = String(Number.MAX_SAFE_INTEGER);
+        }
     });
 
     // Convert back to plain number when focusing
@@ -45,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("btnGrossToNet").addEventListener("click", async function () {
         const income = parseFloat(incomeInput.value.replace(/[^\d]/g, ''));
         const result = await grossToNet(income);
-        
+
         grossElement.textContent = numberFormatter.format(result.gross);
         insuranceElement.textContent = numberFormatter.format(result.totalInsurance);
         taxElement.textContent = numberFormatter.format(result.totalTax);

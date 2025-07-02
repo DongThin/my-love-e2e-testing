@@ -1,117 +1,157 @@
-import assert from 'assert';
+import { expect } from 'chai';
 import solveQuadraticEquation from './solveQuadraticEquation';
 
-const test = require('mocha').it;
+describe('Quadratic Equation Solver', () => {
+    context('when validating inputs', () => {
+        it('should reject non-numeric coefficients', () => {
+            // Given: a string instead of number coefficient
+            const invalidCoefficient = '1';
 
-// Helper function moved to outer scope
-function verifyRoots(actual, expected) {
-    assert.strictEqual(actual.length, expected.length);
-    actual.forEach((root, index) => {
-        // Allow small floating point differences
-        const realDiff = Math.abs(root.real - expected[index].real);
-        const imagDiff = Math.abs(root.imaginary - expected[index].imaginary);
-        assert.ok(realDiff < 1e-10, `Real part difference too large: ${realDiff}`);
-        assert.ok(imagDiff < 1e-10, `Imaginary part difference too large: ${imagDiff}`);
-    });
-}
-
-describe('Calculate quadratic equations', () => {
-    describe('Input validation', () => {
-        test('should throw TypeError for non-number inputs', () => {
-            assert.throws(() => {
-                solveQuadraticEquation('1', 2, 3);
-            }, TypeError);
+            // When/Then: it should throw TypeError
+            expect(() => solveQuadraticEquation(invalidCoefficient, 2, 3))
+                .to.throw(TypeError, 'All coefficients must be numbers');
         });
 
-        test('should throw QuadraticEquationError for infinite or NaN inputs', () => {
-            assert.throws(() => {
-                solveQuadraticEquation(Infinity, 2, 3);
-            }, Error);
+        it('should reject infinite coefficients', () => {
+            // Given/When/Then: it should throw Error for Infinity
+            expect(() => solveQuadraticEquation(Infinity, 2, 3))
+                .to.throw(Error, 'Coefficients must be finite numbers');
         });
 
-        test('should throw QuadraticEquationError when a is zero', () => {
-            assert.throws(() => {
-                solveQuadraticEquation(0, 5, 3);
-            }, Error);
+        it('should reject zero leading coefficient', () => {
+            // Given/When/Then: it should throw Error for a = 0
+            expect(() => solveQuadraticEquation(0, 5, 3))
+                .to.throw(Error, 'Coefficient a must not be zero');
         });
     });
 
-    describe('The equation with distinct real roots', () => {
-        test('should find two positive roots', () => {
-            const actual = solveQuadraticEquation(1, -5, 6);
-            const expected = [
-                { real: 3, imaginary: 0 },
-                { real: 2, imaginary: 0 }
-            ];
-            verifyRoots(actual, expected);
+    context('when equation has real distinct roots', () => {
+        it('should solve equation x² - 5x + 6 = 0', () => {
+            // Given: coefficients of x² - 5x + 6
+            const a = 1, b = -5, c = 6;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return roots 2 and 3
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0]).to.deep.equal({ real: 3 });
+            expect(actual[1]).to.deep.equal({ real: 2 });
         });
 
-        test('should find two negative roots', () => {
-            const actual = solveQuadraticEquation(1, 3, 2);
-            const expected = [
-                { real: -1, imaginary: 0 },
-                { real: -2, imaginary: 0 }
-            ];
-            verifyRoots(actual, expected);
+        it('should solve equation x² + 3x + 2 = 0', () => {
+            // Given: coefficients of x² + 3x + 2
+            const a = 1, b = 3, c = 2;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return roots -1 and -2
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0]).to.deep.equal({ real: -1 });
+            expect(actual[1]).to.deep.equal({ real: -2 });
         });
 
-        test('should handle fractional roots', () => {
-            const actual = solveQuadraticEquation(21, -4, -1);
-            const expected = [
-                { real: 1/3, imaginary: 0 },
-                { real: -1/7, imaginary: 0 }
-            ];
-            verifyRoots(actual, expected);
-        });
-    });
+        it('should solve equation 21x² - 4x - 1 = 0', () => {
+            // Given: coefficients of 21x² - 4x - 1
+            const a = 21, b = -4, c = -1;
 
-    describe('The equation with a double root', () => {
-        test('should find a double positive root', () => {
-            const actual = solveQuadraticEquation(1, -4, 4);
-            verifyRoots(actual, [
-                { real: 2, imaginary: 0 }
-            ]);
-        });
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
 
-        test('should find a double negative root', () => {
-            const actual = solveQuadraticEquation(1, 2, 1);
-            verifyRoots(actual, [
-                { real: -1, imaginary: 0 }
-            ]);
-        });
-
-        test('should handle zero as double root', () => {
-            const actual = solveQuadraticEquation(1, 0, 0);
-            verifyRoots(actual, [
-                { real: 0, imaginary: 0 }
-            ]);
+            // Then: it should return fractional roots 1/3 and -1/7
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0].real).to.be.closeTo(1 / 3, 0.001);
+            expect(actual[0]).to.not.have.property('imaginary');
+            expect(actual[1].real).to.be.closeTo(-1 / 7, 0.001);
+            expect(actual[1]).to.not.have.property('imaginary');
         });
     });
 
-    describe('The equation with complex roots', () => {
-        test('x² + 1 = 0 should return ±i', () => {
-            const actual = solveQuadraticEquation(1, 0, 1);
-            verifyRoots(actual, [
-                { real: 0, imaginary: 1 },
-                { real: 0, imaginary: -1 }
-            ]);
+    context('when equation has a double root', () => {
+        it('should solve equation x² - 4x + 4 = 0', () => {
+            // Given: coefficients of x² - 4x + 4
+            const a = 1, b = -4, c = 4;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return double root x = 2
+            expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
+            expect(actual[0]).to.deep.equal({ real: 2 });
         });
 
-        test('x² + 2x + 2 = 0 should return -1 ± i', () => {
-            const actual = solveQuadraticEquation(1, 2, 2);
-            verifyRoots(actual, [
-                { real: -1, imaginary: 1 },
-                { real: -1, imaginary: -1 }
-            ]);
+        it('should solve equation x² + 2x + 1 = 0', () => {
+            // Given: coefficients of x² + 2x + 1
+            const a = 1, b = 2, c = 1;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return double root x = -1
+            expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
+            expect(actual[0]).to.deep.equal({ real: -1 });
         });
 
-        test('2x² + 4x + 5 = 0 should return -1 ± √1.5i', () => {
-            const actual = solveQuadraticEquation(2, 4, 5);
+        it('should solve equation x² = 0', () => {
+            // Given: coefficients of x²
+            const a = 1, b = 0, c = 0;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return double root x = 0
+            expect(actual).to.have.lengthOf(1, 'Should have exactly one root');
+            expect(actual[0]).to.not.have.property('real');
+            expect(actual[0]).to.deep.equal({});
+        });
+    });
+
+    context('when equation has complex roots', () => {
+        it('should solve equation x² + 1 = 0', () => {
+            // Given: coefficients of x² + 1
+            const a = 1, b = 0, c = 1;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return complex roots ±i
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0]).to.deep.equal({ imaginary: 1 });
+            expect(actual[1]).to.deep.equal({ imaginary: -1 });
+        });
+
+        it('should solve equation x² + 2x + 2 = 0', () => {
+            // Given: coefficients of x² + 2x + 2
+            const a = 1, b = 2, c = 2;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return complex roots -1 ± i
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0]).to.deep.equal({ real: -1, imaginary: 1 });
+            expect(actual[1]).to.deep.equal({ real: -1, imaginary: -1 });
+        });
+
+        it('should solve equation 2x² + 4x + 5 = 0', () => {
+            // Given: coefficients of 2x² + 4x + 5
+            const a = 2, b = 4, c = 5;
+
+            // When: solving the equation
+            const actual = solveQuadraticEquation(a, b, c);
+
+            // Then: it should return complex roots -1 ± √1.5i
             const expectedImaginary = Math.sqrt(1.5);
-            verifyRoots(actual, [
-                { real: -1, imaginary: expectedImaginary },
-                { real: -1, imaginary: -expectedImaginary }
-            ]);
+            expect(actual).to.have.lengthOf(2, 'Should have exactly two roots');
+            expect(actual[0]).to.deep.equal({
+                real: -1,
+                imaginary: expectedImaginary
+            });
+            expect(actual[1]).to.deep.equal({
+                real: -1,
+                imaginary: -expectedImaginary
+            });
         });
     });
 });

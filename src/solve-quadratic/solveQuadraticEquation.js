@@ -1,13 +1,5 @@
 import Big from 'big.js';
 
-// Custom error class for quadratic equation-specific errors
-class QuadraticEquationError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'QuadraticEquationError';
-    }
-}
-
 // Constants to avoid creating new Big instances repeatedly
 const TWO = Big(2);
 const FOUR = Big(4);
@@ -17,8 +9,8 @@ const FOUR = Big(4);
  * @param {number} a - Coefficient of x²
  * @param {number} b - Coefficient of x
  * @param {number} c - Constant term
- * @returns {Array<{real: number, imaginary: number}>} Array of solutions as objects with real and imaginary parts
- * @throws {QuadraticEquationError} If a is zero
+ * @returns {Array<{real?: number, imaginary?: number}>} Array of solutions as objects with real and/or imaginary parts
+ * @throws {Error} If a is zero or coefficients are not finite
  * @throws {TypeError} If inputs are not numbers
  */
 export default function solveQuadraticEquation(a, b, c) {
@@ -29,12 +21,12 @@ export default function solveQuadraticEquation(a, b, c) {
 
     // Handle NaN and Infinity
     if ([a, b, c].some(x => !Number.isFinite(x))) {
-        throw new QuadraticEquationError('Coefficients must be finite numbers');
+        throw new Error('Coefficients must be finite numbers');
     }
 
     const bigA = Big(a);
     if (bigA.eq(0)) {
-        throw new QuadraticEquationError('Coefficient a must not be zero');
+        throw new Error('Coefficient a must not be zero');
     }
 
     const bigB = Big(b);
@@ -46,20 +38,29 @@ export default function solveQuadraticEquation(a, b, c) {
 
     // Calculate real part (common for all cases)
     const realPart = negB.div(twoA);
+    const realValue = realPart.toNumber();
+    
+    // Helper to create root object without undefined values
+    const createRoot = (real, imaginary) => {
+        const root = {};
+        if (real !== 0 && real !== undefined) root.real = real;
+        if (imaginary !== undefined) root.imaginary = imaginary;
+        return root;
+    };
 
     if (delta.gt(0)) {
         const sqrtDelta = delta.sqrt().div(twoA);
         return [
-            { real: realPart.plus(sqrtDelta).toNumber(), imaginary: 0 },
-            { real: realPart.minus(sqrtDelta).toNumber(), imaginary: 0 }
+            createRoot(realValue + sqrtDelta.toNumber()),
+            createRoot(realValue - sqrtDelta.toNumber())
         ];
     } else if (delta.eq(0)) {
-        return [{ real: realPart.toNumber(), imaginary: 0 }];
+        return [createRoot(realValue)];
     } else {
         const imaginaryPart = delta.abs().sqrt().div(twoA).toNumber();
         return [
-            { real: realPart.toNumber(), imaginary: imaginaryPart },
-            { real: realPart.toNumber(), imaginary: -imaginaryPart }
+            createRoot(realValue, imaginaryPart),
+            createRoot(realValue, -imaginaryPart)
         ];
     }
 }

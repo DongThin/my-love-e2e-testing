@@ -2,6 +2,7 @@
   "name": "my-love-api-test",
   "version": "1.0.0",
   "description": "",
+  "type": "commonjs",
   "scripts": {
     "test": "mocha",
     "coverage": "nyc --reporter=text --reporter=text-summary mocha"
@@ -14,7 +15,8 @@
   "devDependencies": {
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
-    "@babel/register": "^7.24.6",
+    "@babel/register": "^7.27.1",
+    "chai": "^4.4.1",
     "coveralls": "^3.1.1",
     "mocha": "^10.4.0",
     "nyc": "^15.1.0",
