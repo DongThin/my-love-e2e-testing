@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tính số tiền BHXH một lần [Chuẩn 2025]</title>
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+        .period-card {
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        .add-period {
+            margin-bottom: 2rem;
+        }
+        .result-section {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .btn-remove {
+            float: right;
+        }
+        .info-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Công cụ tính số tiền BHXH một lần</h1>
+        <div class="alert alert-info">
+            Áp dụng cho thời gian đóng BHXH từ 01/2014 trở đi
+        </div>
+
+        <div id="periods-container">
+            <!-- Contribution periods will be added here -->
+        </div>
+
+        <div class="add-period">
+            <button class="btn btn-success" id="btnAddPeriod">
+                <i class="bi bi-plus-circle"></i> Thêm thời gian đóng BHXH
+            </button>
+        </div>
+
+        <button class="btn btn-primary" id="btnCalculate">Tính số tiền BHXH một lần</button>
+
+        <div class="result-section">
+            <h3>Kết quả tính toán</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Tổng thời gian đóng:</strong> <span id="totalMonths">0</span> tháng (<span id="totalYears">0</span> năm)</p>
+                    <p><strong>Mức bình quân thu nhập tháng:</strong> <span id="averageIncome">0</span> VNĐ</p>
+                    <p><strong>Số tiền BHXH một lần:</strong> <span id="benefitAmount" class="text-primary fw-bold">0</span> VNĐ</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="info-text">
+                        <strong>Công thức tính:</strong><br>
+                        2 × Mức bình quân thu nhập tháng × Số năm đóng BHXH
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Period Template -->
+    <template id="period-template">
+        <div class="period-card">
+            <button type="button" class="btn-close btn-remove" aria-label="Close"></button>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Từ tháng</label>
+                        <input type="month" class="form-control period-start" min="2014-01">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Đến tháng</label>
+                        <input type="month" class="form-control period-end" min="2014-01">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Mức lương đóng BHXH</label>
+                        <input type="number" class="form-control period-salary" placeholder="VNĐ/tháng">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script type="module" src="./oneTimeBenefit.client.js"></script>
+</body>
+</html>
