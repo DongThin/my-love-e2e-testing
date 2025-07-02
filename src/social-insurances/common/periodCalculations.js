@@ -1,10 +1,3 @@
-/**
- * Period Calculations for Social Insurance
- * 
- * Functions for calculating and rounding contribution periods
- * according to social insurance regulations.
- */
-
 import { PARTIAL_YEAR_THRESHOLDS, PARTIAL_YEAR_VALUES } from './socialInsuranceConstants.js';
 
 /**

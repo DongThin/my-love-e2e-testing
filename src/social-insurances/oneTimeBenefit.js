@@ -1,10 +1,3 @@
-/**
- * Social Insurance One-Time Benefit Calculator
- * 
- * Main calculator for determining one-time social insurance benefits
- * according to Vietnamese social insurance regulations (contributions after 2014).
- */
-
 import Big from '../lib/big.js';
 import { BENEFIT_MULTIPLIER, NEW_RULES_START_DATE } from './common/socialInsuranceConstants.js';
 import { calculateYearsFromMonths } from './common/periodCalculations.js';

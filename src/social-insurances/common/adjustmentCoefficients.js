@@ -1,10 +1,3 @@
-/**
- * Adjustment Coefficients for Social Insurance Contributions
- * 
- * These coefficients are used to adjust historical social insurance contributions
- * for inflation according to government regulations.
- */
-
 // Historical adjustment coefficients by year
 const ADJUSTMENT_COEFFICIENTS = {
   2014: 1.40,

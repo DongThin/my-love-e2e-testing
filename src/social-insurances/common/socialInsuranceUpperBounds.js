@@ -5,13 +5,6 @@
  * The upper bound is 20 times the base salary for each period.
  */
 
-
-// Convert YYYY-MM to Date object for policy lookup
-function monthToDate(monthStr) {
-  const [year, month] = monthStr.split('-').map(Number);
-  return new Date(year, month - 1, 1); // Month is 0-based in Date
-}
-
 // Social Insurance Upper Bound Limits based on base salary
 const SOCIAL_INSURANCE_UPPER_BOUNDS = [
   // January 2014 to April 2016 - Base salary: 1,150,000

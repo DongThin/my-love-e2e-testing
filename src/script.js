@@ -1,11 +1,5 @@
 import grossToNet from "./salary-app/grossToNet.js";
-
-const numberFormatter = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-});
+import { numberFormatter } from "./utils.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded and parsed');

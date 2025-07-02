@@ -1,10 +1,4 @@
 /**
- * Month Helpers for Social Insurance Calculator
- * 
- * Utility functions for handling YYYY-MM date format operations.
- */
-
-/**
  * Parse and validate a month string in YYYY-MM format
  * @param {string} monthString - Month in YYYY-MM format
  * @returns {Object} Parsed month object with year and month properties

@@ -1,10 +1,3 @@
-/**
- * Social Insurance One-Time Benefit Calculator Constants
- * 
- * Constants used for calculating one-time social insurance benefits
- * according to Vietnamese social insurance regulations.
- */
-
 // Benefit calculation multiplier (2 months per year of contribution)
 const BENEFIT_MULTIPLIER = 2;
 

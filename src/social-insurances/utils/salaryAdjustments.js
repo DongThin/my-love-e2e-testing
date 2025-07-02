@@ -1,10 +1,3 @@
-/**
- * Salary Adjustments for Social Insurance
- * 
- * Functions for applying inflation adjustments and upper bounds
- * to social insurance contribution salaries.
- */
-
 import Big from '../../lib/big.js';
 import { getAdjustmentCoefficient } from '../common/adjustmentCoefficients.js';
 import { applySocialInsuranceUpperBound } from '../common/socialInsuranceUpperBounds.js';

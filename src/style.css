@@ -81,4 +81,43 @@ button:not([disabled]):focus {
     margin-left: 15px;
 }
 
+.other-tools {
+    margin: 2rem 15px;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.other-tools h4 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.other-tools ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.other-tools li {
+    margin: 0.5rem 0;
+}
+
+.other-tools a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+.other-tools a:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    text-align: center;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
 
