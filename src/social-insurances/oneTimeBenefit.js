@@ -11,18 +11,18 @@ import { validateDateRange, calculateMonthsBetween } from './utils/monthHelpers.
  */
 function validateContributionPeriods(periods) {
   if (!Array.isArray(periods) || periods.length === 0) {
-    throw new Error('Contribution periods must be a non-empty array');
+    throw new Error('Danh sách thời gian đóng BHXH không được để trống');
   }
 
   for (let i = 0; i < periods.length; i++) {
     const period = periods[i];
     
     if (!period.startMonth || !period.endMonth || typeof period.monthlySalary !== 'number') {
-      throw new Error(`Period ${i + 1}: Must have startMonth, endMonth, and monthlySalary`);
+      throw new Error(`Khoảng thời gian ${i + 1}: Phải có thời gian bắt đầu, thời gian kết thúc và mức lương hàng tháng`);
     }
 
     if (period.monthlySalary < 0) {
-      throw new Error(`Period ${i + 1}: Monthly salary must be non-negative`);
+      throw new Error(`Khoảng thời gian ${i + 1}: Mức lương hàng tháng không được âm`);
     }
 
     // Validate date range
@@ -30,7 +30,7 @@ function validateContributionPeriods(periods) {
 
     // Check if period is after 2014 (when new rules apply)
     if (period.startMonth < NEW_RULES_START_DATE) {
-      throw new Error(`Period ${i + 1}: Only contributions from ${NEW_RULES_START_DATE} onwards are supported`);
+      throw new Error(`Khoảng thời gian ${i + 1}: Chỉ hỗ trợ các khoảng đóng góp từ tháng ${NEW_RULES_START_DATE} trở đi`);
     }
   }
 
@@ -38,7 +38,7 @@ function validateContributionPeriods(periods) {
   const sortedPeriods = [...periods].sort((a, b) => a.startMonth.localeCompare(b.startMonth));
   for (let i = 1; i < sortedPeriods.length; i++) {
     if (sortedPeriods[i].startMonth <= sortedPeriods[i - 1].endMonth) {
-      throw new Error('Contribution periods cannot overlap');
+      throw new Error('Các khoảng thời gian đóng BHXH không được chồng lấp');
     }
   }
 }

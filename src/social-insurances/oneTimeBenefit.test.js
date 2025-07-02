@@ -101,14 +101,14 @@ describe('Social Insurance One-Time Benefit Calculator', () => {
     });
 
     it('should throw error for invalid input', () => {
-      expect(() => calculateOneTimeBenefit([])).to.throw('non-empty array');
-      expect(() => calculateOneTimeBenefit(null)).to.throw('non-empty array');
+      expect(() => calculateOneTimeBenefit([])).to.throw('Danh sách thời gian đóng BHXH không được để trống');
+      expect(() => calculateOneTimeBenefit(null)).to.throw('Danh sách thời gian đóng BHXH không được để trống');
       
       expect(() => calculateOneTimeBenefit([{
         startMonth: '2023-01',
         endMonth: '2023-12'
         // missing monthlySalary
-      }])).to.throw('Must have startMonth, endMonth, and monthlySalary');
+      }])).to.throw('Phải có thời gian bắt đầu, thời gian kết thúc và mức lương hàng tháng');
     });
 
     it('should throw error for periods before 2014', () => {
@@ -120,7 +120,7 @@ describe('Social Insurance One-Time Benefit Calculator', () => {
         }
       ];
 
-      expect(() => calculateOneTimeBenefit(contributionPeriods)).to.throw('Only contributions from 2014-01 onwards');
+      expect(() => calculateOneTimeBenefit(contributionPeriods)).to.throw('Chỉ hỗ trợ các khoảng đóng góp từ tháng 2014-01 trở đi');
     });
 
     it('should handle partial year rounding correctly', () => {
@@ -147,6 +147,35 @@ describe('Social Insurance One-Time Benefit Calculator', () => {
 
       const result7 = calculateOneTimeBenefit(periods7Months);
       expect(result7.breakdown.totalContributionYears).to.equal(1);
+    });
+
+    it('should throw error for negative monthly salary', () => {
+      const contributionPeriods = [
+        {
+          startMonth: '2023-01',
+          endMonth: '2023-06',
+          monthlySalary: -1000000  // Negative salary
+        }
+      ];
+
+      expect(() => calculateOneTimeBenefit(contributionPeriods)).to.throw('Mức lương hàng tháng không được âm');
+    });
+
+    it('should throw error for overlapping periods', () => {
+      const contributionPeriods = [
+        {
+          startMonth: '2023-01',
+          endMonth: '2023-06',
+          monthlySalary: 5000000
+        },
+        {
+          startMonth: '2023-05',  // Overlaps with first period (ends 2023-06)
+          endMonth: '2023-12',
+          monthlySalary: 6000000
+        }
+      ];
+
+      expect(() => calculateOneTimeBenefit(contributionPeriods)).to.throw('Các khoảng thời gian đóng BHXH không được chồng lấp');
     });
   });
 });
