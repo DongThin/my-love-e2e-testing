@@ -1,13 +1,5 @@
 import Big from 'big.js';
 
-// Custom error class for quadratic equation-specific errors
-class QuadraticEquationError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'QuadraticEquationError';
-    }
-}
-
 // Constants to avoid creating new Big instances repeatedly
 const TWO = Big(2);
 const FOUR = Big(4);
@@ -18,7 +10,7 @@ const FOUR = Big(4);
  * @param {number} b - Coefficient of x
  * @param {number} c - Constant term
  * @returns {Array<{real?: number, imaginary?: number}>} Array of solutions as objects with real and/or imaginary parts
- * @throws {QuadraticEquationError} If a is zero
+ * @throws {Error} If a is zero or coefficients are not finite
  * @throws {TypeError} If inputs are not numbers
  */
 export default function solveQuadraticEquation(a, b, c) {
@@ -29,12 +21,12 @@ export default function solveQuadraticEquation(a, b, c) {
 
     // Handle NaN and Infinity
     if ([a, b, c].some(x => !Number.isFinite(x))) {
-        throw new QuadraticEquationError('Coefficients must be finite numbers');
+        throw new Error('Coefficients must be finite numbers');
     }
 
     const bigA = Big(a);
     if (bigA.eq(0)) {
-        throw new QuadraticEquationError('Coefficient a must not be zero');
+        throw new Error('Coefficient a must not be zero');
     }
 
     const bigB = Big(b);

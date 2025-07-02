@@ -15,7 +15,7 @@ describe('Quadratic Equation Solver', () => {
         it('should reject infinite coefficients', () => {
             // Given/When/Then: it should throw Error for Infinity
             expect(() => solveQuadraticEquation(Infinity, 2, 3))
-                .to.throw(QuadraticEquationError, 'Coefficients must be finite numbers');
+                .to.throw(Error, 'Coefficients must be finite numbers');
         });
 
         it('should reject zero leading coefficient', () => {
