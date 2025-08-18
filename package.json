@@ -1,18 +1,21 @@
 {
-  "name": "my-love-api-test",
+  "name": "my-love-e2e-testing",
   "version": "1.0.0",
-  "description": "",
-  "type": "commonjs",
+  "description": "Welcome to the \"my-love-e2e-testing\" project!",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "mocha",
     "coverage": "nyc --reporter=text --reporter=text-summary mocha",
-    "dev": "lite-server"
+    "dev": "lite-server",
+    "e2e": "playwright test --ui",
+    "e2e:debug": "playwright test --debug"
   },
-  "author": "thin.pham0002@gmail.com",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "big.js": "^6.2.1"
-  },
   "devDependencies": {
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
@@ -30,6 +33,9 @@
       "src/lib/**",
       "src/**/*.test.js",
       "src/**/*.spec.js"
-    ]
+    ],
+
+    "@playwright/test": "^1.54.1",
+    "playwright": "^1.54.1"
   }
 }
