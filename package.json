@@ -5,8 +5,10 @@
   "type": "commonjs",
   "scripts": {
     "test": "mocha",
-    "coverage": "nyc --reporter=text --reporter=text-summary mocha",
-    "dev": "lite-server"
+    "coverage": "c8 --reporter=text --reporter=text-summary mocha",
+    "dev": "http-server src -p ${PORT} -c-1",
+    "e2e": "playwright test",
+    "e2e:prod": "NODE_ENV=production playwright test"
   },
   "author": "thin.pham0002@gmail.com",
   "license": "ISC",
@@ -17,15 +19,16 @@
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
     "@babel/register": "^7.27.1",
+    "@playwright/test": "^1.54.2",
+    "c8": "^10.1.3",
     "chai": "^4.4.1",
-    "coveralls": "^3.1.1",
-    "lite-server": "^2.6.1",
+    "dotenv": "^17.2.2",
+    "http-server": "^14.1.1",
     "mocha": "^10.4.0",
-    "nyc": "^15.1.0",
     "proxyquire": "^2.1.3",
     "sinon": "^17.0.2"
   },
-  "nyc": {
+  "c8": {
     "exclude": [
       "src/lib/**",
       "src/**/*.test.js",

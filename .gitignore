@@ -3,3 +3,6 @@ node_modules
 .idea
 coverage/
 .vscode/
+.specstory
+playwright-report/
+test-results/
