@@ -2,24 +2,25 @@
   "name": "my-love-e2e-testing",
   "version": "1.0.0",
   "description": "Welcome to the \"my-love-e2e-testing\" project!",
-  "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha", 
     "coverage": "nyc --reporter=text --reporter=text-summary mocha",
     "dev": "lite-server",
     "e2e": "playwright test --ui",
     "e2e:debug": "playwright test --debug"
   },
   "keywords": [],
-  "author": "",
+  "author": "thin.pham0002@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
     "@babel/register": "^7.27.1",
+    "@playwright/test": "^1.54.1",
+    "playwright": "^1.54.1",
     "chai": "^4.4.1",
     "coveralls": "^3.1.1",
     "lite-server": "^2.6.1",
@@ -33,9 +34,6 @@
       "src/lib/**",
       "src/**/*.test.js",
       "src/**/*.spec.js"
-    ],
-
-    "@playwright/test": "^1.54.1",
-    "playwright": "^1.54.1"
+    ]
   }
 }
