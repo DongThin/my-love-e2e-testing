@@ -1,0 +1,70 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Get installed Playwright version
+      id: playwright-version
+      run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_OUTPUT
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: |
+          ~/.cache/playwright
+        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+    
+    - name: Run Playwright tests
+      run: npm run e2e:prod
+    
+    - name: Comment Test Results
+      uses: actions/github-script@v6
+      if: always() && github.event_name == 'pull_request'
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const results = JSON.parse(fs.readFileSync('./test-results/.last-run.json'));
+            const status = results.status === 'passed' ? '✅ PASSED' : '❌ FAILED';
+            const failedCount = results.failedTests?.length || 0;
+            
+            const message = `## 🎭 Playwright Test Results
+            
+          **Status:** ${status}
+          ${failedCount > 0 ? `**Failed Tests:** ${failedCount}` : ''}
+
+          📊 [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+          } catch (error) {
+            console.log('Could not read test results');
+          }
+    
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 1
