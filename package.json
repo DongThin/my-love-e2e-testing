@@ -1,14 +1,18 @@
 {
-  "name": "my-love-api-test",
+  "name": "my-love-e2e-testing",
   "version": "1.0.0",
-  "description": "",
-  "type": "commonjs",
+  "description": "Welcome to the \"my-love-e2e-testing\" project!",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "mocha",
     "coverage": "c8 --reporter=text --reporter=text-summary mocha",
     "dev": "http-server src -p ${PORT} -c-1",
     "e2e": "playwright test",
     "e2e:prod": "NODE_ENV=production playwright test"
+
   },
   "author": "thin.pham0002@gmail.com",
   "license": "ISC",
