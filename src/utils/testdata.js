@@ -1,83 +1,83 @@
 export const testData = {
-    salary: [
+    salaries: [
         {
             desc: "No tax",
-            luongGross: 5_000_000,
+            gross: 5_000_000,
             expected: {
-                luongGross: "5.000.000 ₫",
-                baoHiem: "525.000 ₫",
-                thueTNCN: "0 ₫",
-                luongNet: "4.475.000 ₫"
+                gross: "5.000.000 ₫",
+                insurances: "525.000 ₫",
+                taxes: "0 ₫",
+                netSalary: "4.475.000 ₫"
             }
         },
         {
             desc: "lv1",
-            luongGross: 12_300_000,
+            gross: 12_300_000,
             expected: {
-                luongGross: "12.300.000 ₫",
-                baoHiem: "1.291.500 ₫",
-                thueTNCN: "425 ₫",
-                luongNet: "11.008.075 ₫"
+                gross: "12.300.000 ₫",
+                insurances: "1.291.500 ₫",
+                taxes: "425 ₫",
+                netSalary: "11.008.075 ₫"
             }
         },
         {
             desc: "lv2",
-            luongGross: 17_900_000,
+            gross: 17_900_000,
             expected: {
-                luongGross: "17.900.000 ₫",
-                baoHiem: "1.879.500 ₫",
-                thueTNCN: "252.050 ₫",
-                luongNet: "15.768.450 ₫"
+                gross: "17.900.000 ₫",
+                insurances: "1.879.500 ₫",
+                taxes: "252.050 ₫",
+                netSalary: "15.768.450 ₫"
             }
         },
         {
             desc: "lv3",
-            luongGross: 23_463_687,
+            gross: 23_463_687,
             expected: {
-                luongGross: "23.463.687 ₫",
-                baoHiem: "2.463.687 ₫",
-                thueTNCN: "750.000 ₫",
-                luongNet: "20.250.000 ₫"
+                gross: "23.463.687 ₫",
+                insurances: "2.463.687 ₫",
+                taxes: "750.000 ₫",
+                netSalary: "20.250.000 ₫"
             }
         },
         {
             desc: "lv4",
-            luongGross: 32_402_235,
+            gross: 32_402_235,
             expected: {
-                luongGross: "32.402.235 ₫",
-                baoHiem: "3.402.235 ₫",
-                thueTNCN: "1.950.000 ₫",
-                luongNet: "27.050.000 ₫"
+                gross: "32.402.235 ₫",
+                insurances: "3.402.235 ₫",
+                taxes: "1.950.000 ₫",
+                netSalary: "27.050.000 ₫"
             }
         },
         {
             desc: "lv5",
-            luongGross: 48_044_693,
+            gross: 48_044_693,
             expected: {
-                luongGross: "48.044.693 ₫",
-                baoHiem: "4.926.447 ₫",
-                thueTNCN: "4.779.562 ₫",
-                luongNet: "38.338.685 ₫"
+                gross: "48.044.693 ₫",
+                insurances: "4.926.447 ₫",
+                taxes: "4.779.562 ₫",
+                netSalary: "38.338.685 ₫"
             }
         },
         {
             desc: "lv6",
-            luongGross: 70_391_061,
+            gross: 70_391_061,
             expected: {
-                luongGross: "70.391.061 ₫",
-                baoHiem: "5.149.911 ₫",
-                thueTNCN: "10.422.345 ₫",
-                luongNet: "54.818.805 ₫"
+                gross: "70.391.061 ₫",
+                insurances: "5.149.911 ₫",
+                taxes: "10.422.345 ₫",
+                netSalary: "54.818.805 ₫"
             }
         },
         {
             desc: "lv7",
-            luongGross: 101_675_978,
+            gross: 101_675_978,
             expected: {
-                luongGross: "101.675.978 ₫",
-                baoHiem: "5.438.000 ₫",
-                thueTNCN: "19.983.292 ₫",
-                luongNet: "76.254.686 ₫"
+                gross: "101.675.978 ₫",
+                insurances: "5.438.000 ₫",
+                taxes: "19.983.292 ₫",
+                netSalary: "76.254.686 ₫"
             },
         },
     ]
